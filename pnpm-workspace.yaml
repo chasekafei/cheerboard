@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+
+# Keep ordinary dev/build commands offline once dependencies are installed.
+verifyDepsBeforeRun: false
+updateNotifier: false

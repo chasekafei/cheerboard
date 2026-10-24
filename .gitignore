@@ -1,0 +1,10 @@
+node_modules/
+.pnpm-store/
+dist/
+release/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+.artifacts/
