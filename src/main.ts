@@ -1,26 +1,32 @@
 import './styles.css';
-import { createDesign, getTemplate, TEMPLATES, SLOGANS, type Design, type Category, type TemplateId } from './catalog';
-import { renderBoard, renderExport } from './renderer';
-import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isNative } from './platform';
+import { createDesign, getTemplate, TEMPLATES, SLOGAN_CATEGORIES, getSloganPage, findSloganByText, type Design, type Category, type TemplateId, type SloganFilter } from './catalog';
+import { measureBoard, renderBoard, renderExport } from './renderer';
+import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isBrowserPreview } from './platform';
 import { readRecords, writeRecord, validateDesign } from './records';
+import { normalizeDotEmoji } from './design-values';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 const overlay = document.querySelector<HTMLDivElement>('#overlay')!;
 const toastEl = document.querySelector<HTMLDivElement>('#toast')!;
 let page: 'home' | 'editor' | 'saved' = 'home';
-let category: Category = 'banner';
+let category: Category = 'light';
 let design = createDesign();
 let records: Design[] = [];
 let recordsReady = false;
 let recordsError = false;
 let editRevision = 0;
+let draftAvailable = false;
+let draftReady = false;
+let previewFrame = 0;
 let tab = '文字';
-let sloganCategory = '全部';
+let sloganCategory: SloganFilter = '全部';
+let sloganPage = 0;
 let search = '';
+let searchTimer = 0;
 let noticeSeen = false;
 let noticeSaving = false;
 let exportFormat: 'board' | 'comment' | 'note' | 'a4' | 'memory' = 'board';
-let exportCanvas: HTMLCanvasElement | null = null;
+let exportDataUrl: string | null = null;
 let busy = false;
 let exhibition = false;
 let frame = 0;
@@ -32,6 +38,7 @@ let overflow = false;
 let archiveBusy = false;
 const memory = { place: '', date: '' };
 const icons: Record<string, string> = {
+  paddle: '<ellipse cx="10" cy="9" rx="6.5" ry="7" transform="rotate(-35 10 9)"/><path d="m12 15 5 6 3-2-5-6M5 5l9 9"/><circle cx="20" cy="5" r="2.5"/>',
   arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
   back: '<path d="m14 6-6 6 6 6"/>',
   star: '<path d="m12 3 2.7 5.6 6.3.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.5l6.3-.9Z"/>',
@@ -54,36 +61,54 @@ function toast(message: string) {
 function fail(error: unknown) { toast(error instanceof Error ? error.message : '暂时没能完成，请重试。你的设计还在。'); }
 function dirty() {
   editRevision++;
+  draftAvailable = true;
   design.updatedAt = Date.now();
   clearTimeout(draftTimer);
+  if (!draftReady) return;
   if (design.text.length > 2000) { toast('文字超过 2000 字，草稿尚未保存，请先精简。'); return; }
   draftTimer = window.setTimeout(() => { void saveLocal('draft-v1', design).catch(() => toast('草稿未保存，请先保存图片。')); }, 500);
 }
 function header() {
-  return `<header class="site-header"><button class="brand" data-action="home" aria-label="手机手幅首页"><span class="brand-mark">${icon('star')}</span><span>手机手幅<span class="brand-en">CHEERBOARD</span></span></button><nav aria-label="主导航">${btn('做一块牌', 'home', page === 'home' ? 'nav-link active' : 'nav-link')}${btn(`${icon('bookmark')}我的牌${records.length ? `<span class="count">${records.length}</span>` : ''}`, 'saved', page === 'saved' ? 'nav-link active' : 'nav-link')}</nav></header>`;
+  return `<header class="site-header"><button class="brand" data-action="home" aria-label="手机手幅首页"><span class="brand-mark">${icon('paddle')}</span><span>手机手幅<span class="brand-en">乒乓球迷的加油工具</span></span></button><nav aria-label="主导航">${btn('首页', 'home', page === 'home' ? 'nav-link active' : 'nav-link')}${btn(`${icon('bookmark')}我的牌${records.length ? `<span class="count">${records.length}</span>` : ''}`, 'saved', page === 'saved' ? 'nav-link active' : 'nav-link')}</nav></header>`;
 }
 function templateCard(id: TemplateId, compact = false) {
   const t = getTemplate(id);
-  return `<button class="template-card ${compact ? 'compact' : ''} ${page === 'editor' && design.templateId === id ? 'selected' : ''}" data-action="template" data-id="${id}" aria-label="使用${t.name}" aria-pressed="${page === 'editor' && design.templateId === id}"><div class="template-art"><canvas data-template="${id}" aria-label="${t.name}效果预览"></canvas><span class="template-use">${icon('arrow')}</span></div><span class="template-info"><span><strong>${t.name}</strong>${!compact ? `<small>${t.description}</small>` : ''}</span><span class="template-index">${id}</span></span></button>`;
+  return `<button class="template-card ${compact ? 'compact' : ''} ${page === 'editor' && design.templateId === id ? 'selected' : ''}" data-action="template" data-id="${id}" aria-label="使用${t.name}" aria-pressed="${page === 'editor' && design.templateId === id}"><div class="template-art"><canvas data-template="${id}" aria-label="${t.name}效果预览"></canvas>${page === 'editor' && design.templateId === id ? `<span class="template-check">${icon('check')}</span>` : ''}</div><span class="template-info"><strong>${t.name}</strong>${!compact ? `<small>${t.description}</small>` : ''}</span></button>`;
 }
 function home() {
-  const recent = records[0];
-  return `${header()}<main class="home"><section class="intro"><div class="intro-copy"><h1>把加油，<br>举在<span class="underline">手里。</span><span class="heading-spark">✳</span></h1><p>选一句话，做一块自己的加油牌。<br>灯牌亮出心意，手幅装下喜欢。</p><div class="intro-bottom"><span class="little-dot"></span>随手做，随时用</div></div><button class="featured" data-action="template" data-id="H1" aria-label="制作撞色涂鸦手幅"><div class="featured-top"><span>你的热爱，值得大字写出来</span>${icon('arrow')}</div><div class="featured-board"><canvas id="hero-board" aria-label="撞色涂鸦手幅示例"></canvas></div><div class="featured-bottom"><span>从一句「加油」开始</span><span class="featured-cta">做同款 ${icon('arrow')}</span></div></button></section><section class="collection" aria-labelledby="collection-title"><div class="collection-heading"><div><h2 id="collection-title">先选一款喜欢的</h2><p>文字、颜色都能改成你的。</p></div><div class="category-switch" role="group" aria-label="模板类别">${btn('✦ 灯牌', 'category', category === 'light' ? 'selected' : '', `data-id="light" aria-pressed="${category === 'light'}"`)}${btn('▰ 手幅', 'category', category === 'banner' ? 'selected' : '', `data-id="banner" aria-pressed="${category === 'banner'}"`)}</div></div><div class="category-caption">${category === 'light' ? '让一句加油清清楚楚 · 可选滚动' : '让喜欢有自己的样子 · 静态彩色手幅'}</div><div class="template-grid">${TEMPLATES.filter(t => t.category === category).map(t => templateCard(t.id)).join('')}</div></section>${recent ? `<section class="recent"><div><span class="recent-label">上次的加油还在</span><strong>${escape(recent.text.replace(/\n/g, ' '))}</strong></div>${btn(`继续编辑 ${icon('arrow')}`, 'open', 'text-button', `data-id="${recent.id}"`)}</section>` : ''}<footer class="home-footer"><span>小小一块屏幕，也装得下大大的喜欢。</span><button data-action="tips">使用小提醒 ${icon('arrow')}</button></footer></main>`;
+  const recent = draftAvailable ? design : records[0];
+  return `${header()}<main class="home tool-home"><div class="home-heading"><div><h1>今天，为谁加油？</h1><p>选一块牌，把喜欢亮出来。</p></div><span class="court-symbol" aria-hidden="true">${icon('paddle')}</span></div><section class="tool-entries" aria-label="开始制作"><button class="light-entry" data-action="template" data-id="L3" aria-label="做灯牌"><div class="entry-heading"><span class="entry-icon">${icon('show')}</span><div><h2>灯牌</h2><p>点阵 · 描边 · 霓虹 · 纯色</p></div><span class="entry-arrow">${icon('arrow')}</span></div><div class="entry-board"><canvas id="hero-board" aria-label="乒乓加油点阵灯牌示例"></canvas><i class="board-corner" aria-hidden="true"></i></div><div class="entry-bottom"><span>让喜欢，在看台发光</span><strong>做灯牌 ${icon('arrow')}</strong></div></button><button class="banner-entry" data-action="template" data-id="H1" aria-label="做手幅"><div class="entry-heading"><div><h2>手幅</h2><p>选文案、配颜色，做好存图</p></div><span class="entry-arrow">${icon('arrow')}</span></div><div class="banner-entry-art"><canvas id="home-banner" aria-label="乒乓加油手幅示例"></canvas></div></button></section>${recent ? `<section class="home-recent"><div class="section-heading"><h2>继续做我的牌</h2>${btn('全部作品', 'saved', 'text-button')}</div><button class="recent-work" data-action="${draftAvailable ? 'resume-draft' : 'open'}" data-id="${recent.id}"><canvas ${draftAvailable ? 'data-home-draft' : `data-record="${recent.id}"`} aria-label="上次的加油牌"></canvas><div><strong>${escape(recent.text.replace(/\n/g, ' '))}</strong><small>${getTemplate(recent.templateId).name} · ${draftAvailable ? '上次编辑' : '已保存'}</small></div>${icon('arrow')}</button></section>` : `<section class="home-quick-tip">${icon('paddle')}<div><h2>看台小提醒</h2><p>回合中收起加油牌，把掌声留给好球。</p></div></section>`}<footer class="home-footer"><span>为每一次挥拍加油。</span>${btn('使用小提醒', 'tips', 'text-button')}</footer></main>`;
 }
 function sloganList() {
-  return SLOGANS.filter(s => s.confirmed && (sloganCategory === '全部' || s.category === sloganCategory) && s.text.toLowerCase().includes(search.toLowerCase())).map(s => btn(escape(s.text), 'slogan', `slogan ${design.text === s.text ? 'selected' : ''}`, `data-text="${escape(s.text)}"`)).join('') || '<p class="empty-hint">还没有这句话，直接在上面写吧。</p>';
+  const result = getSloganPage(sloganCategory, search, sloganPage);
+  sloganPage = result.page;
+  const current = findSloganByText(design.text);
+  return result.total ? `<p class="slogan-count" role="status">共 ${result.total} 句 · 点一下套用</p>${result.items.map(s => btn(escape(s.text), 'slogan', `slogan ${current?.id === s.id ? 'selected' : ''}`, `data-text="${escape(s.text)}"`)).join('')}${result.pageCount > 1 ? `<div class="slogan-pagination" role="group" aria-label="文案分页">${btn('上一页', 'slogan-page', '', `data-id="${result.page - 1}" ${result.page === 0 ? 'disabled' : ''}`)}<span>${result.page + 1} / ${result.pageCount}</span>${btn('下一页', 'slogan-page', '', `data-id="${result.page + 1}" ${result.page + 1 === result.pageCount ? 'disabled' : ''}`)}</div>` : ''}` : '<p class="empty-hint">还没有这句话，直接在上面写吧。</p>';
+}
+function updateSloganList() {
+  const list = document.querySelector('#slogans');
+  if (list) { list.innerHTML = sloganList(); list.scrollTop = 0; }
+}
+function sloganVariants() {
+  const current = findSloganByText(design.text);
+  if (!current?.variants.length) return '';
+  return `<div class="slogan-variants"><p>这句话的其他写法</p><div class="slogan-variant-list">${[current.text, ...current.variants].map(text => btn(escape(text), 'slogan', `slogan ${design.text === text ? 'selected' : ''}`, `data-text="${escape(text)}"`)).join('')}</div></div>`;
 }
 function textPanel() {
-  return `<div class="panel-heading"><label for="board-text">写下你的加油</label><span id="text-count">${Array.from(design.text).length} / 2000</span></div><textarea id="board-text" rows="2" placeholder="想说的话，大字写出来" spellcheck="false">${escape(design.text)}</textarea><div class="field-line"><span>排版</span><div class="segmented">${btn('单行', 'layout', design.layout === 'single' ? 'selected' : '', 'data-id="single"')}${btn('双行', 'layout', design.layout === 'double' ? 'selected' : '', 'data-id="double"')}</div></div><p class="input-help">双行可直接换行；不换行时会自动分行。</p><div class="panel-divider"></div><div class="panel-heading"><span>灵感从这里开始</span><span>点一下套用</span></div><input class="search" id="slogan-search" type="search" placeholder="找一句加油…" value="${escape(search)}" aria-label="搜索口号"><div class="slogan-categories">${['全部', '通用', '选手及组合', '数字与符号'].map(c => btn(c === '选手及组合' ? '选手 / 组合' : c === '数字与符号' ? '数字 / 符号' : c, 'slogan-category', sloganCategory === c ? 'selected' : '', `data-id="${c}"`)).join('')}</div><div class="slogans" id="slogans">${sloganList()}</div>`;
+  return `<div class="panel-heading"><label for="board-text">写下你的加油</label><span id="text-count">${Array.from(design.text).length} / 2000</span></div><textarea id="board-text" rows="2" placeholder="想说的话，大字写出来" spellcheck="false">${escape(design.text)}</textarea><div class="field-line"><span>排版</span><div class="segmented">${btn('单行', 'layout', design.layout === 'single' ? 'selected' : '', 'data-id="single"')}${btn('双行', 'layout', design.layout === 'double' ? 'selected' : '', 'data-id="double"')}</div></div><p class="input-help">双行可直接换行；不换行时会自动分行。</p><div id="slogan-variants">${sloganVariants()}</div><div class="panel-divider"></div><div class="panel-heading"><span>灵感从这里开始</span><span>点一下套用</span></div><input class="search" id="slogan-search" type="search" placeholder="找一句加油…" value="${escape(search)}" aria-label="搜索口号"><div class="slogan-categories" role="group" aria-label="文案分类">${['全部', ...SLOGAN_CATEGORIES].map(c => btn(c, 'slogan-category', sloganCategory === c ? 'selected' : '', `data-id="${c}" aria-pressed="${sloganCategory === c}"`)).join('')}</div><div class="slogans" id="slogans">${sloganList()}</div>`;
+}
+function rangeField(id: string, label: string, value: number, min: number, max: number, ends: [string, string], suffix = '%') {
+  return `<div class="range-field"><label for="${id}">${label}<output id="${id}-value" for="${id}">${value}${suffix}</output></label><input id="${id}" type="range" min="${min}" max="${max}" step="1" value="${value}"><div class="range-ends"><span>${ends[0]}</span><span>${ends[1]}</span></div></div>`;
 }
 function stylePanel() {
-  return `<div class="panel-heading"><span>换个样子，心意不变</span></div><div class="mini-category">${btn('灯牌', 'editor-category', category === 'light' ? 'selected' : '', 'data-id="light"')}${btn('手幅', 'editor-category', category === 'banner' ? 'selected' : '', 'data-id="banner"')}</div><div class="mini-templates">${TEMPLATES.filter(t => t.category === category).map(t => templateCard(t.id, true)).join('')}</div>`;
+  const light = category === 'light';
+  return `<div class="panel-heading"><span>${light ? '灯牌效果' : '手幅样式'}</span><span>点一下切换</span></div><div class="${light ? 'light-styles' : 'mini-templates'}">${TEMPLATES.filter(t => t.category === category).map(t => templateCard(t.id, true)).join('')}</div><section class="effect-settings" aria-label="效果设置">${design.templateId === 'L3' ? `<div class="panel-heading"><span>点阵形状</span></div><div class="dot-shapes" role="group" aria-label="点阵形状">${[['circle', '●', '圆形'], ['square', '■', '方形'], ['heart', '♥', '心形'], ['star', '★', '星形'], ['emoji', design.dotEmoji, 'Emoji']].map(([id, glyph, label]) => btn(`<span class="shape-glyph">${escape(glyph)}</span><small>${label}</small>`, 'dot-shape', design.dotShape === id ? 'shape-option selected' : 'shape-option', `data-id="${id}" aria-pressed="${design.dotShape === id}"`)).join('')}</div>${design.dotShape === 'emoji' ? `<div class="emoji-editor"><label for="dot-emoji">你的 Emoji 点阵</label><input id="dot-emoji" type="text" value="${escape(design.dotEmoji)}" maxlength="128" aria-describedby="emoji-help" autocomplete="off"><div class="emoji-presets" role="group" aria-label="常用 Emoji">${['🏓', '❤️', '⭐', '🍟', '🦈', '🦁'].map(glyph => btn(glyph, 'dot-emoji-preset', design.dotEmoji === glyph ? 'selected' : '', `data-id="${glyph}" aria-label="使用${glyph}点阵" aria-pressed="${design.dotEmoji === glyph}"`)).join('')}</div><p id="emoji-help" class="input-help">输入或粘贴一个 Emoji。较大的光点更容易看清，外观随手机系统略有不同。</p></div>` : ''}<div class="field-line"><span>光点大小</span><div class="segmented" role="group" aria-label="光点大小">${[['1', '大'], ['2', '中'], ['3', '小']].map(([id, label]) => btn(label, 'dot-density', design.dotDensity === Number(id) ? 'selected' : '', `data-id="${id}" aria-pressed="${design.dotDensity === Number(id)}"`)).join('')}</div></div>` : ''}${design.templateId === 'L4' ? `${rangeField('glow', '光晕强度', design.glow, 0, 100, ['清晰灯管', '柔和光晕'])}<p class="input-help">保留明亮字芯与灯管轮廓，光晕只向外散开。</p>` : ''}${rangeField('font-scale', '文字大小', design.fontScale, 70, 130, ['更小', '更大'])}</section>${motionPanel()}`;
 }
 function colorPanel() {
-  return `<div class="panel-heading"><span>配好的一整套颜色</span></div><div class="palette-list">${getTemplate(design.templateId).palettes.map(p => `<button data-action="palette" data-id="${p.id}" class="palette ${design.paletteId === p.id ? 'selected' : ''}" aria-pressed="${design.paletteId === p.id}"><span class="swatch" style="background:${p.background};color:${p.foreground}">Aa<span style="background:${p.accent}"></span></span><span>${p.name}</span>${design.paletteId === p.id ? icon('check') : ''}</button>`).join('')}</div><div class="panel-divider"></div><div class="panel-heading"><span>也可以自己配</span></div><div class="custom-colors"><label>文字颜色<input type="color" id="foreground" value="${design.foreground}"></label><label>背景颜色<input type="color" id="background" value="${design.background}"></label></div>`;
+  return `<div class="panel-heading"><span>选一组配色</span></div><div class="palette-list">${getTemplate(design.templateId).palettes.map(p => `<button data-action="palette" data-id="${p.id}" class="palette ${design.paletteId === p.id ? 'selected' : ''}" aria-pressed="${design.paletteId === p.id}"><span class="swatch" style="background:${p.background};color:${p.foreground}">Aa<span style="background:${p.accent}"></span></span><span>${p.name}</span>${design.paletteId === p.id ? icon('check') : ''}</button>`).join('')}</div><div class="panel-divider"></div><div class="panel-heading"><span>自定义颜色</span></div><div class="custom-colors"><label>${design.templateId === 'L4' ? '灯管颜色' : '文字颜色'}<input type="color" id="foreground" value="${design.foreground}"></label><label>背景颜色<input type="color" id="background" value="${design.background}"></label>${design.templateId === 'L2' ? `<label>描边颜色<input type="color" id="accent" value="${design.accent}"></label>` : ''}</div>${design.templateId === 'L3' && design.dotShape === 'emoji' ? '<p class="input-help">Emoji 使用自身颜色；文字颜色会用于其他点阵形状。</p>' : ''}`;
 }
 function graphicPanel() {
-  return `<div class="panel-heading"><span>加一点喜欢的小细节</span></div><div class="sticker-grid">${[['none', '不添加', '—'], ['star', '星星', '✦'], ['heart', '爱心', '♡'], ['fries', '薯条', '🍟']].map(([id, name, glyph]) => btn(`<span class="sticker-glyph">${glyph}</span>${name}`, 'sticker', design.sticker === id ? 'selected' : '', `data-id="${id}" aria-pressed="${design.sticker === id}"`)).join('')}</div><label class="toggle-row"><span>装饰边框<small>不抢走文字的主角位置</small></span><input id="border" type="checkbox" ${design.border ? 'checked' : ''}><span class="toggle"></span></label>`;
+  return `<div class="panel-heading"><span>一点看台小装饰</span></div><div class="sticker-grid">${[['none', '不添加', '—'], ['star', '星星', '✦'], ['heart', '爱心', '♡'], ['fries', '薯条', '🍟'], ['paddle', '球拍', '🏓'], ['ball', '乒乓球', '●']].map(([id, name, glyph]) => btn(`<span class="sticker-glyph">${glyph}</span>${name}`, 'sticker', design.sticker === id ? 'selected' : '', `data-id="${id}" aria-pressed="${design.sticker === id}"`)).join('')}</div><label class="toggle-row"><span>装饰边框<small>给加油牌加一道细框</small></span><input id="border" type="checkbox" ${design.border ? 'checked' : ''}><span class="toggle"></span></label><label class="toggle-row"><span>展示时保留场馆提醒<small>回合中收起，不遮挡后排视线</small></span><input id="friendly" type="checkbox" ${design.friendly ? 'checked' : ''}><span class="toggle"></span></label>`;
 }
 function motionPanel() {
   if (getTemplate(design.templateId).category !== 'light') return '';
@@ -91,7 +116,7 @@ function motionPanel() {
 }
 function editor() {
   const t = getTemplate(design.templateId);
-  return `${header()}<main class="editor-page"><div class="editor-title">${btn(`${icon('back')}选款`, 'home', 'back-link')}<h1>这块牌，写你的心意。</h1>${btn(`${icon('bookmark')}保存到我的牌`, 'archive', 'save-record')}</div><div class="workspace"><section class="preview-column"><div class="preview-label"><span>你的${t.category === 'light' ? '灯牌' : '手幅'}<span class="muted"> / ${t.name}</span></span><span>实时预览</span></div><div class="preview-stage"><div class="board-frame"><canvas id="preview" aria-label="当前加油牌实时预览"></canvas></div><div class="preview-stage-bottom"><span class="preview-dot"></span>文字会按屏幕自动适配<span>横屏更好看 ${icon('show')}</span></div></div><p id="length-warning" class="length-warning" role="status"></p>${motionPanel()}<div class="friendly-box"><label class="toggle-row"><span>${icon('heart')}场馆友好<small>回合中收起，别挡住后排的视线。</small></span><input id="friendly" type="checkbox" ${design.friendly ? 'checked' : ''}><span class="toggle"></span></label><p>是否允许展示，以当场规定为准。亮度与自动锁屏请在手机系统中手动设置。</p></div><div class="editor-actions">${btn(`${icon('show')}进入展示`, 'show', 'primary-button')}${btn(`${icon('download')}保存图片`, 'export', 'secondary-button')}</div><div class="more-actions">${btn('另存为新牌', 'archive-new', 'text-button')}${btn('分享 / 打印 / 返图卡', 'export-more', 'text-button')}</div></section><section class="editor-panel"><div class="editor-tabs" role="tablist" aria-label="编辑选项">${['文字', '款式', '颜色', '图形'].map(label => btn(label, 'tab', tab === label ? 'selected' : '', `data-id="${label}" role="tab" aria-selected="${tab === label}" aria-controls="edit-panel"`)).join('')}</div><div class="panel-body" id="edit-panel" role="tabpanel">${tab === '文字' ? textPanel() : tab === '款式' ? stylePanel() : tab === '颜色' ? colorPanel() : graphicPanel()}</div></section></div></main>`;
+  return `${header()}<main class="editor-page editor-${t.category}"><div class="editor-title">${btn(`${icon('back')}首页`, 'home', 'back-link')}<h1>${t.category === 'light' ? '灯牌' : '手幅'}编辑器</h1>${btn(`${icon('bookmark')}保存到我的牌`, 'archive', 'save-record')}</div><div class="workspace"><section class="preview-column"><div class="preview-label"><span>${t.name}</span><span>实时预览</span></div><div class="preview-stage"><div class="board-frame"><canvas id="preview" aria-label="当前加油牌实时预览"></canvas></div><div class="preview-stage-bottom"><span class="preview-dot"></span>横持手机，举起你的加油${icon('paddle')}</div></div><p id="length-warning" class="length-warning" role="status"></p><p class="venue-note">回合中请收起，是否允许展示以场馆规定为准。</p><div class="editor-actions">${btn(`${icon('show')}进入展示`, 'show', 'primary-button')}${btn(`${icon('download')}保存图片`, 'export', 'secondary-button')}</div><div class="more-actions">${btn('另存为新牌', 'archive-new', 'text-button')}${btn('分享 / 打印 / 返图卡', 'export-more', 'text-button')}</div></section><section class="editor-panel"><div class="editor-tabs" role="tablist" aria-label="编辑选项">${['文字', '样式', '配色', '装饰'].map(label => btn(label, 'tab', tab === label ? 'selected' : '', `data-id="${label}" role="tab" aria-selected="${tab === label}" aria-controls="edit-panel"`)).join('')}</div><div class="panel-body" id="edit-panel" role="tabpanel">${tab === '文字' ? textPanel() : tab === '样式' ? stylePanel() : tab === '配色' ? colorPanel() : graphicPanel()}</div></section></div></main>`;
 }
 function saved() {
   return `${header()}<main class="saved-page"><div class="section-top"><div><h1>我的牌<span class="muted"> ${records.length}<small> / 5</small></span></h1><p>把喜欢留在这里，下次直接拿出来。</p></div>${btn(`做一块新牌 ${icon('arrow')}`, 'home', 'primary-button')}</div>${!recordsReady ? `<div class="empty-state"><h2>${recordsError ? '暂时读不到原存档' : '正在取出你的牌…'}</h2><p>${recordsError ? '你的原存档未被覆盖。可以重试，或先制作并保存图片。' : '稍等一下，喜欢还在路上。'}</p>${recordsError ? btn('重新读取', 'reload-records', 'primary-button') : ''}</div>` : records.length ? `<div class="saved-grid">${records.map(d => `<article class="saved-card"><button class="saved-preview" data-action="open" data-id="${d.id}" aria-label="编辑${escape(d.text)}"><canvas data-record="${d.id}"></canvas></button><div class="saved-card-info"><div><strong>${escape(d.text.replace(/\n/g, ' ')) || '还没写下的加油'}</strong><small>${getTemplate(d.templateId).name} · ${new Date(d.updatedAt).toLocaleDateString('zh-CN')}</small></div>${btn(icon('close'), 'delete', 'icon-button', `data-id="${d.id}" aria-label="删除${escape(d.text)}"`)}</div><div class="saved-card-actions">${btn('编辑', 'open', 'secondary-button', `data-id="${d.id}"`)}${btn(`展示 ${icon('arrow')}`, 'show-record', 'primary-button', `data-id="${d.id}"`)}</div></article>`).join('')}</div>` : `<div class="empty-state"><span class="empty-art">${icon('bookmark')}</span><h2>这里，留给你的加油。</h2><p>做好一块牌后，点「保存到我的牌」。</p>${btn('去做第一块', 'home', 'primary-button')}</div>`}<p class="storage-note">最多保存最近 5 块；修改后保存会覆盖原牌，另存才会新增。清理应用或缓存可能丢失，喜欢的记得存图。</p></main>`;
@@ -108,7 +133,11 @@ function paint() {
     if (item) renderBoard(canvas, item, { width: 720, height: 405 });
   });
   const hero = document.querySelector<HTMLCanvasElement>('#hero-board');
-  if (hero) { const sample = createDesign('H1'); sample.text = '为你加油'; renderBoard(hero, sample, { width: 1024, height: 576 }); }
+  if (hero) { const sample = createDesign('L3'); sample.text = '莎出重围'; renderBoard(hero, sample, { width: 1024, height: 480 }); }
+  const banner = document.querySelector<HTMLCanvasElement>('#home-banner');
+  if (banner) { const sample = createDesign('H1'); sample.text = '钦尽全力'; sample.sticker = 'none'; renderBoard(banner, sample, { width: 640, height: 300 }); }
+  const draft = document.querySelector<HTMLCanvasElement>('[data-home-draft]');
+  if (draft) renderBoard(draft, design, { width: 320, height: 180 });
   paintPreview();
 }
 function paintPreview() {
@@ -120,6 +149,8 @@ function paintPreview() {
   if (warning) { warning.textContent = !design.text.trim() ? '先写一句话，再展示给喜欢的人。' : overflow ? '文字较长，建议换行或精简。灯牌也可以主动开启滚动。' : design.scroll ? '预览为静态排版，进入展示后开始滚动。' : ''; warning.classList.toggle('has-warning', overflow); }
 }
 function render() {
+  clearTimeout(searchTimer);
+  cancelAnimationFrame(previewFrame);
   app.innerHTML = page === 'home' ? home() : page === 'saved' ? saved() : editor();
   paint();
 }
@@ -127,9 +158,14 @@ function chooseTemplate(id: TemplateId) {
   const next = createDesign(id);
   const old = getTemplate(design.templateId);
   const t = getTemplate(id);
-  const compatible = t.palettes.find(p => p.id === design.paletteId);
-  design = { ...next, id: page === 'editor' ? design.id : next.id, text: design.text, friendly: design.friendly, layout: old.category === t.category ? design.layout : 'single', ...(compatible ? { paletteId: compatible.id, background: compatible.background, foreground: compatible.foreground } : {}) };
+  const editing = page === 'editor';
+  const sameCategory = editing && old.category === t.category;
+  const compatible = editing ? t.palettes.find(p => p.id === design.paletteId) : undefined;
+  design = { ...next, id: editing ? design.id : next.id, text: editing || draftAvailable ? design.text : next.text, friendly: design.friendly,
+    ...(sameCategory ? { layout: design.layout, sticker: design.sticker, border: design.border, scroll: design.scroll, speed: design.speed, direction: design.direction, loop: design.loop, fontScale: design.fontScale, dotShape: design.dotShape, dotEmoji: design.dotEmoji, dotDensity: design.dotDensity, glow: design.glow } : {}),
+    ...(sameCategory && design.paletteId === 'custom' ? { paletteId: 'custom', foreground: design.foreground, background: design.background, accent: design.accent } : compatible ? { paletteId: compatible.id, background: compatible.background, foreground: compatible.foreground, accent: compatible.accent } : {}) };
   category = t.category;
+  if (!editing) tab = '文字';
   page = 'editor';
   dirty(); render();
 }
@@ -161,7 +197,7 @@ function closeOverlay() {
   if (overlayCleanup) { overlayCleanup(); overlayCleanup = null; }
   cancelAnimationFrame(frame);
   exhibition = false;
-  exportCanvas = null;
+  exportDataUrl = null;
   overlay.innerHTML = '';
   document.body.classList.remove('has-overlay');
   app.removeAttribute('aria-hidden');
@@ -183,6 +219,7 @@ function showBoard() {
   const canvas = overlay.querySelector<HTMLCanvasElement>('#display-board')!;
   const container = overlay.querySelector<HTMLElement>('.exhibition')!;
   let progress = 0; let previous = 0; let stopped = false;
+  let measurement: { width: number; height: number; fontSize: number; textWidth: number } | null = null;
   const size = () => {
     const r = canvas.getBoundingClientRect();
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -193,8 +230,10 @@ function showBoard() {
     const dimensions = size();
     if (design.scroll && !stopped) {
       const elapsed = previous ? Math.min(time - previous, 60) : 0;
-      const metrics = renderBoard(canvas, design, dimensions);
-      const distance = (dimensions.width + metrics.textWidth) / 2 + metrics.fontSize * 0.25;
+      if (!measurement || measurement.width !== dimensions.width || measurement.height !== dimensions.height) {
+        measurement = { ...dimensions, ...measureBoard(canvas, design, dimensions) };
+      }
+      const distance = (dimensions.width + measurement.textWidth) / 2 + measurement.fontSize * 0.25;
       progress += elapsed / 1000 * [0, 55, 85, 120, 170, 230][design.speed] * dimensions.height / 720;
       if (progress > distance * 2) { if (design.loop) progress = 0; else stopped = true; }
       renderBoard(canvas, design, { ...dimensions, offset: (distance - progress) * (design.direction === 'left' ? 1 : -1) });
@@ -216,20 +255,32 @@ function showBoard() {
 const exportOptions = [ ['board', '横版图片', '1920 × 1080'], ['comment', '评论晒图卡', '1080 × 1080'], ['note', '笔记分享卡', '1080 × 1440'], ['a4', 'A4 打印图', '3508 × 2480'], ['memory', '观赛返图卡', '自填地点与日期'] ];
 function exportsDialog() {
   if (!design.text.trim()) { toast('先写一句话，再保存图片。'); return; }
-  openOverlay(`<div class="modal-backdrop"><section class="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"><div class="modal-header"><div><h2 id="export-title">把这份喜欢带走</h2><p>存图备用，或分享你的加油牌。</p></div>${btn(icon('close'), 'close', 'icon-button', 'aria-label="关闭保存窗口"')}</div><div class="export-layout"><div class="export-preview"><img id="export-image" alt="导出图片预览"></div><div class="export-settings"><div class="export-options">${exportOptions.map(([id, label, size]) => btn(`<span>${label}<small>${size}</small></span>${exportFormat === id ? icon('check') : ''}`, 'format', exportFormat === id ? 'selected' : '', `data-id="${id}" aria-pressed="${exportFormat === id}"`)).join('')}</div>${exportFormat === 'memory' ? `<div class="memory-fields"><label>地点（选填）<input id="memory-place" value="${escape(memory.place)}" maxlength="30" placeholder="写下你真实去过的地方"></label><label>日期（选填）<input id="memory-date" type="date" value="${escape(memory.date)}"></label><small>这是设计纪念卡，不是现场合照。</small></div>` : ''}<div class="export-buttons">${btn(`${icon('download')}${isNative() ? '保存到相册' : '下载图片'}`, 'save-image', 'primary-button wide')}${exportFormat === 'comment' ? btn('打开评论草稿', 'share-comment', 'secondary-button wide') : exportFormat === 'note' || exportFormat === 'memory' ? btn('打开笔记草稿', 'share-note', 'secondary-button wide') : ''}</div><p class="export-hint">${exportFormat === 'a4' ? '打印选择 A4 横向、适合页面；实体物料是否可带入请确认当场规定。' : exportFormat === 'comment' || exportFormat === 'note' || exportFormat === 'memory' ? '分享需在小红书内使用；草稿不等于发布，请在发布页检查工具挂件。' : '图片不含操作按钮与宣传水印。可提前存好，现场备用。'}</p></div></div></section></div>`);
+  openOverlay(`<div class="modal-backdrop"><section class="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"><div class="modal-header"><div><h2 id="export-title">把这份喜欢带走</h2><p>存图备用，或分享你的加油牌。</p></div>${btn(icon('close'), 'close', 'icon-button', 'aria-label="关闭保存窗口"')}</div><div class="export-layout"><div class="export-preview"><img id="export-image" alt="导出图片预览"></div><div class="export-settings"><div class="export-options">${exportOptions.map(([id, label, size]) => btn(`<span>${label}<small>${size}</small></span>${exportFormat === id ? icon('check') : ''}`, 'format', exportFormat === id ? 'selected' : '', `data-id="${id}" aria-pressed="${exportFormat === id}"`)).join('')}</div>${exportFormat === 'memory' ? `<div class="memory-fields"><label>地点（选填）<input id="memory-place" value="${escape(memory.place)}" maxlength="30" placeholder="写下你真实去过的地方"></label><label>日期（选填）<input id="memory-date" type="date" value="${escape(memory.date)}"></label><small>这是设计纪念卡，不是现场合照。</small></div>` : ''}<div class="export-buttons">${btn(`${icon('download')}${isBrowserPreview() ? '下载图片' : '保存到相册'}`, 'save-image', 'primary-button wide')}${exportFormat === 'comment' ? btn('打开评论草稿', 'share-comment', 'secondary-button wide') : exportFormat === 'note' || exportFormat === 'memory' ? btn('打开笔记草稿', 'share-note', 'secondary-button wide') : ''}</div><p class="export-hint">${exportFormat === 'a4' ? '打印选择 A4 横向、适合页面；实体物料是否可带入请确认当场规定。' : exportFormat === 'comment' || exportFormat === 'note' || exportFormat === 'memory' ? '分享需在小红书内使用；草稿不等于发布，请在发布页检查工具挂件。' : '图片不含操作按钮与宣传水印。可提前存好，现场备用。'}</p></div></div></section></div>`);
   updateExport();
 }
 function updateExport() {
-  try { exportCanvas = renderExport(design, exportFormat, memory); const img = overlay.querySelector<HTMLImageElement>('#export-image'); if (img) img.src = exportCanvas.toDataURL('image/png'); } catch (error) { exportCanvas = null; const img = overlay.querySelector<HTMLImageElement>('#export-image'); if (img) { img.removeAttribute('src'); img.alt = error instanceof Error ? error.message : '暂时无法导出'; } overlay.querySelectorAll<HTMLButtonElement>('.export-buttons button').forEach(b => { b.disabled = true; }); fail(error); }
+  try {
+    // Encode once for both preview and delivery; do not retain the large A4
+    // canvas or encode a second copy when the user saves or shares it.
+    exportDataUrl = renderExport(design, exportFormat, memory).toDataURL('image/png');
+    const img = overlay.querySelector<HTMLImageElement>('#export-image');
+    if (img) img.src = exportDataUrl;
+  } catch (error) {
+    exportDataUrl = null;
+    const img = overlay.querySelector<HTMLImageElement>('#export-image');
+    if (img) { img.removeAttribute('src'); img.alt = error instanceof Error ? error.message : '暂时无法导出'; }
+    overlay.querySelectorAll<HTMLButtonElement>('.export-buttons button').forEach(b => { b.disabled = true; });
+    fail(error);
+  }
 }
 async function deliver(kind: 'save' | 'comment' | 'note') {
-  if (busy || !exportCanvas) return;
+  if (busy || !exportDataUrl) return;
   busy = true;
   overlay.querySelectorAll<HTMLButtonElement>('.export-buttons button').forEach(b => { b.disabled = true; });
   try {
-    const data = exportCanvas.toDataURL('image/png');
-    if (kind !== 'save') { clearTimeout(draftTimer); await saveLocal('draft-v1', { ...design }).catch(() => toast('草稿未保存，建议先存图备用。')); }
-    if (kind === 'save') { await saveImage(data); toast(isNative() ? '已保存到相册' : '图片已下载'); }
+    const data = exportDataUrl;
+    if (kind !== 'save' && draftReady) { clearTimeout(draftTimer); await saveLocal('draft-v1', { ...design }).catch(() => toast('草稿未保存，建议先存图备用。')); }
+    if (kind === 'save') { await saveImage(data); toast(isBrowserPreview() ? '图片已下载' : '已保存到相册'); }
     else { await shareImage(data, kind, design); toast('已打开分享流程；是否发布请在小红书内确认。'); }
   } catch (error) { fail(error); }
   finally { busy = false; overlay.querySelectorAll<HTMLButtonElement>('.export-buttons button').forEach(b => { b.disabled = false; }); }
@@ -240,13 +291,17 @@ async function action(button: HTMLElement) {
     case 'home': page = 'home'; render(); window.scrollTo(0, 0); break;
     case 'saved': page = 'saved'; render(); window.scrollTo(0, 0); break;
     case 'category': category = id as Category; render(); break;
-    case 'template': chooseTemplate(id as TemplateId); window.scrollTo(0, 0); break;
+    case 'template': { const fromHome = page !== 'editor'; chooseTemplate(id as TemplateId); if (fromHome) window.scrollTo(0, 0); break; }
     case 'tab': tab = id!; render(); break;
-    case 'editor-category': category = id as Category; render(); break;
+    case 'resume-draft': page = 'editor'; category = getTemplate(design.templateId).category; tab = '文字'; render(); window.scrollTo(0, 0); break;
+    case 'dot-shape': design.dotShape = id as Design['dotShape']; dirty(); render(); break;
+    case 'dot-density': design.dotDensity = Number(id); dirty(); render(); break;
+    case 'dot-emoji-preset': design.dotEmoji = normalizeDotEmoji(id); dirty(); render(); break;
     case 'layout': design.layout = id as Design['layout']; dirty(); render(); break;
-    case 'slogan-category': sloganCategory = id!; render(); break;
-    case 'slogan': design.text = button.dataset.text!; dirty(); render(); break;
-    case 'palette': { const p = getTemplate(design.templateId).palettes.find(p => p.id === id); if (p) { design.paletteId = p.id; design.foreground = p.foreground; design.background = p.background; dirty(); render(); } break; }
+    case 'slogan-category': sloganCategory = id as SloganFilter; sloganPage = 0; render(); break;
+    case 'slogan-page': sloganPage = Number(id); updateSloganList(); break;
+    case 'slogan': design.text = button.dataset.text!; if (design.text.includes('\n')) design.layout = 'double'; dirty(); render(); break;
+    case 'palette': { const p = getTemplate(design.templateId).palettes.find(p => p.id === id); if (p) { design.paletteId = p.id; design.foreground = p.foreground; design.background = p.background; design.accent = p.accent; dirty(); render(); } break; }
     case 'sticker': design.sticker = id as Design['sticker']; dirty(); render(); break;
     case 'direction': design.direction = id as Design['direction']; dirty(); render(); break;
     case 'archive': await archive(); break;
@@ -270,9 +325,27 @@ document.addEventListener('click', event => { const button = (event.target as HT
 document.addEventListener('input', event => {
   const target = event.target as HTMLInputElement;
   switch (target.id) {
-    case 'board-text': design.text = target.value; dirty(); paintPreview(); { const count = document.querySelector('#text-count'); if (count) count.textContent = Array.from(design.text).length + ' / 2000'; } break;
-    case 'slogan-search': search = target.value; { const list = document.querySelector('#slogans'); if (list) list.innerHTML = sloganList(); } break;
-    case 'foreground': case 'background': design[target.id] = target.value; design.paletteId = 'custom'; dirty(); paintPreview(); break;
+    case 'board-text': {
+      design.text = target.value; dirty(); paintPreview();
+      const count = document.querySelector('#text-count');
+      if (count) count.textContent = Array.from(design.text).length + ' / 2000';
+      const variants = document.querySelector('#slogan-variants');
+      if (variants) variants.innerHTML = sloganVariants();
+      const current = findSloganByText(design.text);
+      document.querySelectorAll<HTMLButtonElement>('#slogans [data-action="slogan"]').forEach(button => button.classList.toggle('selected', button.dataset.text === current?.text));
+      break;
+    }
+    case 'slogan-search': search = target.value; sloganPage = 0; clearTimeout(searchTimer); searchTimer = window.setTimeout(updateSloganList, 120); break;
+    case 'foreground': case 'background': case 'accent': design[target.id] = target.value; design.paletteId = 'custom'; dirty(); paintPreview(); break;
+    case 'dot-emoji': if (!(event as InputEvent).isComposing) { design.dotEmoji = normalizeDotEmoji(target.value); dirty(); paintPreview(); } break;
+    case 'font-scale': case 'glow': {
+      const key = target.id === 'font-scale' ? 'fontScale' : 'glow';
+      design[key] = Number(target.value);
+      const output = document.getElementById(target.id + '-value');
+      if (output) output.textContent = target.value + '%';
+      dirty(); cancelAnimationFrame(previewFrame); previewFrame = requestAnimationFrame(paintPreview); break;
+    }
+    case 'speed': { design.speed = Number(target.value); const output = target.nextElementSibling; if (output) output.textContent = target.value + ' / 5'; dirty(); break; }
     case 'memory-place': memory.place = target.value; updateExport(); break;
     case 'memory-date': memory.date = target.value; updateExport(); break;
   }
@@ -281,7 +354,7 @@ document.addEventListener('change', event => {
   const target = event.target as HTMLInputElement;
   switch (target.id) {
     case 'border': case 'scroll': case 'loop': case 'friendly': design[target.id] = target.checked; dirty(); render(); break;
-    case 'speed': design.speed = Number(target.value); dirty(); render(); break;
+    case 'dot-emoji': design.dotEmoji = normalizeDotEmoji(target.value); target.value = design.dotEmoji; dirty(); paintPreview(); break;
   }
 });
 document.addEventListener('keydown', event => {
@@ -294,25 +367,33 @@ document.addEventListener('keydown', event => {
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
 });
-async function loadRecords(preferSaved = false) {
+async function loadRecords() {
   recordsError = false;
-  try { records = await readRecords(); recordsReady = true; if (preferSaved && records.length && editRevision === 0 && page === 'home') page = 'saved'; }
+  try { records = await readRecords(); recordsReady = true; }
   catch { recordsReady = false; recordsError = true; toast('原存档未能读取，已暂停修改存档；仍可制作和存图。'); }
   render();
 }
 async function start() {
   const probe = document.createElement('div'); probe.style.cssText = 'display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden'; probe.innerHTML = '<i style="height:1px"></i><i style="height:1px"></i>'; document.body.appendChild(probe); if (probe.scrollHeight !== 3) document.documentElement.classList.add('no-flex-gap'); probe.remove();
+  const refreshHeight = () => {
+    const height = window.visualViewport?.height || window.innerHeight;
+    document.documentElement.style.setProperty('--app-height', height + 'px');
+  };
+  refreshHeight();
   render();
   const initialRevision = editRevision;
-  void loadRecords(true);
+  void loadRecords();
   void loadLocal('draft-v1').then(value => {
+    draftReady = true;
     const draft = validateDesign(value);
-    if (draft && editRevision === initialRevision && page !== 'editor') { design = draft; category = getTemplate(design.templateId).category; render(); }
-  }).catch(() => {});
+    if (draft && editRevision === initialRevision && page !== 'editor') { design = draft; draftAvailable = true; category = getTemplate(design.templateId).category; render(); }
+    else if (editRevision !== initialRevision) dirty();
+  }).catch(() => { toast('上次草稿暂时读不到，已暂停自动保存；仍可保存到我的牌或存图。'); });
   void loadLocal('notice-v1').then(value => { noticeSeen = value === true; }).catch(() => {});
   const refreshInsets = () => { void getInsets().then(insets => { (['top', 'right', 'bottom', 'left'] as const).forEach(key => document.documentElement.style.setProperty('--native-' + key, insets[key] + 'px')); }).catch(() => {}); };
   refreshInsets();
   let resizeTimer = 0;
-  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = window.setTimeout(refreshInsets, 200); });
+  window.addEventListener('resize', () => { refreshHeight(); clearTimeout(resizeTimer); resizeTimer = window.setTimeout(refreshInsets, 200); });
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', refreshHeight);
 }
 void start();

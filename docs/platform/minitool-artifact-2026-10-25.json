@@ -1,0 +1,24 @@
+{
+  "skillVersion": "1.8.0",
+  "skillArchiveSha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
+  "zipBytes": 33256,
+  "zipSha256": "43b7a12d22e325934e664ac963951ac90414c471b1c1498b3482c874de16d910",
+  "uncompressedBytes": 108123,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 693,
+      "sha256": "aecccdbd3848f748d0d1b68b25e27da472c605aac1ad032ca40c12834a8697a9"
+    },
+    {
+      "path": "assets/app.css",
+      "bytes": 33407,
+      "sha256": "3d9c94beb89280542fbd70f0ce5c85960b08f8899bdd0f78745f077f72e67950"
+    },
+    {
+      "path": "assets/app.js",
+      "bytes": 74023,
+      "sha256": "85e2d55d52224c1fb76465bb8a761409669e858225d4df68efef798bb6354981"
+    }
+  ]
+}

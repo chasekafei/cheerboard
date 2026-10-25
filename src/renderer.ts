@@ -1,4 +1,5 @@
-import { getTemplate, type Design } from './catalog';
+import { getTemplate, type Design } from './catalog.ts';
+import { normalizeDotEmoji } from './design-values.ts';
 
 type RenderOptions = { width?: number; height?: number; offset?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
@@ -8,6 +9,19 @@ const INK = '#172657';
 let dotMask: HTMLCanvasElement | null = null;
 let dotMaskKey = '';
 let dotMaskPixels: Uint8ClampedArray | null = null;
+const dotSprites = new Map<string, HTMLCanvasElement>();
+const MAX_DOT_SPRITES = 16;
+
+function bounded(value: number, minimum: number, maximum: number, fallback: number): number {
+  return Number.isFinite(value) ? Math.max(minimum, Math.min(maximum, value)) : fallback;
+}
+
+function brightCore(color: string): string {
+  const hex = /^#([a-f\d]{6})$/i.exec(color);
+  if (!hex) return '#FFFDFB';
+  const rgb = [0, 2, 4].map(offset => Math.round(parseInt(hex[1].slice(offset, offset + 2), 16) * 0.14 + 255 * 0.86));
+  return 'rgb(' + rgb.join(',') + ')';
+}
 
 function roundedRect(ctx: Context, x: number, y: number, width: number, height: number, radius: number): void {
   const r = Math.min(radius, width / 2, height / 2);
@@ -91,6 +105,48 @@ function fries(ctx: Context, x: number, y: number, radius: number, outline: stri
   ctx.restore();
 }
 
+function pingPongBall(ctx: Context, x: number, y: number, radius: number, outline: string): void {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = '#FFA541';
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = radius * 0.09;
+  ctx.stroke();
+  ctx.fill();
+  ctx.strokeStyle = '#FFE3B4';
+  ctx.lineWidth = radius * 0.12;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(x, y, radius * 0.66, Math.PI * 1.08, Math.PI * 1.55);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function pingPongPaddle(ctx: Context, x: number, y: number, radius: number, outline: string): void {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(0.48);
+  ctx.lineWidth = radius * 0.08;
+  ctx.strokeStyle = outline;
+  roundedRect(ctx, -radius * 0.14, radius * 0.25, radius * 0.28, radius * 0.77, radius * 0.08);
+  ctx.fillStyle = '#F0CA91';
+  ctx.stroke();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(0, -radius * 0.22, radius * 0.68, radius * 0.78, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#FF6655';
+  ctx.stroke();
+  ctx.fill();
+  ctx.strokeStyle = '#FFB39A';
+  ctx.lineWidth = radius * 0.055;
+  ctx.beginPath();
+  ctx.ellipse(0, -radius * 0.22, radius * 0.51, radius * 0.61, 0, Math.PI * 0.95, Math.PI * 1.6);
+  ctx.stroke();
+  ctx.restore();
+  pingPongBall(ctx, x + radius * 0.67, y - radius * 0.65, radius * 0.28, outline);
+}
+
 function sticker(ctx: Context, design: Design, x: number, y: number, radius: number, accent: string, outline: string): void {
   if (design.sticker === 'none') return;
   ctx.save();
@@ -99,6 +155,8 @@ function sticker(ctx: Context, design: Design, x: number, y: number, radius: num
   ctx.shadowOffsetY = radius * 0.07;
   if (design.sticker === 'star') star(ctx, x, y, radius, accent, outline, 0.17);
   else if (design.sticker === 'heart') heart(ctx, x, y, radius, accent, outline);
+  else if (design.sticker === 'paddle') pingPongPaddle(ctx, x, y, radius, outline);
+  else if (design.sticker === 'ball') pingPongBall(ctx, x, y, radius * 0.84, outline);
   else fries(ctx, x, y, radius, outline);
   ctx.restore();
 }
@@ -201,15 +259,6 @@ function drawBackground(ctx: Context, design: Design, width: number, height: num
     ctx.restore();
     polygon(ctx, [[width * 0.06, height * 0.08], [width * 0.19, height * 0.08], [width * 0.175, height * 0.13], [width * 0.045, height * 0.13]], design.foreground);
     polygon(ctx, [[width * 0.81, height * 0.87], [width * 0.94, height * 0.87], [width * 0.925, height * 0.92], [width * 0.795, height * 0.92]], design.foreground);
-  } else if (id === 'L3') {
-    ctx.save();
-    ctx.fillStyle = '#FFFFFF';
-    ctx.globalAlpha = 0.055;
-    const gap = Math.max(5, unit * 0.026);
-    for (let y = gap; y < height; y += gap) {
-      for (let x = gap; x < width; x += gap) { ctx.beginPath(); ctx.arc(x, y, gap * 0.16, 0, Math.PI * 2); ctx.fill(); }
-    }
-    ctx.restore();
   }
   if (design.border) {
     ctx.save();
@@ -231,15 +280,39 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
   ctx.lineJoin = 'round';
   ctx.miterLimit = 2;
   if (design.templateId === 'L2') {
-    ctx.shadowColor = accent;
-    ctx.shadowBlur = fontSize * 0.1;
+    // A flat colored outline stays distinct from the luminous neon tube style.
+    ctx.shadowBlur = 0;
     ctx.strokeStyle = accent;
     ctx.lineWidth = fontSize * 0.14;
     ctx.strokeText(line, x, y);
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = '#080D24';
+    ctx.strokeStyle = design.background;
     ctx.lineWidth = fontSize * 0.065;
     ctx.strokeText(line, x, y);
+  } else if (design.templateId === 'L4') {
+    const strength = bounded(design.glow, 0, 100, 65) / 100;
+    ctx.save();
+    // Follow the glyph contours: a colored tube surrounds a narrow bright core.
+    // Keep the character interiors dark instead of filling the whole glyph white.
+    if (strength > 0) {
+      ctx.globalAlpha = 0.3 + strength * 0.25;
+      ctx.strokeStyle = design.foreground;
+      ctx.shadowColor = design.foreground;
+      ctx.shadowBlur = fontSize * (0.025 + strength * 0.14);
+      ctx.lineWidth = fontSize * 0.055;
+      ctx.strokeText(line, x, y);
+    }
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = design.foreground;
+    ctx.shadowColor = design.foreground;
+    ctx.shadowBlur = fontSize * 0.035 * strength;
+    ctx.lineWidth = Math.max(1.5, fontSize * 0.038);
+    ctx.strokeText(line, x, y);
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = brightCore(design.foreground);
+    ctx.lineWidth = Math.max(0.7, fontSize * 0.009);
+    ctx.strokeText(line, x, y);
+    ctx.restore();
+    return;
   } else if (design.templateId === 'H1') {
     ctx.strokeStyle = INK;
     ctx.lineWidth = fontSize * 0.12;
@@ -266,28 +339,56 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
     ctx.strokeText(line, x, y);
   }
   ctx.fillStyle = design.foreground;
-  if (design.templateId === 'L1' && design.paletteId === 'red-blue') {
-    const textWidth = ctx.measureText(line).width;
-    const gradient = ctx.createLinearGradient(x - textWidth / 2, 0, x + textWidth / 2, 0);
-    gradient.addColorStop(0, design.foreground);
-    gradient.addColorStop(0.49, design.foreground);
-    gradient.addColorStop(0.5, accent);
-    gradient.addColorStop(1, accent);
-    ctx.fillStyle = gradient;
-  }
   ctx.fillText(line, x, y);
 }
 
-function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number, accent: string): void {
-  // Rasterize actual system glyphs into a small mask, then draw individual round LEDs.
+function dotSprite(design: Design, spacing: number, color: string): HTMLCanvasElement {
+  const shape = ['square', 'heart', 'star', 'emoji'].includes(design.dotShape) ? design.dotShape : 'circle';
+  const emoji = shape === 'emoji' ? normalizeDotEmoji(design.dotEmoji) : '';
+  const side = Math.max(8, Math.min(128, Math.ceil(spacing)));
+  const glow = shape === 'emoji' ? 0 : bounded(design.glow, 0, 100, 65);
+  const key = JSON.stringify([shape, emoji, side, shape === 'emoji' ? '' : color, glow]);
+  const cached = dotSprites.get(key);
+  if (cached) return cached;
+  const sprite = document.createElement('canvas');
+  sprite.width = side;
+  sprite.height = side;
+  const ctx = sprite.getContext('2d');
+  if (ctx) {
+    const middle = side / 2;
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = side * 0.07 * glow / 100;
+    if (shape === 'emoji') {
+      ctx.font = Math.round(side * 0.7) + 'px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(emoji, middle, middle, side * 0.8);
+    } else if (shape === 'square') ctx.fillRect(side * 0.18, side * 0.18, side * 0.64, side * 0.64);
+    else if (shape === 'heart') heart(ctx, middle, middle, side * 0.27, color, color);
+    else if (shape === 'star') star(ctx, middle, middle, side * 0.36, color, color);
+    else { ctx.beginPath(); ctx.arc(middle, middle, side * 0.34, 0, Math.PI * 2); ctx.fill(); }
+  }
+  if (dotSprites.size >= MAX_DOT_SPRITES) {
+    const oldest = dotSprites.keys().next().value;
+    if (typeof oldest === 'string') dotSprites.delete(oldest);
+  }
+  dotSprites.set(key, sprite);
+  return sprite;
+}
+
+function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number): void {
+  // Rasterize actual system glyphs into a small mask, then stamp separated LEDs.
   // The grid follows screen height, so the dots remain distinct on thumbnails and exports.
   // Only rasterize the visible viewport. Even a very long scrolling sentence
   // never allocates a canvas proportional to the sentence's width.
-  const spacing = Math.max(2, Math.min(width, height) * 0.015, width / 384, height / 192);
+  const density = Math.round(bounded(design.dotDensity, 1, 3, 2));
+  const spacing = Math.max(2, Math.min(width, height) * [0, 0.03, 0.022, 0.015][density], width / 384, height / 192);
   const mask = dotMask || (dotMask = document.createElement('canvas'));
   const maskWidth = Math.max(1, Math.ceil(width / spacing));
   const maskHeight = Math.max(1, Math.ceil(height / spacing));
   const sampleX = Math.round(x / spacing) * spacing;
+  const shiftX = x - sampleX;
   const key = JSON.stringify([maskWidth, maskHeight, spacing, fontSize, gap, sampleX, y, lines]);
   if (mask.width !== maskWidth) mask.width = maskWidth;
   if (mask.height !== maskHeight) mask.height = maskHeight;
@@ -307,33 +408,30 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
     dotMaskKey = key;
   }
   const pixels = dotMaskPixels;
+  const primary = dotSprite(design, spacing, design.foreground);
   ctx.save();
   for (let row = 0; row < mask.height; row++) {
     for (let column = 0; column < mask.width; column++) {
       if (pixels[(row * mask.width + column) * 4 + 3] < 64) continue;
-      ctx.fillStyle = column / mask.width < 0.62 ? design.foreground : accent;
-      ctx.beginPath();
-      ctx.arc((column + 0.5) * spacing, (row + 0.5) * spacing, spacing * 0.38, 0, Math.PI * 2);
-      ctx.fill();
+      // Keep sub-cell motion smooth while the much cheaper mask changes only
+      // when the sentence crosses a grid boundary.
+      ctx.drawImage(primary, column * spacing + shiftX, row * spacing, spacing, spacing);
     }
   }
   ctx.restore();
 }
 
-export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: RenderOptions = {}): RenderResult {
-  const width = Math.max(1, Math.round(options.width || canvas.width || 1920));
-  const height = Math.max(1, Math.round(options.height || canvas.height || 1080));
-  if (canvas.width !== width) canvas.width = width;
-  if (canvas.height !== height) canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return { fontSize: 0, overflow: true, textWidth: 0 };
-  const template = getTemplate(design.templateId);
-  const palette = template.palettes.find((item) => item.id === design.paletteId) || template.palettes[0];
-  const accent = palette.accent;
-  const light = template.category === 'light';
+function boardDimensions(canvas: HTMLCanvasElement, options: RenderOptions): { width: number; height: number } {
+  return {
+    width: Math.max(1, Math.round(options.width || canvas.width || 1920)),
+    height: Math.max(1, Math.round(options.height || canvas.height || 1080)),
+  };
+}
+
+function boardLayout(ctx: Context, design: Design, width: number, height: number) {
+  const light = getTemplate(design.templateId).category === 'light';
   const scrolling = light && design.scroll;
   const unit = Math.min(width, height);
-  const hasSticker = design.sticker !== 'none';
   const lines = linesFor(design.text, design.layout);
   const padding = unit * (light ? 0.09 : 0.12);
   // Stickers stay in the corner, outside the text's quiet central band.
@@ -342,6 +440,7 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const lineHeight = 1.19;
   const maxFont = textAreaHeight / (lines.length * lineHeight);
   const minFont = Math.min(maxFont, height * (light ? 0.19 : 0.15));
+  const outlineAllowance = design.templateId === 'L4' ? 0.32 : 0.18;
   let fontSize = maxFont;
   const measure = (size: number) => {
     ctx.font = '900 ' + size + 'px ' + FONT;
@@ -353,20 +452,44 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
     for (let i = 0; i < 14; i++) {
       const middle = (low + high) / 2;
       // Include outline and shadow extents, not just advance width.
-      if (measure(middle) + middle * 0.18 <= textAreaWidth) low = middle;
+      if (measure(middle) + middle * outlineAllowance <= textAreaWidth) low = middle;
       else high = middle;
     }
     fontSize = low;
   } else fontSize = Math.max(minFont, maxFont * 0.86);
+  fontSize *= bounded(design.fontScale, 70, 130, 100) / 100;
   const textWidth = measure(fontSize);
-  const overflow = !scrolling && textWidth + fontSize * 0.18 > textAreaWidth + 1;
+  const overflow = !scrolling && textWidth + fontSize * outlineAllowance > textAreaWidth + 1;
+  return { fontSize, overflow, textWidth, light, scrolling, unit, lines, padding, lineHeight };
+}
+
+/** Measure layout without drawing, reading pixels or resizing the canvas bitmap. */
+export function measureBoard(canvas: HTMLCanvasElement, design: Design, options: RenderOptions = {}): RenderResult {
+  const { width, height } = boardDimensions(canvas, options);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return { fontSize: 0, overflow: true, textWidth: 0 };
+  const { fontSize, overflow, textWidth } = boardLayout(ctx, design, width, height);
+  return { fontSize, overflow, textWidth };
+}
+
+export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: RenderOptions = {}): RenderResult {
+  const { width, height } = boardDimensions(canvas, options);
+  if (canvas.width !== width) canvas.width = width;
+  if (canvas.height !== height) canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return { fontSize: 0, overflow: true, textWidth: 0 };
+  const template = getTemplate(design.templateId);
+  const palette = template.palettes.find((item) => item.id === design.paletteId) || template.palettes[0];
+  const accent = design.accent || palette.accent;
+  const { fontSize, overflow, textWidth, light, scrolling, unit, lines, padding, lineHeight } = boardLayout(ctx, design, width, height);
+  const hasSticker = design.sticker !== 'none';
   ctx.save();
   ctx.clearRect(0, 0, width, height);
   drawBackground(ctx, design, width, height, accent);
   const offset = scrolling ? (options.offset || 0) : 0;
   const x = width / 2 + offset;
   const y = height * (design.templateId === 'H2' ? 0.52 : 0.51);
-  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height, accent);
+  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height);
   else {
     ctx.save();
     if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
@@ -375,9 +498,9 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
     ctx.restore();
   }
   if (hasSticker) {
-    const stickerRadius = unit * (light ? 0.065 : 0.09);
+    const stickerRadius = unit * (light ? 0.04 : 0.09);
     const stickerX = width - padding * 1.08;
-    const stickerY = height * (light ? 0.17 : 0.2);
+    const stickerY = height * (light ? 0.065 : 0.2);
     sticker(ctx, design, stickerX, stickerY, stickerRadius, light ? accent : design.templateId === 'H2' ? accent : design.foreground, light ? design.foreground : design.templateId === 'H2' ? '#FFFFFF' : INK);
   }
   ctx.restore();
