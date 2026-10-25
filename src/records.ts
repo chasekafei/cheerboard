@@ -1,5 +1,6 @@
 import { createDesign, getTemplate, TEMPLATES, type Design } from './catalog.ts';
 import { normalizeDotEmoji } from './design-values.ts';
+import { BOARD_FONTS } from './fonts.ts';
 import { loadLocal, saveLocal } from './platform.ts';
 
 function color(value: unknown, fallback: string): string {
@@ -30,6 +31,11 @@ export function validateDesign(value: unknown): Design | null {
     dotDensity: boundedNumber(d.dotDensity, 1, 3, base.dotDensity),
     glow: boundedNumber(d.glow, 0, 100, base.glow),
     fontScale: boundedNumber(d.fontScale, 70, 130, base.fontScale),
+    fontId: base.templateId === 'L4' ? 'sans' : BOARD_FONTS.some(font => font.id === d.fontId) ? d.fontId! : base.fontId,
+    gradient: d.gradient === true,
+    gradientEnd: color(d.gradientEnd, palette?.gradientEnd || palette?.accent || base.gradientEnd),
+    gradientAngle: boundedNumber(d.gradientAngle, 0, 360, base.gradientAngle),
+    orientation: d.orientation === 'portrait' ? 'portrait' : 'landscape',
     layout: d.layout === 'double' ? 'double' : 'single',
     sticker: ['star', 'heart', 'fries', 'paddle', 'ball', 'none'].indexOf(d.sticker || '') >= 0 ? d.sticker! : base.sticker,
     border: typeof d.border === 'boolean' ? d.border : base.border,

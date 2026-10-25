@@ -1,5 +1,7 @@
 import { SLOGANS } from './slogans.ts';
 import { DEFAULT_DOT_EMOJI } from './design-values.ts';
+import type { BoardFontId } from './fonts.ts';
+export type { BoardFontId } from './fonts.ts';
 export { SLOGANS, SLOGAN_CATEGORIES, findSlogans, getSloganPage, findSloganByText, type Slogan, type SloganCategory, type SloganFilter } from './slogans.ts';
 
 export type Category = 'light' | 'banner';
@@ -18,6 +20,11 @@ export type Design = {
   dotDensity: number;
   glow: number;
   fontScale: number;
+  fontId: BoardFontId;
+  gradient: boolean;
+  gradientEnd: string;
+  gradientAngle: number;
+  orientation: 'portrait' | 'landscape';
   layout: 'single' | 'double';
   sticker: 'star' | 'heart' | 'fries' | 'paddle' | 'ball' | 'none';
   border: boolean;
@@ -28,7 +35,7 @@ export type Design = {
   friendly: boolean;
   updatedAt: number;
 };
-export type Palette = { id: string; name: string; background: string; foreground: string; accent: string };
+export type Palette = { id: string; name: string; background: string; foreground: string; accent: string; gradientEnd?: string; gradientAngle?: number };
 export type Template = { id: TemplateId; name: string; category: Category; description: string; palettes: Palette[] };
 
 const BASE_PALETTES: Palette[] = [
@@ -39,7 +46,14 @@ const BASE_PALETTES: Palette[] = [
   { id: 'pink', name: '霓虹粉', background: '#100916', foreground: '#FF76D5', accent: '#6DDFFF' },
 ];
 
-const LIGHT_PALETTES = BASE_PALETTES.map(palette => ({ ...palette, name: palette.id === 'red-blue' ? '珊瑚红' : palette.name, background: '#000000' }));
+const LIGHT_PALETTES: Palette[] = [
+  ...BASE_PALETTES.map(palette => ({ ...palette, name: palette.id === 'red-blue' ? '珊瑚红' : palette.name, background: '#000000' })),
+  { id: 'gradient-pink-blue', name: '粉蓝渐变', background: '#000000', foreground: '#FF76D5', accent: '#75DFFF', gradientEnd: '#75DFFF', gradientAngle: 0 },
+  { id: 'gradient-sunset', name: '橙金渐变', background: '#000000', foreground: '#FF804D', accent: '#FFD86B', gradientEnd: '#FFD86B', gradientAngle: 0 },
+  { id: 'gradient-ocean', name: '蓝紫渐变', background: '#000000', foreground: '#71E7FF', accent: '#7E87FF', gradientEnd: '#7E87FF', gradientAngle: 0 },
+  { id: 'gradient-lime', name: '青绿渐变', background: '#000000', foreground: '#B8F66C', accent: '#65E6C4', gradientEnd: '#65E6C4', gradientAngle: 0 },
+  { id: 'gradient-violet', name: '紫粉渐变', background: '#000000', foreground: '#D39BFF', accent: '#FF77B9', gradientEnd: '#FF77B9', gradientAngle: 0 },
+];
 
 export const TEMPLATES: Template[] = [
   { id: 'L3', name: '点阵灯牌', category: 'light', description: '一颗颗光点，汇成加油声', palettes: [
@@ -84,7 +98,7 @@ export function createDesign(templateId: TemplateId = 'L3'): Design {
   const palette = template.palettes[0];
   return {
     id: 'board-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8),
-    text: SLOGANS.find(slogan => slogan.id === (template.category === 'light' ? 'C004' : 'C003'))!.text,
+    text: template.category === 'light' ? '点击屏幕编辑文案和样式' : SLOGANS.find(slogan => slogan.id === 'C003')!.text,
     templateId: template.id,
     paletteId: palette.id,
     foreground: palette.foreground,
@@ -95,6 +109,11 @@ export function createDesign(templateId: TemplateId = 'L3'): Design {
     dotDensity: 2,
     glow: 65,
     fontScale: 100,
+    fontId: 'sans',
+    gradient: Boolean(palette.gradientEnd),
+    gradientEnd: palette.gradientEnd || palette.accent,
+    gradientAngle: palette.gradientAngle ?? 0,
+    orientation: 'landscape',
     layout: 'single',
     sticker: template.category === 'light' ? 'none' : template.id === 'H2' ? 'heart' : 'star',
     border: template.category !== 'light',

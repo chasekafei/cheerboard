@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Cheerboard Sans';
+  src: url('/fonts/CheerboardSans.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cheerboard Tube';
+  src: url('/fonts/CheerboardTube.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cheerboard Handwriting';
+  src: url('/fonts/CheerboardHandwriting.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}

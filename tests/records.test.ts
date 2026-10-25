@@ -34,6 +34,11 @@ test('legacy drafts keep their content and settings while receiving new design v
   assert.equal(migrated.dotDensity, 2);
   assert.equal(migrated.glow, 65);
   assert.equal(migrated.fontScale, 100);
+  assert.equal(migrated.fontId, 'sans');
+  assert.equal(migrated.gradient, false);
+  assert.equal(migrated.gradientEnd, '#64D9FF');
+  assert.equal(migrated.gradientAngle, 0);
+  assert.equal(migrated.orientation, 'landscape');
   assert.equal(validateDesign({ ...legacyDraft, paletteId: 'custom' })!.accent, getTemplate('L2').palettes[0].accent);
 });
 
@@ -48,6 +53,8 @@ test('existing template IDs remain valid and new light defaults do not migrate o
   assert.equal(validateDesign({ ...legacyDraft, templateId: 'unknown' }), null);
   assert.deepEqual(TEMPLATES.map(template => template.id), ['L3', 'L2', 'L4', 'L1', 'H1', 'H2', 'H3']);
   assert.equal(createDesign().templateId, 'L3');
+  assert.equal(createDesign().text, '点击屏幕编辑文案和样式');
+  assert.equal(createDesign().layout, 'single');
   assert.equal(getTemplate('unknown' as TemplateId).id, 'L3');
   for (const templateId of ['L1', 'L2', 'L3', 'L4'] as TemplateId[]) {
     const design = createDesign(templateId);
@@ -68,11 +75,18 @@ test('new persisted controls preserve valid values and bound invalid numeric inp
     dotDensity: 3,
     glow: 0,
     fontScale: 130,
+    fontId: 'serif',
+    gradient: true,
+    gradientEnd: '#Ff7654',
+    gradientAngle: 360,
+    orientation: 'portrait',
   };
   const restored = validateDesign(saved)!;
-  for (const key of ['accent', 'dotShape', 'dotEmoji', 'dotDensity', 'glow', 'fontScale'] as const) {
+  for (const key of ['accent', 'dotShape', 'dotEmoji', 'dotDensity', 'glow', 'fontScale', 'gradient', 'gradientEnd', 'gradientAngle', 'orientation'] as const) {
     assert.equal(restored[key], saved[key], key);
   }
+  assert.equal(restored.fontId, 'sans');
+  assert.equal(validateDesign({ ...saved, templateId: 'L1' })!.fontId, 'serif');
   const bounded = validateDesign({ ...saved, dotDensity: 1.7, glow: -5, fontScale: 999 })!;
   assert.equal(bounded.dotDensity, 2);
   assert.equal(bounded.glow, 0);
@@ -91,6 +105,14 @@ test('new persisted controls preserve valid values and bound invalid numeric inp
   for (const sticker of ['paddle', 'ball']) {
     assert.equal(validateDesign({ ...saved, sticker })!.sticker, sticker);
   }
+  const invalidEffects = validateDesign({ ...saved, fontId: 'foreign-font', gradient: 'true', gradientEnd: 'red', gradientAngle: Infinity, orientation: 'sideways' })!;
+  assert.equal(invalidEffects.fontId, 'sans');
+  assert.equal(invalidEffects.gradient, false);
+  assert.equal(invalidEffects.gradientEnd, getTemplate('L4').palettes[0].accent);
+  assert.equal(invalidEffects.gradientAngle, 0);
+  assert.equal(invalidEffects.orientation, 'landscape');
+  assert.equal(validateDesign({ ...saved, gradientAngle: -1 })!.gradientAngle, 0);
+  assert.equal(validateDesign({ ...saved, gradientAngle: 361 })!.gradientAngle, 360);
 });
 
 test('emoji labels retain a complete first cluster without depending on Intl.Segmenter', () => {
@@ -127,7 +149,7 @@ test('reading legacy records does not rewrite them and new control values surviv
   assert.equal(writes, 0);
   assert.equal(stored.get('boards-v1'), original);
 
-  const design = { ...createDesign('L4'), id: 'new-neon', accent: '#AB1234', dotShape: 'heart' as const, dotEmoji: '👩🏽‍🚀', dotDensity: 1, glow: 42, fontScale: 85 };
+  const design = { ...createDesign('L4'), id: 'new-neon', accent: '#AB1234', dotShape: 'heart' as const, dotEmoji: '👩🏽‍🚀', dotDensity: 1, glow: 42, fontScale: 85, fontId: 'sans' as const, gradient: true, gradientEnd: '#Ff7654', gradientAngle: 135, orientation: 'portrait' as const };
   const next = await writeRecord(migrated, design);
   assert.equal(next.length, 5);
   assert.equal(migrated[0].id, 'legacy-0');

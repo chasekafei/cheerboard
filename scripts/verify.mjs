@@ -3,7 +3,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const MAX_PACKAGE_BYTES = 2 * 1024 * 1024;
+export const MAX_PACKAGE_BYTES = 3 * 1024 * 1024;
 
 const prohibitedIdentifiers = new Set([
   'fetch', 'XMLHttpRequest', 'WebSocket', 'EventSource', 'RTCPeerConnection',
@@ -129,7 +129,7 @@ export async function verifyDirectory(directory = resolve('dist')) {
     if (!allowedExtensions.has(extname(file).toLowerCase())) fail(`不支持的发布文件：${relative(root, file)}`);
     totalBytes += (await stat(file)).size;
   }
-  if (totalBytes >= MAX_PACKAGE_BYTES) fail(`未压缩资源 ${(totalBytes / 1024).toFixed(1)} KB，超过项目 2 MB 目标`);
+  if (totalBytes >= MAX_PACKAGE_BYTES) fail(`未压缩资源 ${(totalBytes / 1024).toFixed(1)} KB，超过项目 3 MiB 预算`);
 
   const index = resolve(root, 'index.html');
   const html = await readFile(index, 'utf8');

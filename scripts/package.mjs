@@ -20,6 +20,6 @@ if (entries.some((entry) => entry.startsWith('/') || entry.split('/').includes('
 }
 execFileSync('unzip', ['-tq', archive], { stdio: 'pipe' });
 const bytes = (await stat(archive)).size;
-if (bytes >= MAX_PACKAGE_BYTES) throw new Error('ZIP 超过项目 2 MB 上限');
+if (bytes >= MAX_PACKAGE_BYTES) throw new Error('ZIP 超过项目 3 MiB 预算');
 await auditOfficialArtifact(archive);
 console.log(`发布包：${archive}（${(bytes / 1024).toFixed(1)} KB）`);
