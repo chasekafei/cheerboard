@@ -8,3 +8,13 @@ release/
 .env.*
 !.env.example
 .artifacts/
+
+# 调研参考图片仅保留本地，不进入代码仓库
+/docs/references/**/*.[jJ][pP][gG]
+/docs/references/**/*.[jJ][pP][eE][gG]
+/docs/references/**/*.[pP][nN][gG]
+/docs/references/**/*.[wW][eE][bB][pP]
+/docs/方案②｜手机手幅：灯牌与手幅（执行版 v2）/**/*.[jJ][pP][gG]
+/docs/方案②｜手机手幅：灯牌与手幅（执行版 v2）/**/*.[jJ][pP][eE][gG]
+/docs/方案②｜手机手幅：灯牌与手幅（执行版 v2）/**/*.[pP][nN][gG]
+/docs/方案②｜手机手幅：灯牌与手幅（执行版 v2）/**/*.[wW][eE][bB][pP]
