@@ -5,12 +5,13 @@ import { measureBoard, renderBoard, renderExport, invalidateFontCache } from './
 import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isBrowserPreview } from './platform';
 import { readRecords, writeRecord, validateDesign } from './records';
 import { normalizeDotEmoji } from './design-values';
-import { loadBoardFonts } from './fonts';
+import { BOARD_FONTS, TUBE_FONT, loadBoardFonts } from './fonts';
+import { mountLightScene } from './light-scene';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 const overlay = document.querySelector<HTMLDivElement>('#overlay')!;
 const toastEl = document.querySelector<HTMLDivElement>('#toast')!;
-let page: 'home' | 'editor' | 'saved' = 'home';
+let page: 'home' | 'editor' | 'saved' | 'light' = 'home';
 let category: Category = 'light';
 let design = createDesign();
 let records: Design[] = [];
@@ -38,8 +39,17 @@ let lastFocus: HTMLElement | null = null;
 let overlayCleanup: (() => void) | null = null;
 let overflow = false;
 let archiveBusy = false;
+let lightControls = false;
+let lightSheet: 'text' | 'style' | null = null;
+let lightScene: ReturnType<typeof mountLightScene> | null = null;
 const memory = { place: '', date: '' };
 const icons: Record<string, string> = {
+  edit: '<path d="m16 3 5 5-12 12-6 1 1-6Z M13 6l5 5"/>',
+  rotate: '<path d="M4 8a9 9 0 0 1 15-3l2 2M21 2v5h-5M20 16a9 9 0 0 1-15 3l-2-2M3 22v-5h5"/>',
+  motion: '<path d="M3 7h10M3 12h18M3 17h10m3-10 5 5-5 5"/>',
+  speed: '<path d="M5 19a9 9 0 1 1 14 0M12 12l5-5M5 14h1m12 0h1M8 7l1 1"/>',
+  sliders: '<path d="M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M10 15v6"/>',
+  share: '<path d="M12 16V3m-5 5 5-5 5 5M4 13v8h16v-8"/>',
   paddle: '<ellipse cx="10" cy="9" rx="6.5" ry="7" transform="rotate(-35 10 9)"/><path d="m12 15 5 6 3-2-5-6M5 5l9 9"/><circle cx="20" cy="5" r="2.5"/>',
   arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
   back: '<path d="m14 6-6 6 6 6"/>',
@@ -79,7 +89,7 @@ function templateCard(id: TemplateId, compact = false) {
 }
 function home() {
   const recent = draftAvailable ? design : records[0];
-  return `${header()}<main class="home tool-home"><div class="home-heading"><div><h1>今天，为谁加油？</h1><p>选一块牌，把喜欢亮出来。</p></div><span class="court-symbol" aria-hidden="true">${icon('paddle')}</span></div><section class="tool-entries" aria-label="开始制作"><button class="light-entry" data-action="template" data-id="L3" aria-label="做灯牌"><div class="entry-heading"><span class="entry-icon">${icon('show')}</span><div><h2>灯牌</h2><p>点阵 · 描边 · 霓虹 · 纯色</p></div><span class="entry-arrow">${icon('arrow')}</span></div><div class="entry-board"><canvas id="hero-board" aria-label="乒乓加油点阵灯牌示例"></canvas><i class="board-corner" aria-hidden="true"></i></div><div class="entry-bottom"><span>让喜欢，在看台发光</span><strong>做灯牌 ${icon('arrow')}</strong></div></button><button class="banner-entry" data-action="template" data-id="H1" aria-label="做手幅"><div class="entry-heading"><div><h2>手幅</h2><p>选文案、配颜色，做好存图</p></div><span class="entry-arrow">${icon('arrow')}</span></div><div class="banner-entry-art"><canvas id="home-banner" aria-label="乒乓加油手幅示例"></canvas></div></button></section>${recent ? `<section class="home-recent"><div class="section-heading"><h2>继续做我的牌</h2>${btn('全部作品', 'saved', 'text-button')}</div><button class="recent-work" data-action="${draftAvailable ? 'resume-draft' : 'open'}" data-id="${recent.id}"><canvas ${draftAvailable ? 'data-home-draft' : `data-record="${recent.id}"`} aria-label="上次的加油牌"></canvas><div><strong>${escape(recent.text.replace(/\n/g, ' '))}</strong><small>${getTemplate(recent.templateId).name} · ${draftAvailable ? '上次编辑' : '已保存'}</small></div>${icon('arrow')}</button></section>` : `<section class="home-quick-tip">${icon('paddle')}<div><h2>看台小提醒</h2><p>回合中收起加油牌，把掌声留给好球。</p></div></section>`}<footer class="home-footer"><span>为每一次挥拍加油。</span>${btn('使用小提醒', 'tips', 'text-button')}</footer></main>`;
+  return `${header()}<main class="home tool-home"><div class="home-heading"><div><h1>今天，为谁加油？</h1><p>选一块牌，把喜欢亮出来。</p></div><span class="court-symbol" aria-hidden="true">${icon('paddle')}</span></div><section class="tool-entries" aria-label="开始制作"><button class="light-entry" data-action="light-start" aria-label="做灯牌"><div class="entry-heading"><span class="entry-icon">${icon('show')}</span><div><h2>灯牌</h2><p>点阵 · 描边 · 霓虹 · 纯色</p></div><span class="entry-arrow">${icon('arrow')}</span></div><div class="entry-board"><canvas id="hero-board" aria-label="乒乓加油点阵灯牌示例"></canvas><i class="board-corner" aria-hidden="true"></i></div><div class="entry-bottom"><span>让喜欢，在看台发光</span><strong>做灯牌 ${icon('arrow')}</strong></div></button><button class="banner-entry" data-action="template" data-id="H1" aria-label="做手幅"><div class="entry-heading"><div><h2>手幅</h2><p>选文案、配颜色，做好存图</p></div><span class="entry-arrow">${icon('arrow')}</span></div><div class="banner-entry-art"><canvas id="home-banner" aria-label="乒乓加油手幅示例"></canvas></div></button></section>${recent ? `<section class="home-recent"><div class="section-heading"><h2>继续做我的牌</h2>${btn('全部作品', 'saved', 'text-button')}</div><button class="recent-work" data-action="${draftAvailable ? 'resume-draft' : 'open'}" data-id="${recent.id}"><canvas ${draftAvailable ? 'data-home-draft' : `data-record="${recent.id}"`} aria-label="上次的加油牌"></canvas><div><strong>${escape(recent.text.replace(/\n/g, ' '))}</strong><small>${getTemplate(recent.templateId).name} · ${draftAvailable ? '上次编辑' : '已保存'}</small></div>${icon('arrow')}</button></section>` : `<section class="home-quick-tip">${icon('paddle')}<div><h2>看台小提醒</h2><p>回合中收起加油牌，把掌声留给好球。</p></div></section>`}<footer class="home-footer"><span>为每一次挥拍加油。</span>${btn('使用小提醒', 'tips', 'text-button')}</footer></main>`;
 }
 function sloganList() {
   const result = getSloganPage(sloganCategory, search, sloganPage);
@@ -102,19 +112,61 @@ function textPanel() {
 function rangeField(id: string, label: string, value: number, min: number, max: number, ends: [string, string], suffix = '%') {
   return `<div class="range-field"><label for="${id}">${label}<output id="${id}-value" for="${id}">${value}${suffix}</output></label><input id="${id}" type="range" min="${min}" max="${max}" step="1" value="${value}"><div class="range-ends"><span>${ends[0]}</span><span>${ends[1]}</span></div></div>`;
 }
+function fontField() {
+  return `<div class="sheet-field"><label for="board-font">字体</label><select id="board-font">${(design.templateId === 'L4' ? [TUBE_FONT] : BOARD_FONTS).map(font => `<option value="${font.id}" ${(design.templateId === 'L4' ? font.id === 'sans' : design.fontId === font.id) ? 'selected' : ''}>${font.name}</option>`).join('')}</select><p class="input-help">${design.templateId === 'L4' ? '灯管使用无衬线字形；手写与宋体可在其他效果中选择。' : '少见字使用系统字体补全。'}</p></div>`;
+}
+function dotControls() {
+  return `<div class="panel-heading"><span>点阵形状</span></div><div class="dot-shapes" role="group" aria-label="点阵形状">${[['circle', '●', '圆形'], ['square', '■', '方形'], ['heart', '♥', '心形'], ['star', '★', '星形'], ['emoji', design.dotEmoji, 'Emoji']].map(([id, glyph, label]) => btn(`<span class="shape-glyph">${escape(glyph)}</span><small>${label}</small>`, 'dot-shape', design.dotShape === id ? 'shape-option selected' : 'shape-option', `data-id="${id}" aria-pressed="${design.dotShape === id}"`)).join('')}</div>${design.dotShape === 'emoji' ? `<div class="emoji-editor"><label for="dot-emoji">你的 Emoji 点阵</label><input id="dot-emoji" type="text" value="${escape(design.dotEmoji)}" maxlength="128" aria-describedby="emoji-help" autocomplete="off"><div class="emoji-presets" role="group" aria-label="常用 Emoji">${['🏓', '❤️', '⭐', '🍟', '🦈', '🦁'].map(glyph => btn(glyph, 'dot-emoji-preset', design.dotEmoji === glyph ? 'selected' : '', `data-id="${glyph}" aria-label="使用${glyph}点阵" aria-pressed="${design.dotEmoji === glyph}"`)).join('')}</div><p id="emoji-help" class="input-help">输入或粘贴一个 Emoji，使用它自身的颜色。</p></div>` : ''}<div class="field-line"><span>光点大小</span><div class="segmented" role="group" aria-label="光点大小">${[['1', '大'], ['2', '中'], ['3', '小']].map(([id, label]) => btn(label, 'dot-density', design.dotDensity === Number(id) ? 'selected' : '', `data-id="${id}" aria-pressed="${design.dotDensity === Number(id)}"`)).join('')}</div></div>`;
+}
 function stylePanel() {
-  const light = category === 'light';
-  return `<div class="panel-heading"><span>${light ? '灯牌效果' : '手幅样式'}</span><span>点一下切换</span></div><div class="${light ? 'light-styles' : 'mini-templates'}">${TEMPLATES.filter(t => t.category === category).map(t => templateCard(t.id, true)).join('')}</div><section class="effect-settings" aria-label="效果设置">${design.templateId === 'L3' ? `<div class="panel-heading"><span>点阵形状</span></div><div class="dot-shapes" role="group" aria-label="点阵形状">${[['circle', '●', '圆形'], ['square', '■', '方形'], ['heart', '♥', '心形'], ['star', '★', '星形'], ['emoji', design.dotEmoji, 'Emoji']].map(([id, glyph, label]) => btn(`<span class="shape-glyph">${escape(glyph)}</span><small>${label}</small>`, 'dot-shape', design.dotShape === id ? 'shape-option selected' : 'shape-option', `data-id="${id}" aria-pressed="${design.dotShape === id}"`)).join('')}</div>${design.dotShape === 'emoji' ? `<div class="emoji-editor"><label for="dot-emoji">你的 Emoji 点阵</label><input id="dot-emoji" type="text" value="${escape(design.dotEmoji)}" maxlength="128" aria-describedby="emoji-help" autocomplete="off"><div class="emoji-presets" role="group" aria-label="常用 Emoji">${['🏓', '❤️', '⭐', '🍟', '🦈', '🦁'].map(glyph => btn(glyph, 'dot-emoji-preset', design.dotEmoji === glyph ? 'selected' : '', `data-id="${glyph}" aria-label="使用${glyph}点阵" aria-pressed="${design.dotEmoji === glyph}"`)).join('')}</div><p id="emoji-help" class="input-help">输入或粘贴一个 Emoji。较大的光点更容易看清，外观随手机系统略有不同。</p></div>` : ''}<div class="field-line"><span>光点大小</span><div class="segmented" role="group" aria-label="光点大小">${[['1', '大'], ['2', '中'], ['3', '小']].map(([id, label]) => btn(label, 'dot-density', design.dotDensity === Number(id) ? 'selected' : '', `data-id="${id}" aria-pressed="${design.dotDensity === Number(id)}"`)).join('')}</div></div>` : ''}${design.templateId === 'L4' ? `${rangeField('glow', '光晕强度', design.glow, 0, 100, ['清晰灯管', '柔和光晕'])}<p class="input-help">保留明亮字芯与灯管轮廓，光晕只向外散开。</p>` : ''}${rangeField('font-scale', '文字大小', design.fontScale, 70, 130, ['更小', '更大'])}</section>${motionPanel()}`;
+  return `<div class="panel-heading"><span>手幅样式</span></div><div class="mini-templates">${TEMPLATES.filter(t => t.category === category).map(t => templateCard(t.id, true)).join('')}</div><section class="effect-settings">${fontField()}${rangeField('font-scale', '文字大小', design.fontScale, 70, 130, ['更小', '更大'])}</section>`;
 }
 function colorPanel() {
-  return `<div class="panel-heading"><span>选一组配色</span></div><div class="palette-list">${getTemplate(design.templateId).palettes.map(p => `<button data-action="palette" data-id="${p.id}" class="palette ${design.paletteId === p.id ? 'selected' : ''}" aria-pressed="${design.paletteId === p.id}"><span class="swatch" style="background:${p.background};color:${p.foreground}">Aa<span style="background:${p.accent}"></span></span><span>${p.name}</span>${design.paletteId === p.id ? icon('check') : ''}</button>`).join('')}</div><div class="panel-divider"></div><div class="panel-heading"><span>自定义颜色</span></div><div class="custom-colors"><label>${design.templateId === 'L4' ? '灯管颜色' : '文字颜色'}<input type="color" id="foreground" value="${design.foreground}"></label><label>背景颜色<input type="color" id="background" value="${design.background}"></label>${design.templateId === 'L2' ? `<label>描边颜色<input type="color" id="accent" value="${design.accent}"></label>` : ''}</div>${design.templateId === 'L3' && design.dotShape === 'emoji' ? '<p class="input-help">Emoji 使用自身颜色；文字颜色会用于其他点阵形状。</p>' : ''}`;
+  return `<div class="palette-list">${getTemplate(design.templateId).palettes.map(p => `<button data-action="palette" data-id="${p.id}" class="palette ${design.paletteId === p.id ? 'selected' : ''}" aria-pressed="${design.paletteId === p.id}"><span class="swatch" style="background:${p.gradientEnd ? `linear-gradient(${90 + (p.gradientAngle || 0)}deg,${p.foreground},${p.gradientEnd})` : p.background};color:${p.gradientEnd ? '#FFFFFF' : p.foreground}">Aa<span style="background:${p.accent}"></span></span><span>${p.name}</span>${design.paletteId === p.id ? icon('check') : ''}</button>`).join('')}</div><div class="custom-colors"><label>${design.templateId === 'L4' ? '灯管颜色' : '文字颜色'}<input type="color" id="foreground" value="${design.foreground}"></label><label>背景颜色<input type="color" id="background" value="${design.background}"></label>${design.templateId === 'L2' ? `<label>描边颜色<input type="color" id="accent" value="${design.accent}"></label>` : ''}</div><label class="toggle-row"><span>渐变文字</span><input id="gradient" type="checkbox" ${design.gradient ? 'checked' : ''}><span class="toggle"></span></label>${design.gradient ? `<div class="custom-colors"><label>渐变终点<input type="color" id="gradient-end" value="${design.gradientEnd}"></label></div><div class="sheet-field"><label for="gradient-angle">渐变方向</label><select id="gradient-angle">${[[0, '从左到右'], [90, '从上到下'], [45, '斜向渐变']].map(([value, label]) => `<option value="${value}" ${design.gradientAngle === value ? 'selected' : ''}>${label}</option>`).join('')}</select></div>` : ''}${design.templateId === 'L3' && design.dotShape === 'emoji' ? '<p class="input-help">Emoji 使用自身颜色；纯色与渐变会用于其他点阵形状。</p>' : ''}`;
+}
+function lightStylePanel() {
+  return `<div class="sheet-field"><label for="light-effect">灯牌效果</label><select id="light-effect">${TEMPLATES.filter(t => t.category === 'light').map(t => `<option value="${t.id}" ${design.templateId === t.id ? 'selected' : ''}>${t.name}</option>`).join('')}</select></div>${fontField()}${rangeField('font-scale', '文字大小', design.fontScale, 70, 130, ['更小', '更大'])}<section class="effect-settings">${design.templateId === 'L3' ? dotControls() : ''}${design.templateId === 'L4' ? rangeField('glow', '光晕强度', design.glow, 0, 100, ['清晰灯管', '弥散光晕']) : ''}</section><details class="sheet-colors" open><summary>配色</summary>${colorPanel()}</details><details class="sheet-decoration"><summary>更多装饰</summary>${graphicPanel()}</details>`;
 }
 function graphicPanel() {
   return `<div class="panel-heading"><span>一点看台小装饰</span></div><div class="sticker-grid">${[['none', '不添加', '—'], ['star', '星星', '✦'], ['heart', '爱心', '♡'], ['fries', '薯条', '🍟'], ['paddle', '球拍', '🏓'], ['ball', '乒乓球', '●']].map(([id, name, glyph]) => btn(`<span class="sticker-glyph">${glyph}</span>${name}`, 'sticker', design.sticker === id ? 'selected' : '', `data-id="${id}" aria-pressed="${design.sticker === id}"`)).join('')}</div><label class="toggle-row"><span>装饰边框<small>给加油牌加一道细框</small></span><input id="border" type="checkbox" ${design.border ? 'checked' : ''}><span class="toggle"></span></label><label class="toggle-row"><span>展示时保留场馆提醒<small>回合中收起，不遮挡后排视线</small></span><input id="friendly" type="checkbox" ${design.friendly ? 'checked' : ''}><span class="toggle"></span></label>`;
 }
-function motionPanel() {
-  if (getTemplate(design.templateId).category !== 'light') return '';
-  return `<section class="motion-panel"><label class="toggle-row"><span>让文字滚动<small>默认静态，需要时再开启</small></span><input id="scroll" type="checkbox" ${design.scroll ? 'checked' : ''}><span class="toggle"></span></label>${design.scroll ? `<div class="motion-options"><label>速度 <input id="speed" type="range" min="1" max="5" step="1" value="${design.speed}"><span>${design.speed} / 5</span></label><div class="field-line"><span>方向</span><div class="segmented">${btn('← 向左', 'direction', design.direction === 'left' ? 'selected' : '', 'data-id="left"')}${btn('向右 →', 'direction', design.direction === 'right' ? 'selected' : '', 'data-id="right"')}</div></div><label class="checkbox-label"><input id="loop" type="checkbox" ${design.loop ? 'checked' : ''}>循环播放</label></div>` : ''}</section>`;
+function lightPlayer() {
+  return `<main class="light-player ${lightControls ? 'controls-visible' : ''}" id="light-player" style="background:${design.background}"><div class="light-canvas-wrap" id="light-canvas-wrap"><canvas id="light-board" tabindex="0" role="button" aria-label="点击屏幕显示或收起编辑按钮"></canvas></div><div class="light-top-tools" aria-hidden="${!lightControls}">${btn(`${icon('back')}首页`, 'home', 'light-back')}${btn(`${icon('bookmark')}保存`, 'archive', 'light-save')}</div><div class="light-tools" aria-hidden="${!lightControls}">${lightToolButtons()}</div><p class="light-explanation">轻点屏幕，显示或收起按钮</p></main>`;
+}
+function lightToolButtons() {
+  return `${btn(`${icon('edit')}<span>改文字</span><small>文案灵感</small>`, 'light-text')}${btn(`${icon('rotate')}<span>转屏</span><small>${design.orientation === 'landscape' ? '横屏' : '竖屏'}</small>`, 'light-orientation', '', `aria-label="切换到${design.orientation === 'landscape' ? '竖屏' : '横屏'}"`)}${btn(`${icon('motion')}<span>${design.scroll ? '滚动模式' : '全部展示'}</span><small>点按切换</small>`, 'light-mode', '', `aria-pressed="${design.scroll}"`)}${design.scroll ? btn(`${icon('speed')}<span>速度</span><small>${design.speed} / 5 档</small>`, 'light-speed') : ''}${btn(`${icon('sliders')}<span>样式</span><small>字体与配色</small>`, 'light-style')}${btn(`${icon('share')}<span>分享</span><small>存图与晒图</small>`, 'export-more')}`;
+}
+function updateLightControls() {
+  const root = document.querySelector<HTMLElement>('#light-player');
+  if (!root) return;
+  root.classList.toggle('controls-visible', lightControls);
+  const hint = root.querySelector<HTMLElement>('.light-explanation');
+  if (hint) hint.style.display = !lightControls && design.text === '点击屏幕编辑文案和样式' ? '' : 'none';
+  root.style.background = design.background;
+  const tools = root.querySelector<HTMLElement>('.light-tools')!;
+  tools.innerHTML = lightToolButtons();
+  root.querySelectorAll<HTMLElement>('.light-tools, .light-top-tools').forEach(el => el.setAttribute('aria-hidden', String(!lightControls)));
+  root.querySelectorAll<HTMLButtonElement>('button').forEach(button => { button.tabIndex = lightControls ? 0 : -1; });
+}
+function openLightSheet(kind: 'text' | 'style') {
+  openOverlay(`<div class="light-sheet-backdrop" data-action="light-sheet-close"><section class="light-sheet" role="dialog" aria-modal="true" aria-labelledby="light-sheet-title"><div class="light-sheet-header"><h2 id="light-sheet-title">${kind === 'text' ? '文字与文案灵感' : '灯牌样式'}</h2>${btn('完成', 'light-sheet-close')}</div><div class="light-sheet-body" id="light-sheet-body">${kind === 'text' ? textPanel() : lightStylePanel()}</div></section></div>`);
+  lightSheet = kind;
+}
+function refreshLightSheet() {
+  const body = overlay.querySelector<HTMLElement>('#light-sheet-body');
+  if (!body || !lightSheet) return;
+  const scroll = body.scrollTop;
+  const opened = Array.from(body.querySelectorAll('details')).map(item => item.open);
+  const focused = body.contains(document.activeElement) ? (document.activeElement as HTMLElement).id : '';
+  body.innerHTML = lightSheet === 'text' ? textPanel() : lightStylePanel();
+  body.querySelectorAll('details').forEach((item, index) => { if (index < opened.length) item.open = opened[index]; });
+  if (focused) document.getElementById(focused)?.focus();
+  body.scrollTop = scroll;
+}
+function enterLight() {
+  if (!draftAvailable || getTemplate(design.templateId).category !== 'light') design = createDesign('L3');
+  page = 'light'; category = 'light'; lightControls = false;
+  dirty(); render();
 }
 function editor() {
   const t = getTemplate(design.templateId);
@@ -144,7 +196,7 @@ function paint() {
 }
 function paintPreview() {
   const canvas = document.querySelector<HTMLCanvasElement>('#preview');
-  if (!canvas) return;
+  if (!canvas) { if (page === 'light') lightScene?.repaint(); return; }
   const metrics = renderBoard(canvas, design, { width: 1280, height: 720 });
   overflow = metrics.overflow;
   const warning = document.querySelector('#length-warning');
@@ -153,22 +205,31 @@ function paintPreview() {
 function render() {
   clearTimeout(searchTimer);
   cancelAnimationFrame(previewFrame);
-  app.innerHTML = page === 'home' ? home() : page === 'saved' ? saved() : editor();
+  if (page === 'light' && lightScene && document.querySelector('#light-player')) {
+    updateLightControls(); refreshLightSheet(); lightScene.repaint(); return;
+  }
+  if (lightScene) { lightScene.destroy(); lightScene = null; }
+  document.body.classList.toggle('light-page-active', page === 'light');
+  app.innerHTML = page === 'home' ? home() : page === 'saved' ? saved() : page === 'light' ? lightPlayer() : editor();
   paint();
+  if (page === 'light') {
+    lightScene = mountLightScene(document.querySelector<HTMLElement>('#light-player')!, () => design, () => { lightControls = !lightControls; updateLightControls(); });
+    updateLightControls();
+  }
 }
 function chooseTemplate(id: TemplateId) {
   const next = createDesign(id);
   const old = getTemplate(design.templateId);
   const t = getTemplate(id);
-  const editing = page === 'editor';
+  const editing = page === 'editor' || page === 'light';
   const sameCategory = editing && old.category === t.category;
   const compatible = editing ? t.palettes.find(p => p.id === design.paletteId) : undefined;
   design = { ...next, id: editing ? design.id : next.id, text: editing || draftAvailable ? design.text : next.text, friendly: design.friendly,
-    ...(sameCategory ? { layout: design.layout, sticker: design.sticker, border: design.border, scroll: design.scroll, speed: design.speed, direction: design.direction, loop: design.loop, fontScale: design.fontScale, dotShape: design.dotShape, dotEmoji: design.dotEmoji, dotDensity: design.dotDensity, glow: design.glow } : {}),
-    ...(sameCategory && design.paletteId === 'custom' ? { paletteId: 'custom', foreground: design.foreground, background: design.background, accent: design.accent } : compatible ? { paletteId: compatible.id, background: compatible.background, foreground: compatible.foreground, accent: compatible.accent } : {}) };
+    ...(sameCategory ? { layout: design.layout, sticker: design.sticker, border: design.border, scroll: design.scroll, speed: design.speed, direction: design.direction, loop: design.loop, fontScale: design.fontScale, dotShape: design.dotShape, dotEmoji: design.dotEmoji, dotDensity: design.dotDensity, glow: design.glow, fontId: id === 'L4' && design.templateId !== 'L4' ? next.fontId : design.fontId, orientation: design.orientation } : {}),
+    ...(sameCategory && design.paletteId === 'custom' ? { paletteId: 'custom', foreground: design.foreground, background: design.background, accent: design.accent, gradient: design.gradient, gradientEnd: design.gradientEnd, gradientAngle: design.gradientAngle } : compatible ? { paletteId: compatible.id, background: compatible.background, foreground: compatible.foreground, accent: compatible.accent, gradient: Boolean(compatible.gradientEnd), gradientEnd: compatible.gradientEnd || next.gradientEnd, gradientAngle: compatible.gradientAngle || 0 } : {}) };
   category = t.category;
   if (!editing) tab = '文字';
-  page = 'editor';
+  page = t.category === 'light' ? 'light' : 'editor';
   dirty(); render();
 }
 async function archive(asNew = false) {
@@ -192,6 +253,7 @@ function openOverlay(html: string) {
   overlay.innerHTML = html;
   document.body.classList.add('has-overlay');
   app.setAttribute('aria-hidden', 'true');
+  lightScene?.setObscured(true);
   const focusable = overlay.querySelector<HTMLElement>('button, input');
   if (focusable) focusable.focus();
 }
@@ -201,9 +263,12 @@ function closeOverlay() {
   exhibition = false;
   exportDataUrl = null;
   overlay.innerHTML = '';
+  lightSheet = null;
+  lightScene?.setObscured(false);
   document.body.classList.remove('has-overlay');
   app.removeAttribute('aria-hidden');
   if (lastFocus && document.body.contains(lastFocus)) lastFocus.focus();
+  else if (page === 'light') document.querySelector<HTMLCanvasElement>('#light-board')?.focus();
   lastFocus = null;
 }
 function tips(start = false) {
@@ -254,10 +319,13 @@ function showBoard() {
   overlayCleanup = () => { window.removeEventListener('resize', resize); document.removeEventListener('visibilitychange', visibility); };
   frame = requestAnimationFrame(draw);
 }
-const exportOptions = [ ['board', '横版图片', '1920 × 1080'], ['comment', '评论晒图卡', '1080 × 1080'], ['note', '笔记分享卡', '1080 × 1440'], ['a4', 'A4 打印图', '3508 × 2480'], ['memory', '观赛返图卡', '自填地点与日期'] ];
+function exportOptions() {
+  const portrait = getTemplate(design.templateId).category === 'light' && design.orientation === 'portrait';
+  return [ ['board', portrait ? '竖版图片' : '横版图片', portrait ? '1080 × 1920' : '1920 × 1080'], ['comment', '评论晒图卡', '1080 × 1080'], ['note', '笔记分享卡', '1080 × 1440'], ['a4', 'A4 打印图', portrait ? '2480 × 3508' : '3508 × 2480'], ['memory', '观赛返图卡', '自填地点与日期'] ];
+}
 function exportsDialog() {
   if (!design.text.trim()) { toast('先写一句话，再保存图片。'); return; }
-  openOverlay(`<div class="modal-backdrop"><section class="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"><div class="modal-header"><div><h2 id="export-title">把这份喜欢带走</h2><p>存图备用，或分享你的加油牌。</p></div>${btn(icon('close'), 'close', 'icon-button', 'aria-label="关闭保存窗口"')}</div><div class="export-layout"><div class="export-preview"><img id="export-image" alt="导出图片预览"></div><div class="export-settings"><div class="export-options">${exportOptions.map(([id, label, size]) => btn(`<span>${label}<small>${size}</small></span>${exportFormat === id ? icon('check') : ''}`, 'format', exportFormat === id ? 'selected' : '', `data-id="${id}" aria-pressed="${exportFormat === id}"`)).join('')}</div>${exportFormat === 'memory' ? `<div class="memory-fields"><label>地点（选填）<input id="memory-place" value="${escape(memory.place)}" maxlength="30" placeholder="写下你真实去过的地方"></label><label>日期（选填）<input id="memory-date" type="date" value="${escape(memory.date)}"></label><small>这是设计纪念卡，不是现场合照。</small></div>` : ''}<div class="export-buttons">${btn(`${icon('download')}${isBrowserPreview() ? '下载图片' : '保存到相册'}`, 'save-image', 'primary-button wide')}${exportFormat === 'comment' ? btn('打开评论草稿', 'share-comment', 'secondary-button wide') : exportFormat === 'note' || exportFormat === 'memory' ? btn('打开笔记草稿', 'share-note', 'secondary-button wide') : ''}</div><p class="export-hint">${exportFormat === 'a4' ? '打印选择 A4 横向、适合页面；实体物料是否可带入请确认当场规定。' : exportFormat === 'comment' || exportFormat === 'note' || exportFormat === 'memory' ? '分享需在小红书内使用；草稿不等于发布，请在发布页检查工具挂件。' : '图片不含操作按钮与宣传水印。可提前存好，现场备用。'}</p></div></div></section></div>`);
+  openOverlay(`<div class="modal-backdrop"><section class="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"><div class="modal-header"><div><h2 id="export-title">把这份喜欢带走</h2><p>存图备用，或分享你的加油牌。</p></div>${btn(icon('close'), 'close', 'icon-button', 'aria-label="关闭保存窗口"')}</div><div class="export-layout"><div class="export-preview"><img id="export-image" alt="导出图片预览"></div><div class="export-settings"><div class="export-options">${exportOptions().map(([id, label, size]) => btn(`<span>${label}<small>${size}</small></span>${exportFormat === id ? icon('check') : ''}`, 'format', exportFormat === id ? 'selected' : '', `data-id="${id}" aria-pressed="${exportFormat === id}"`)).join('')}</div>${exportFormat === 'memory' ? `<div class="memory-fields"><label>地点（选填）<input id="memory-place" value="${escape(memory.place)}" maxlength="30" placeholder="写下你真实去过的地方"></label><label>日期（选填）<input id="memory-date" type="date" value="${escape(memory.date)}"></label><small>这是设计纪念卡，不是现场合照。</small></div>` : ''}<div class="export-buttons">${btn(`${icon('download')}${isBrowserPreview() ? '下载图片' : '保存到相册'}`, 'save-image', 'primary-button wide')}${exportFormat === 'comment' ? btn('打开评论草稿', 'share-comment', 'secondary-button wide') : exportFormat === 'note' || exportFormat === 'memory' ? btn('打开笔记草稿', 'share-note', 'secondary-button wide') : ''}</div><p class="export-hint">${exportFormat === 'a4' ? `打印选择 A4 ${getTemplate(design.templateId).category === 'light' && design.orientation === 'portrait' ? '纵向' : '横向'}、适合页面；实体物料是否可带入请确认当场规定。` : exportFormat === 'comment' || exportFormat === 'note' || exportFormat === 'memory' ? '分享需在小红书内使用；草稿不等于发布，请在发布页检查工具挂件。' : '图片不含操作按钮与宣传水印。可提前存好，现场备用。'}</p></div></div></section></div>`);
   updateExport();
 }
 function updateExport() {
@@ -290,12 +358,19 @@ async function deliver(kind: 'save' | 'comment' | 'note') {
 async function action(button: HTMLElement) {
   const a = button.dataset.action; const id = button.dataset.id;
   switch (a) {
-    case 'home': page = 'home'; render(); window.scrollTo(0, 0); break;
+    case 'home': closeOverlay(); page = 'home'; render(); window.scrollTo(0, 0); break;
     case 'saved': page = 'saved'; render(); window.scrollTo(0, 0); break;
+    case 'light-start': enterLight(); break;
+    case 'light-text': openLightSheet('text'); break;
+    case 'light-style': openLightSheet('style'); break;
+    case 'light-sheet-close': closeOverlay(); break;
+    case 'light-orientation': design.orientation = design.orientation === 'landscape' ? 'portrait' : 'landscape'; dirty(); render(); break;
+    case 'light-mode': design.scroll = !design.scroll; dirty(); render(); break;
+    case 'light-speed': design.speed = design.speed % 5 + 1; dirty(); render(); break;
     case 'category': category = id as Category; render(); break;
-    case 'template': { const fromHome = page !== 'editor'; chooseTemplate(id as TemplateId); if (fromHome) window.scrollTo(0, 0); break; }
+    case 'template': { const fromHome = page !== 'editor' && page !== 'light'; chooseTemplate(id as TemplateId); if (fromHome) window.scrollTo(0, 0); break; }
     case 'tab': tab = id!; render(); break;
-    case 'resume-draft': page = 'editor'; category = getTemplate(design.templateId).category; tab = '文字'; render(); window.scrollTo(0, 0); break;
+    case 'resume-draft': page = getTemplate(design.templateId).category === 'light' ? 'light' : 'editor'; lightControls = false; category = getTemplate(design.templateId).category; tab = '文字'; render(); window.scrollTo(0, 0); break;
     case 'dot-shape': design.dotShape = id as Design['dotShape']; dirty(); render(); break;
     case 'dot-density': design.dotDensity = Number(id); dirty(); render(); break;
     case 'dot-emoji-preset': design.dotEmoji = normalizeDotEmoji(id); dirty(); render(); break;
@@ -303,12 +378,12 @@ async function action(button: HTMLElement) {
     case 'slogan-category': sloganCategory = id as SloganFilter; sloganPage = 0; render(); break;
     case 'slogan-page': sloganPage = Number(id); updateSloganList(); break;
     case 'slogan': design.text = button.dataset.text!; if (design.text.includes('\n')) design.layout = 'double'; dirty(); render(); break;
-    case 'palette': { const p = getTemplate(design.templateId).palettes.find(p => p.id === id); if (p) { design.paletteId = p.id; design.foreground = p.foreground; design.background = p.background; design.accent = p.accent; dirty(); render(); } break; }
+    case 'palette': { const p = getTemplate(design.templateId).palettes.find(p => p.id === id); if (p) { design.paletteId = p.id; design.foreground = p.foreground; design.background = p.background; design.accent = p.accent; design.gradient = Boolean(p.gradientEnd); design.gradientEnd = p.gradientEnd || design.gradientEnd; design.gradientAngle = p.gradientAngle || 0; dirty(); render(); } break; }
     case 'sticker': design.sticker = id as Design['sticker']; dirty(); render(); break;
     case 'direction': design.direction = id as Design['direction']; dirty(); render(); break;
     case 'archive': await archive(); break;
     case 'archive-new': await archive(true); break;
-    case 'open': case 'show-record': { const item = records.find(d => d.id === id); if (item) { design = { ...item }; category = getTemplate(design.templateId).category; page = 'editor'; dirty(); render(); window.scrollTo(0, 0); if (a === 'show-record') tryShow(); } break; }
+    case 'open': case 'show-record': { const item = records.find(d => d.id === id); if (item) { design = { ...item }; category = getTemplate(design.templateId).category; page = category === 'light' ? 'light' : 'editor'; lightControls = false; dirty(); render(); window.scrollTo(0, 0); if (a === 'show-record' && page === 'editor') tryShow(); } break; }
     case 'reload-records': await loadRecords(); break;
     case 'delete': { if (!recordsReady || archiveBusy) break; archiveBusy = true; try { const next = records.filter(d => d.id !== id); await saveLocal('boards-v1', next); records = next; render(); toast('已移除这块牌'); } finally { archiveBusy = false; } break; }
     case 'show': tryShow(); break;
@@ -323,7 +398,7 @@ async function action(button: HTMLElement) {
     case 'share-note': await deliver('note'); break;
   }
 }
-document.addEventListener('click', event => { const button = (event.target as HTMLElement).closest<HTMLElement>('[data-action]'); if (button && !button.hasAttribute('disabled')) void action(button).catch(fail); });
+document.addEventListener('click', event => { const button = (event.target as HTMLElement).closest<HTMLElement>('[data-action]'); if (button?.classList.contains('light-sheet-backdrop') && event.target !== button) return; if (button && !button.hasAttribute('disabled')) void action(button).catch(fail); });
 document.addEventListener('input', event => {
   const target = event.target as HTMLInputElement;
   switch (target.id) {
@@ -339,6 +414,7 @@ document.addEventListener('input', event => {
     }
     case 'slogan-search': search = target.value; sloganPage = 0; clearTimeout(searchTimer); searchTimer = window.setTimeout(updateSloganList, 120); break;
     case 'foreground': case 'background': case 'accent': design[target.id] = target.value; design.paletteId = 'custom'; dirty(); paintPreview(); break;
+    case 'gradient-end': design.gradientEnd = target.value; design.paletteId = 'custom'; dirty(); paintPreview(); break;
     case 'dot-emoji': if (!(event as InputEvent).isComposing) { design.dotEmoji = normalizeDotEmoji(target.value); dirty(); paintPreview(); } break;
     case 'font-scale': case 'glow': {
       const key = target.id === 'font-scale' ? 'fontScale' : 'glow';
@@ -356,15 +432,21 @@ document.addEventListener('change', event => {
   const target = event.target as HTMLInputElement;
   switch (target.id) {
     case 'border': case 'scroll': case 'loop': case 'friendly': design[target.id] = target.checked; dirty(); render(); break;
+    case 'gradient': design.gradient = target.checked; design.paletteId = 'custom'; dirty(); render(); break;
+    case 'light-effect': chooseTemplate(target.value as TemplateId); break;
+    case 'board-font': design.fontId = design.templateId === 'L4' ? 'sans' : target.value as Design['fontId']; dirty(); paintPreview(); break;
+    case 'gradient-angle': design.gradientAngle = Number(target.value); design.paletteId = 'custom'; dirty(); paintPreview(); break;
     case 'dot-emoji': design.dotEmoji = normalizeDotEmoji(target.value); target.value = design.dotEmoji; dirty(); paintPreview(); break;
   }
 });
 document.addEventListener('keydown', event => {
-  if (!overlay.innerHTML) return;
+  if (!overlay.innerHTML) { if (page === 'light' && event.key === 'Escape') { lightControls = !lightControls; updateLightControls(); } return; }
   if (event.key === 'Escape') { event.preventDefault(); closeOverlay(); }
   if (event.key === 'Tab') {
-    const items = Array.from(overlay.querySelectorAll<HTMLElement>('button:not([disabled]), input, [tabindex="0"]'));
+    const items = Array.from(overlay.querySelectorAll<HTMLElement>('button:not([disabled]), input, select, textarea, summary, [tabindex="0"]')).filter(item => item.getClientRects().length > 0);
+    if (!items.length) return;
     const first = items[0]; const last = items[items.length - 1];
+    if (!items.includes(document.activeElement as HTMLElement)) { event.preventDefault(); (event.shiftKey ? last : first).focus(); return; }
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
@@ -373,7 +455,7 @@ async function loadRecords() {
   recordsError = false;
   try { records = await readRecords(); recordsReady = true; }
   catch { recordsReady = false; recordsError = true; toast('原存档未能读取，已暂停修改存档；仍可制作和存图。'); }
-  render();
+  if (page === 'light') updateLightControls(); else render();
 }
 async function start() {
   const probe = document.createElement('div'); probe.style.cssText = 'display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden'; probe.innerHTML = '<i style="height:1px"></i><i style="height:1px"></i>'; document.body.appendChild(probe); if (probe.scrollHeight !== 3) document.documentElement.classList.add('no-flex-gap'); probe.remove();
@@ -391,7 +473,7 @@ async function start() {
   void loadLocal('draft-v1').then(value => {
     draftReady = true;
     const draft = validateDesign(value);
-    if (draft && editRevision === initialRevision && page !== 'editor') { design = draft; draftAvailable = true; category = getTemplate(design.templateId).category; render(); }
+    if (draft && editRevision === initialRevision && page !== 'editor' && page !== 'light') { design = draft; draftAvailable = true; category = getTemplate(design.templateId).category; render(); }
     else if (editRevision !== initialRevision) dirty();
   }).catch(() => { toast('上次草稿暂时读不到，已暂停自动保存；仍可保存到我的牌或存图。'); });
   void loadLocal('notice-v1').then(value => { noticeSeen = value === true; }).catch(() => {});
