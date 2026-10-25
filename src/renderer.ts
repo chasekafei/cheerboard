@@ -1,5 +1,6 @@
 import { getTemplate, type Design } from './catalog.ts';
 import { normalizeDotEmoji } from './design-values.ts';
+import { getBoardFont, TUBE_FONT } from './fonts.ts';
 
 type RenderOptions = { width?: number; height?: number; offset?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
@@ -10,7 +11,21 @@ let dotMask: HTMLCanvasElement | null = null;
 let dotMaskKey = '';
 let dotMaskPixels: Uint8ClampedArray | null = null;
 const dotSprites = new Map<string, HTMLCanvasElement>();
-const MAX_DOT_SPRITES = 16;
+const MAX_DOT_SPRITES = 32;
+const DOT_SAMPLE_SCALE = 4;
+type TextBounds = { x: number; y: number; width: number; height: number };
+type Paint = string | CanvasGradient;
+
+export function invalidateFontCache(): void {
+  dotMaskKey = '';
+  dotMaskPixels = null;
+}
+
+function boardFont(design: Design, size: number): string {
+  const font = design.templateId === 'L4' ? TUBE_FONT : getBoardFont(design.fontId);
+  const weight = design.templateId === 'L3' ? 400 : font.weight || 700;
+  return weight + ' ' + size + 'px ' + font.family;
+}
 
 function bounded(value: number, minimum: number, maximum: number, fallback: number): number {
   return Number.isFinite(value) ? Math.max(minimum, Math.min(maximum, value)) : fallback;
@@ -21,6 +36,37 @@ function brightCore(color: string): string {
   if (!hex) return '#FFFDFB';
   const rgb = [0, 2, 4].map(offset => Math.round(parseInt(hex[1].slice(offset, offset + 2), 16) * 0.14 + 255 * 0.86));
   return 'rgb(' + rgb.join(',') + ')';
+}
+
+function colorChannels(color: string): number[] {
+  const hex = /^#([a-f\d]{6})$/i.exec(color);
+  return hex ? [0, 2, 4].map(offset => parseInt(hex[1].slice(offset, offset + 2), 16)) : [255, 255, 255];
+}
+
+function mixedColor(start: string, end: string, progress: number): string {
+  const from = colorChannels(start);
+  const to = colorChannels(end);
+  return '#' + from.map((value, index) => Math.round(value + (to[index] - value) * progress).toString(16).padStart(2, '0')).join('');
+}
+
+function gradientVector(design: Design, bounds: TextBounds) {
+  const radians = bounded(design.gradientAngle, 0, 360, 0) * Math.PI / 180;
+  const dx = Math.cos(radians);
+  const dy = Math.sin(radians);
+  const span = Math.max(1, Math.abs(dx) * bounds.width + Math.abs(dy) * bounds.height);
+  return { dx, dy, span };
+}
+
+function textPaint(ctx: Context, design: Design, bounds: TextBounds, core = false): Paint {
+  const start = core ? brightCore(design.foreground) : design.foreground;
+  if (!design.gradient) return start;
+  const end = core ? brightCore(design.gradientEnd) : design.gradientEnd;
+  const { dx, dy, span } = gradientVector(design, bounds);
+  const paint = ctx.createLinearGradient(bounds.x - dx * span / 2, bounds.y - dy * span / 2,
+    bounds.x + dx * span / 2, bounds.y + dy * span / 2);
+  paint.addColorStop(0, start);
+  paint.addColorStop(1, end);
+  return paint;
 }
 
 function roundedRect(ctx: Context, x: number, y: number, width: number, height: number, radius: number): void {
@@ -273,8 +319,8 @@ function drawBackground(ctx: Context, design: Design, width: number, height: num
   }
 }
 
-function styledText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number, accent: string): void {
-  ctx.font = '900 ' + fontSize + 'px ' + FONT;
+function styledText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number, accent: string, paint: Paint, core: Paint): void {
+  ctx.font = boardFont(design, fontSize);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.lineJoin = 'round';
@@ -291,26 +337,29 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
   } else if (design.templateId === 'L4') {
     const strength = bounded(design.glow, 0, 100, 65) / 100;
     ctx.save();
-    // Follow the glyph contours: a colored tube surrounds a narrow bright core.
-    // Keep the character interiors dark instead of filling the whole glyph white.
+    const glowColor = design.gradient ? mixedColor(design.foreground, design.gradientEnd, 0.5) : design.foreground;
+    // A thin font supplies the tube itself; avoid tracing both sides of a heavy
+    // glyph as separate rectangular tubes. Soft light spreads beyond that tube.
+    ctx.fillStyle = paint;
+    ctx.shadowColor = glowColor;
     if (strength > 0) {
-      ctx.globalAlpha = 0.3 + strength * 0.25;
-      ctx.strokeStyle = design.foreground;
-      ctx.shadowColor = design.foreground;
-      ctx.shadowBlur = fontSize * (0.025 + strength * 0.14);
-      ctx.lineWidth = fontSize * 0.055;
-      ctx.strokeText(line, x, y);
+      ctx.globalAlpha = strength * 0.78;
+      ctx.shadowBlur = fontSize * (0.2 + strength * 0.24);
+      ctx.fillText(line, x, y);
+      ctx.globalAlpha = strength * 0.72;
+      ctx.shadowBlur = fontSize * (0.045 + strength * 0.075);
+      ctx.fillText(line, x, y);
     }
     ctx.globalAlpha = 1;
-    ctx.strokeStyle = design.foreground;
-    ctx.shadowColor = design.foreground;
-    ctx.shadowBlur = fontSize * 0.035 * strength;
-    ctx.lineWidth = Math.max(1.5, fontSize * 0.038);
+    ctx.strokeStyle = paint;
+    ctx.shadowBlur = fontSize * 0.025 * strength;
+    ctx.lineWidth = Math.max(0.5, fontSize * 0.012);
     ctx.strokeText(line, x, y);
+    ctx.fillText(line, x, y);
     ctx.shadowBlur = 0;
-    ctx.strokeStyle = brightCore(design.foreground);
-    ctx.lineWidth = Math.max(0.7, fontSize * 0.009);
-    ctx.strokeText(line, x, y);
+    ctx.fillStyle = core;
+    ctx.globalAlpha = 0.92;
+    ctx.fillText(line, x, y);
     ctx.restore();
     return;
   } else if (design.templateId === 'H1') {
@@ -338,7 +387,7 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
     ctx.lineWidth = fontSize * 0.025;
     ctx.strokeText(line, x, y);
   }
-  ctx.fillStyle = design.foreground;
+  ctx.fillStyle = paint;
   ctx.fillText(line, x, y);
 }
 
@@ -377,45 +426,80 @@ function dotSprite(design: Design, spacing: number, color: string): HTMLCanvasEl
   return sprite;
 }
 
-function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number): void {
-  // Rasterize actual system glyphs into a small mask, then stamp separated LEDs.
-  // The grid follows screen height, so the dots remain distinct on thumbnails and exports.
-  // Only rasterize the visible viewport. Even a very long scrolling sentence
-  // never allocates a canvas proportional to the sentence's width.
+function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number, bounds: TextBounds): void {
+  // Keep enough cells across each glyph after auto-fitting, within a fixed
+  // viewport budget. Supersampling preserves counters without eroding strokes.
   const density = Math.round(bounded(design.dotDensity, 1, 3, 2));
-  const spacing = Math.max(2, Math.min(width, height) * [0, 0.03, 0.022, 0.015][density], width / 384, height / 192);
+  const glyphCells = [0, 26, 34, 42][density];
+  const inkTop = Math.max(0, bounds.y - bounds.height / 2 - fontSize * 0.15);
+  const inkBottom = Math.min(height, bounds.y + bounds.height / 2 + fontSize * 0.15);
+  // A portrait viewport can be mostly empty above/below a fitted sentence.
+  // Spend the row budget on its actual text band instead of those blank rows.
+  const spacing = Math.max(1, width / 384, Math.max(1, inkBottom - inkTop) / 190,
+    Math.min(Math.min(width, height) * [0, 0.03, 0.022, 0.015][density], fontSize / glyphCells));
+  const rasterTop = Math.floor(inkTop / spacing) * spacing;
   const mask = dotMask || (dotMask = document.createElement('canvas'));
-  const maskWidth = Math.max(1, Math.ceil(width / spacing));
-  const maskHeight = Math.max(1, Math.ceil(height / spacing));
+  const columns = Math.min(384, Math.max(1, Math.ceil(width / spacing)));
+  const rows = Math.min(192, Math.max(1, Math.ceil((inkBottom - rasterTop) / spacing)));
+  const maskWidth = columns * DOT_SAMPLE_SCALE;
+  const maskHeight = rows * DOT_SAMPLE_SCALE;
   const sampleX = Math.round(x / spacing) * spacing;
   const shiftX = x - sampleX;
-  const key = JSON.stringify([maskWidth, maskHeight, spacing, fontSize, gap, sampleX, y, lines]);
+  const font = boardFont(design, fontSize);
+  const key = JSON.stringify([maskWidth, maskHeight, spacing, font, gap, sampleX, y, rasterTop, lines]);
   if (mask.width !== maskWidth) mask.width = maskWidth;
   if (mask.height !== maskHeight) mask.height = maskHeight;
-  const mctx = mask.getContext('2d');
+  const mctx = mask.getContext('2d', { willReadFrequently: true });
   if (!mctx) return;
   // LEDs advance on their own grid; reuse the mask between grid changes.
   if (key !== dotMaskKey || !dotMaskPixels) {
     mctx.setTransform(1, 0, 0, 1, 0, 0);
     mctx.clearRect(0, 0, mask.width, mask.height);
-    mctx.scale(1 / spacing, 1 / spacing);
-    mctx.font = '900 ' + fontSize + 'px ' + FONT;
+    mctx.scale(DOT_SAMPLE_SCALE / spacing, DOT_SAMPLE_SCALE / spacing);
+    mctx.font = font;
     mctx.textAlign = 'center';
     mctx.textBaseline = 'middle';
     mctx.fillStyle = '#FFFFFF';
-    lines.forEach((line, index) => mctx.fillText(line, sampleX, y + (index - (lines.length - 1) / 2) * gap));
-    dotMaskPixels = mctx.getImageData(0, 0, mask.width, mask.height).data;
+    lines.forEach((line, index) => mctx.fillText(line, sampleX, y - rasterTop + (index - (lines.length - 1) / 2) * gap));
+    const rgba = mctx.getImageData(0, 0, mask.width, mask.height).data;
+    const cells = new Uint8ClampedArray(columns * rows);
+    for (let row = 0; row < rows; row++) {
+      for (let column = 0; column < columns; column++) {
+        const sx = column * DOT_SAMPLE_SCALE + 1;
+        const sy = row * DOT_SAMPLE_SCALE + 1;
+        // Only the central quarter determines occupancy. Antialiasing on a
+        // distant cell edge must not expand into a full bright LED.
+        let coverage = 0;
+        for (let dy = 0; dy < 2; dy++) {
+          for (let dx = 0; dx < 2; dx++) coverage += rgba[((sy + dy) * maskWidth + sx + dx) * 4 + 3];
+        }
+        cells[row * columns + column] = coverage >= 4 * 128 ? 1 : 0;
+      }
+    }
+    dotMaskPixels = cells;
     dotMaskKey = key;
   }
   const pixels = dotMaskPixels;
-  const primary = dotSprite(design, spacing, design.foreground);
+  const gradient = design.gradient && design.dotShape !== 'emoji';
+  const sprites = gradient
+    ? Array.from({ length: 12 }, (_, index) => dotSprite(design, spacing, mixedColor(design.foreground, design.gradientEnd, index / 11)))
+    : [dotSprite(design, spacing, design.foreground)];
+  const vector = gradientVector(design, bounds);
   ctx.save();
-  for (let row = 0; row < mask.height; row++) {
-    for (let column = 0; column < mask.width; column++) {
-      if (pixels[(row * mask.width + column) * 4 + 3] < 64) continue;
+  for (let row = 0; row < rows; row++) {
+    for (let column = 0; column < columns; column++) {
+      if (!pixels[row * columns + column]) continue;
+      const cellX = column * spacing + shiftX;
+      const cellY = rasterTop + row * spacing;
+      let sprite = sprites[0];
+      if (gradient) {
+        const progress = bounded(0.5 + ((cellX + spacing / 2 - bounds.x) * vector.dx
+          + (cellY + spacing / 2 - bounds.y) * vector.dy) / vector.span, 0, 1, 0);
+        sprite = sprites[Math.round(progress * (sprites.length - 1))];
+      }
       // Keep sub-cell motion smooth while the much cheaper mask changes only
       // when the sentence crosses a grid boundary.
-      ctx.drawImage(primary, column * spacing + shiftX, row * spacing, spacing, spacing);
+      ctx.drawImage(sprite, cellX, cellY, spacing, spacing);
     }
   }
   ctx.restore();
@@ -440,24 +524,30 @@ function boardLayout(ctx: Context, design: Design, width: number, height: number
   const lineHeight = 1.19;
   const maxFont = textAreaHeight / (lines.length * lineHeight);
   const minFont = Math.min(maxFont, height * (light ? 0.19 : 0.15));
-  const outlineAllowance = design.templateId === 'L4' ? 0.32 : 0.18;
+  const outlineAllowance = design.templateId === 'L4' ? 0.36 : 0.18;
   let fontSize = maxFont;
   const measure = (size: number) => {
-    ctx.font = '900 ' + size + 'px ' + FONT;
+    ctx.font = boardFont(design, size);
     return Math.max(...lines.map((line) => ctx.measureText(line).width));
   };
   if (!scrolling) {
-    let low = minFont;
-    let high = maxFont;
-    for (let i = 0; i < 14; i++) {
-      const middle = (low + high) / 2;
-      // Include outline and shadow extents, not just advance width.
-      if (measure(middle) + middle * outlineAllowance <= textAreaWidth) low = middle;
-      else high = middle;
-    }
-    fontSize = low;
+    const fit = (maximum: number, minimum: number) => {
+      let low = minimum;
+      let high = maximum;
+      for (let i = 0; i < 20; i++) {
+        const middle = (low + high) / 2;
+        if (measure(middle) + middle * outlineAllowance <= textAreaWidth) low = middle;
+        else high = middle;
+      }
+      return low;
+    };
+    fontSize = fit(maxFont, light ? 0 : minFont);
+    const scale = bounded(design.fontScale, 70, 130, 100) / 100;
+    // Static light boards always fit the complete sentence. The size control
+    // can shrink it, or enlarge it only while there is still room.
+    fontSize = light ? Math.min(fontSize * scale, fit(maxFont * 1.3, 0)) : fontSize * scale;
   } else fontSize = Math.max(minFont, maxFont * 0.86);
-  fontSize *= bounded(design.fontScale, 70, 130, 100) / 100;
+  if (scrolling) fontSize *= bounded(design.fontScale, 70, 130, 100) / 100;
   const textWidth = measure(fontSize);
   const overflow = !scrolling && textWidth + fontSize * outlineAllowance > textAreaWidth + 1;
   return { fontSize, overflow, textWidth, light, scrolling, unit, lines, padding, lineHeight };
@@ -489,12 +579,15 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const offset = scrolling ? (options.offset || 0) : 0;
   const x = width / 2 + offset;
   const y = height * (design.templateId === 'H2' ? 0.52 : 0.51);
-  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height);
+  const bounds = { x, y, width: textWidth, height: fontSize * lineHeight * lines.length };
+  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height, bounds);
   else {
+    const paint = textPaint(ctx, design, bounds);
+    const core = design.templateId === 'L4' ? textPaint(ctx, design, bounds, true) : paint;
     ctx.save();
     if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
     if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
-    lines.forEach((line, index) => styledText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent));
+    lines.forEach((line, index) => styledText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core));
     ctx.restore();
   }
   if (hasSticker) {
@@ -525,13 +618,16 @@ function fittedCardText(ctx: Context, text: string, x: number, y: number, maxSiz
 
 export function renderExport(design: Design, format: 'board' | 'comment' | 'note' | 'a4' | 'memory', meta?: { place: string; date: string }): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
+  const portrait = getTemplate(design.templateId).category === 'light' && design.orientation === 'portrait';
   const renderCompleteBoard = (target: HTMLCanvasElement, width: number, height: number) => {
     const result = renderBoard(target, { ...design, scroll: false }, { width, height });
     if (result.overflow) throw new Error('文字太长，图片放不下。请先改为双行或精简文字，再保存图片。');
   };
   if (format === 'board' || format === 'a4') {
     // A4 uses its own wider/taller layout calculation; it is never a stretched screenshot.
-    renderCompleteBoard(canvas, format === 'a4' ? 3508 : 1920, format === 'a4' ? 2480 : 1080);
+    const long = format === 'a4' ? 3508 : 1920;
+    const short = format === 'a4' ? 2480 : 1080;
+    renderCompleteBoard(canvas, portrait ? short : long, portrait ? long : short);
     return canvas;
   }
   canvas.width = 1080;
@@ -550,11 +646,13 @@ export function renderExport(design: Design, format: 'board' | 'comment' | 'note
   cardText(ctx, '手机手幅', 64, 95, 34, '#294635', 900);
   cardText(ctx, format === 'memory' ? '把这一刻，好好收藏' : '把喜欢，写成一块牌', 64, 146, 24, '#798174');
   const board = document.createElement('canvas');
-  renderCompleteBoard(board, 1920, 1080);
-  const bx = 64;
-  const bw = width - bx * 2;
-  const bh = bw * 9 / 16;
-  const by = format === 'comment' ? 246 : 280;
+  renderCompleteBoard(board, portrait ? 1080 : 1920, portrait ? 1920 : 1080);
+  const ratio = board.width / board.height;
+  const maxHeight = height * (format === 'comment' || format === 'memory' ? 0.5 : 0.56);
+  const bw = portrait ? Math.min(width - 128, maxHeight * ratio) : width - 128;
+  const bh = bw / ratio;
+  const bx = (width - bw) / 2;
+  const by = portrait ? (format === 'comment' ? 230 : 240) : format === 'comment' ? 246 : 280;
   ctx.save();
   ctx.translate(bx + bw / 2, by + bh / 2);
   ctx.rotate(-0.025);
@@ -567,7 +665,7 @@ export function renderExport(design: Design, format: 'board' | 'comment' | 'note
   roundedRect(ctx, -bw / 2, -bh / 2, bw, bh, 14); ctx.clip();
   ctx.drawImage(board, -bw / 2, -bh / 2, bw, bh);
   ctx.restore();
-  const textTop = by + bh + (format === 'comment' ? 84 : 104);
+  const textTop = by + bh + (portrait ? 72 : format === 'comment' ? 84 : 104);
   if (format === 'memory') {
     cardText(ctx, '我的观赛记忆', 72, textTop, 38, '#294635', 900);
     // Meta is filled in by the user; empty fields remain blank instead of posing as a real trip.

@@ -1,9 +1,11 @@
 import './styles.css';
+import './fonts.css';
 import { createDesign, getTemplate, TEMPLATES, SLOGAN_CATEGORIES, getSloganPage, findSloganByText, type Design, type Category, type TemplateId, type SloganFilter } from './catalog';
-import { measureBoard, renderBoard, renderExport } from './renderer';
+import { measureBoard, renderBoard, renderExport, invalidateFontCache } from './renderer';
 import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isBrowserPreview } from './platform';
 import { readRecords, writeRecord, validateDesign } from './records';
 import { normalizeDotEmoji } from './design-values';
+import { loadBoardFonts } from './fonts';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 const overlay = document.querySelector<HTMLDivElement>('#overlay')!;
@@ -381,6 +383,9 @@ async function start() {
   };
   refreshHeight();
   render();
+  const fontsChanged = () => { invalidateFontCache(); paint(); };
+  void loadBoardFonts().then(fontsChanged);
+  if (document.fonts && typeof document.fonts.addEventListener === 'function') document.fonts.addEventListener('loadingdone', fontsChanged);
   const initialRevision = editRevision;
   void loadRecords();
   void loadLocal('draft-v1').then(value => {
