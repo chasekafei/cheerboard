@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   base: './',
+  define: { __CHEERBOARD_BROWSER_PREVIEW__: JSON.stringify(command === 'serve') },
   server: { host: '127.0.0.1' },
   build: {
     target: ['chrome61', 'es2017'],
@@ -26,4 +27,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

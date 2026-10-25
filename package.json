@@ -13,6 +13,7 @@
     "check": "tsc --noEmit",
     "build": "pnpm check && node scripts/build.mjs",
     "verify": "node scripts/verify.mjs",
+    "audit:official": "node scripts/audit-official.mjs",
     "package": "pnpm build && node scripts/package.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --experimental-strip-types --test tests/*.test.ts"

@@ -9,10 +9,13 @@ const prohibitedIdentifiers = new Set([
   'fetch', 'XMLHttpRequest', 'WebSocket', 'EventSource', 'RTCPeerConnection',
   'webkitRTCPeerConnection', 'Worker', 'SharedWorker', 'WebAssembly', 'eval',
   'Function', 'SharedArrayBuffer', 'DeviceMotionEvent', 'DeviceOrientationEvent',
+  'Accelerometer', 'Gyroscope', 'Magnetometer', 'AmbientLightSensor',
+  'PaymentRequest', 'Notification',
 ]);
 const prohibitedMethods = new Set([
   'requestFullscreen', 'webkitRequestFullscreen', 'webkitEnterFullscreen',
   'mozRequestFullScreen', 'msRequestFullscreen', 'sendBeacon',
+  'download', 'getDisplayMedia', 'enumerateDevices', 'getBattery',
 ]);
 
 function fail(message) {
@@ -41,6 +44,29 @@ function isIdentifier(node, name) {
   return node?.type === 'Identifier' && node.name === name;
 }
 
+function memberPath(node) {
+  if (node?.type === 'Identifier') return node.name;
+  if (node?.type !== 'MemberExpression') return '';
+  const base = memberPath(node.object);
+  const name = memberName(node);
+  return base && name ? `${base}.${name}` : '';
+}
+
+function checkString(value, file) {
+  if (/(?:https?|wss?):\/\//i.test(value)) fail(`${file} 包含外部网络地址`);
+  if (/javascript:|<(?:iframe|object|embed|script)\b|<[^>]+\bon[a-z]+\s*=|<a\b[^>]*\bdownload\b|\btarget\s*=\s*["']?_blank/i.test(value)) {
+    fail(`${file} 包含禁止的动态 HTML 或脚本地址`);
+  }
+}
+
+function checkStaticBase64(source, file) {
+  for (const match of source.matchAll(/data:[^\s"'()<>]+;base64,([A-Za-z0-9+/_=-]+)/gi)) {
+    const bytes = Buffer.from(match[1], 'base64').byteLength;
+    if (bytes > 1024 * 1024) fail(`${file} 内嵌单条 Base64 解码后超过 1 MiB`);
+    if (bytes > 100 * 1024) console.warn(`体积提醒：${file} 内嵌 Base64 解码后超过 100 KiB，宜改为包内文件`);
+  }
+}
+
 function checkJavaScript(source, file) {
   let tree;
   try {
@@ -58,16 +84,16 @@ function checkJavaScript(source, file) {
       if (prohibitedIdentifiers.has(name) || prohibitedMethods.has(name)) {
         fail(`${file}:${node.loc.start.line} 出现禁止的 API ${name}`);
       }
-      if ((name === 'clipboard' || name === 'geolocation' || name === 'serviceWorker') &&
-        isIdentifier(node.object, 'navigator')) {
-        fail(`${file} 不允许 navigator.${name}`);
-      }
+      const path = memberPath(node).replace(/^window\./, '');
+      if (/^navigator\.(?:clipboard|geolocation|serviceWorker|bluetooth|usb|hid|serial|connection|credentials|locks)(?:\.|$)/.test(path) || path === 'navigator.storage.persist') fail(`${file} 不允许 ${path}`);
       if (name === 'open' && isIdentifier(node.object, 'window')) fail(`${file} 不允许 window.open`);
+      if (name === 'prompt' && isIdentifier(node.object, 'window')) fail(`${file} 不允许 window.prompt`);
+      if (name === 'execCommand' && isIdentifier(node.object, 'document')) fail(`${file} 不允许 document.execCommand`);
       if (name === 'lock' && memberName(node.object) === 'orientation') fail(`${file} 不允许锁定屏幕方向`);
     }
-    if (node.type === 'Literal' && typeof node.value === 'string' && /(?:https?|wss?):\/\//i.test(node.value)) {
-      fail(`${file} 包含外部网络地址`);
-    }
+    if (node.type === 'Literal' && typeof node.value === 'string') checkString(node.value, file);
+    if (node.type === 'TemplateElement') checkString(node.value.cooked || node.value.raw, file);
+    if (node.type === 'CallExpression' && memberName(node.callee) === 'setAttribute' && node.arguments[0]?.value === 'download') fail(`${file} 不允许动态 download 属性`);
     for (const value of Object.values(node)) {
       if (Array.isArray(value)) value.forEach(visit);
       else if (value && typeof value === 'object') visit(value);
@@ -77,7 +103,7 @@ function checkJavaScript(source, file) {
 }
 
 async function checkResource(reference, fromFile, root, allowData = false) {
-  if (allowData && /^data:(?:image\/|font\/)/i.test(reference)) return;
+  if (allowData && /^data:image\//i.test(reference)) return;
   if (!reference || reference.startsWith('#')) return;
   if (/^(?:[a-z][a-z\d+.-]*:|\/)/i.test(reference)) fail(`资源必须使用本地相对路径：${reference}`);
   const clean = reference.split(/[?#]/)[0];
@@ -107,6 +133,11 @@ export async function verifyDirectory(directory = resolve('dist')) {
 
   const index = resolve(root, 'index.html');
   const html = await readFile(index, 'utf8');
+  if (!/^\s*<!doctype\s+html\s*>/i.test(html) || !/<html\b[^>]*\blang=["']zh-CN["']/i.test(html) || !/<meta\b[^>]*\bcharset=["']?UTF-8["'\s>]/i.test(html)) fail('入口缺少 HTML5、zh-CN 或 UTF-8 声明');
+  const viewport = html.match(/<meta\b[^>]*\bname=["']viewport["'][^>]*\bcontent=["']([^"']+)["']/i)?.[1] || '';
+  if (!/width\s*=\s*device-width/i.test(viewport) || !/initial-scale\s*=\s*1(?:\.0)?\s*(?:,|$)/i.test(viewport) || !/viewport-fit\s*=\s*cover/i.test(viewport)) fail('viewport 缺少设备宽度、初始缩放或安全区声明');
+  if (/<meta\b[^>]*http-equiv\s*=\s*["']?content-security-policy/i.test(html)) fail('不得自行声明容器 CSP');
+  if (/javascript:/i.test(html)) fail('HTML 含 javascript: URI');
   if (/<(?:iframe|object|embed|base)\b/i.test(html)) fail('HTML 含不允许的嵌入或 base 元素');
   if (/\bon[a-z]+\s*=/i.test(html)) fail('HTML 含内联事件处理器');
   if (/\b(?:crossorigin|download)\b(?:\s*=|\s|>)/i.test(html)) fail('HTML 含 crossorigin 或下载属性');
@@ -129,6 +160,7 @@ export async function verifyDirectory(directory = resolve('dist')) {
   let jsCount = 0;
   let cssCount = 0;
   for (const file of files) {
+    if (['.html', '.css', '.js', '.json', '.svg'].includes(extname(file))) checkStaticBase64(await readFile(file, 'utf8'), relative(root, file));
     if (extname(file) === '.js') {
       jsCount += 1;
       checkJavaScript(await readFile(file, 'utf8'), relative(root, file));

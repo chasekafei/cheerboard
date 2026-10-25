@@ -1,4 +1,8 @@
 /** Public miniTool bridge contract, verified against the 2026-10-22 docs. */
+declare const __CHEERBOARD_BROWSER_PREVIEW__: boolean;
+// Vite replaces this guard at build time, removing browser-only capabilities
+// from the uploaded package. The typeof guard also supports the Node tests.
+const browserPreview = typeof __CHEERBOARD_BROWSER_PREVIEW__ !== 'undefined' && __CHEERBOARD_BROWSER_PREVIEW__;
 type NativeResult = Record<string, unknown>;
 type NativeOptions = Record<string, unknown> & {
   success?: (result: NativeResult) => void;
@@ -38,7 +42,11 @@ function sdk(): XhsSdk | undefined {
 }
 
 export function isNative(): boolean {
-  return Boolean(sdk()) || /xiaohongshu|\bxhs\b|redapp/i.test(navigator.userAgent);
+  return Boolean(sdk());
+}
+
+export function isBrowserPreview(): boolean {
+  return browserPreview && !isNative();
 }
 
 function asRecord(value: unknown): NativeResult {
@@ -228,6 +236,9 @@ async function imagePath(dataUrl: string, required: boolean): Promise<string> {
     throw new Error('图片文件生成失败，请重试。');
   }
   if (/^(data:|https?:)/i.test(result.filePath)) throw new Error('客户端未返回可用的本地图片文件，请改为保存图片。');
+  if (required && (/^(?:file:|blob:)/i.test(result.filePath) || /^(?:[\\/]|[A-Za-z]:[\\/])/.test(result.filePath))) {
+    throw new Error('客户端返回的路径不能用于评论，请改为保存图片。');
+  }
   return result.filePath;
 }
 
@@ -239,15 +250,17 @@ export async function saveImage(dataUrl: string): Promise<void> {
     await invoke('saveImageToPhotosAlbum', { filePath });
     return;
   }
-  // This path is exclusively for regular browser previews. a[download] is
-  // prohibited in the miniTool sandbox and is never its native fallback.
-  const link = document.createElement('a');
-  if (!('download' in link)) throw new Error('此浏览器不支持下载，请在小红书中保存图片。');
-  link.href = dataUrl;
-  link.download = '手机手幅-' + Date.now() + '.png';
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
+  if (browserPreview) {
+    const link = document.createElement('a');
+    if (!('download' in link)) throw new Error('此浏览器不支持下载，请在小红书中保存图片。');
+    link.href = dataUrl;
+    link.download = '手机手幅-' + Date.now() + '.png';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    return;
+  }
+  throw new NativeUnavailableError();
 }
 
 export async function shareImage(dataUrl: string, kind: 'comment' | 'note', snapshot?: unknown): Promise<void> {
@@ -265,7 +278,7 @@ export async function shareImage(dataUrl: string, kind: 'comment' | 'note', snap
     };
     if (typeof snapshot !== 'undefined') {
       const serialized = JSON.stringify(snapshot);
-      if (typeof serialized !== 'string' || new Blob([serialized]).size >= 2048) {
+      if (typeof serialized !== 'string' || new Blob([serialized]).size > 2048) {
         throw new Error('设计信息太长，暂时无法晒到评论，请精简文字或保存图片。');
       }
       payload.miniToolSnapshotInfo = serialized;
@@ -294,7 +307,11 @@ function browserInsets(): Insets {
     + 'padding:0;padding-top:constant(safe-area-inset-top);padding-right:constant(safe-area-inset-right);'
     + 'padding-bottom:constant(safe-area-inset-bottom);padding-left:constant(safe-area-inset-left);'
     + 'padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);'
-    + 'padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);';
+    + 'padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);'
+    + 'padding-top:var(--safe-area-inset-top,env(safe-area-inset-top,0px));'
+    + 'padding-right:var(--safe-area-inset-right,env(safe-area-inset-right,0px));'
+    + 'padding-bottom:var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px));'
+    + 'padding-left:var(--safe-area-inset-left,env(safe-area-inset-left,0px));';
   document.body.appendChild(probe);
   const style = getComputedStyle(probe);
   const result = {

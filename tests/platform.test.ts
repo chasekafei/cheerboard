@@ -191,6 +191,46 @@ test('snapshot limits use UTF-8 bytes and prevent invalid native sharing', async
   assert.equal(writes, 1);
 });
 
+test('comment snapshots accept exactly 2048 UTF-8 bytes and reject 2049', async () => {
+  let comments = 0;
+  environment({
+    writeTempFile: options => options.success({ filePath: 'xhsfile://tmp/boundary.png' }),
+    interactionOpenApi: options => { comments += 1; options.success({ routed: true }); },
+  });
+  const atLimit = { text: 'x'.repeat(2037) };
+  assert.equal(new Blob([JSON.stringify(atLimit)]).size, 2048);
+  await shareImage(image, 'comment', atLimit);
+  await assert.rejects(shareImage(image, 'comment', { text: 'x'.repeat(2038) }), /太长/);
+  assert.equal(comments, 1);
+});
+
+test('comment media rejects absolute and browser paths without rewriting native handles', async () => {
+  for (const filePath of ['/tmp/image.png', 'file:///tmp/image.png', 'C:\\tmp\\image.png', '\\\\server\\image.png', 'blob:preview-image']) {
+    let comments = 0;
+    environment({
+      writeTempFile: options => options.success({ filePath }),
+      interactionOpenApi: options => { comments += 1; options.success({ routed: true }); },
+    });
+    await assert.rejects(shareImage(image, 'comment'), /不能用于评论/);
+    assert.equal(comments, 0);
+  }
+  let received = '';
+  environment({
+    writeTempFile: options => options.success({ filePath: '/tmp/album-image.png' }),
+    saveImageToPhotosAlbum: options => { received = String(options.filePath); options.success({}); },
+  });
+  await saveImage(image);
+  assert.equal(received, '/tmp/album-image.png');
+});
+
+test('release behavior without an injected SDK never attempts a browser download', async () => {
+  environment();
+  Object.defineProperty(globalThis, 'document', { configurable: true, value: {
+    createElement: () => { assert.fail('release must not create download elements'); },
+  } });
+  await assert.rejects(saveImage(image), NativeUnavailableError);
+});
+
 test('album denial and missing SDK never fall through to browser download', async () => {
   const { mockWindow } = environment({
     writeTempFile: options => options.success({ filePath: 'xhsfile://tmp/image.png' }),

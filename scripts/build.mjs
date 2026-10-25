@@ -1,6 +1,7 @@
 import { build } from 'vite';
 import { readFile, writeFile } from 'node:fs/promises';
 import { verifyDirectory } from './verify.mjs';
+import { auditOfficialArtifact } from './audit-official.mjs';
 
 await build();
 
@@ -16,3 +17,4 @@ const html = source
 
 await writeFile(new URL('../dist/index.html', import.meta.url), html);
 await verifyDirectory(new URL('../dist/', import.meta.url));
+await auditOfficialArtifact(new URL('../dist/', import.meta.url));
