@@ -1,0 +1,638 @@
+[
+  {
+    "id": "ST-03",
+    "subject": "莎头（王楚钦、孙颖莎）；广州乒超场次",
+    "kind": "两面手幅设计预览",
+    "design": "奶油粉底、洋红大字、粗白描边；上下两条横幅；人物抠图在两侧，星形与心形少量点缀。文字断笔与倾斜带来活泼感。",
+    "copy": [
+      {
+        "text": "嚟咗廣州",
+        "image": "images/ST-03/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第一条上行，粤语；圖中文字廣为繁体。"
+      },
+      {
+        "text": "乒超撐莎莎楚钦",
+        "image": "images/ST-03/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第一条下行；撐采用手旁加掌形字，原图混用简繁。"
+      },
+      {
+        "text": "莎莎楚钦",
+        "image": "images/ST-03/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第二条上行。"
+      },
+      {
+        "text": "welcome to廣州",
+        "image": "images/ST-03/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第二条下行；英文与廣州混排。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01.webp。",
+      "城市与赛事文字具有场次语境；不应误归为通用口号。人物抠图仅用于观察层级。"
+    ]
+  },
+  {
+    "id": "ST-07",
+    "subject": "王楚钦、孙颖莎（各一款）",
+    "kind": "毛巾手幅预览及独立平面稿",
+    "design": "红金火焰与蓝色水纹成对出现；白色毛笔姓名为主视觉，细线英文手写叠于姓名下缘；角落一句短语。红款有龙形，蓝款有鲨鱼形。",
+    "copy": [
+      {
+        "text": "王楚钦",
+        "image": "images/ST-07/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "来日方长",
+        "image": "images/ST-07/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "WangChuqin",
+        "image": "images/ST-07/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "连写英文姓名，未人为补空格。"
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/ST-07/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "全力以赴",
+        "image": "images/ST-07/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "SunYingsha",
+        "image": "images/ST-07/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "连写英文姓名，未人为补空格。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01—03.webp；01 为两款合并预览，02、03 为对应平面稿。",
+      "作者正文标明仅自印、禁止商用及二传二改；此处为内部参考。"
+    ]
+  },
+  {
+    "id": "ST-08",
+    "subject": "莎头（王楚钦、孙颖莎）；大连乒超场次",
+    "kind": "两面手幅设计预览",
+    "design": "浅蓝与奶黄配色、水波与贝壳泡泡营造清凉感；蓝色英文连写字作背景主层，选手照片分列或拼贴；深蓝城市与赛事名突出。",
+    "copy": [
+      {
+        "text": "大连",
+        "image": "images/ST-08/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "三条手幅预览中均可见。"
+      },
+      {
+        "text": "Sunhope",
+        "image": "images/ST-08/01.webp",
+        "pathType": "主文案",
+        "confidence": "局部可辨",
+        "note": "下方手幅英文连写字可辨为 Sunhope；上方版本被人物部分遮挡，不以标题补写。"
+      },
+      {
+        "text": "中国乒乓球超级联赛",
+        "image": "images/ST-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/ST-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/ST-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "深圳大学",
+        "image": "images/ST-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "下方手幅照片旁标签。"
+      },
+      {
+        "text": "山东魏桥",
+        "image": "images/ST-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "下方手幅照片旁标签。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01.webp。",
+      "中间的「乒超联赛手幅」是展示页标题，不是手幅上的主文案，未混入。",
+      "小号装饰英文与密集水印未录入；该例照片占比高，不宜直接缩小为手机模板。"
+    ]
+  },
+  {
+    "id": "ST-10",
+    "subject": "王楚钦、孙颖莎（同构成对款）",
+    "kind": "3:1 手幅多款设计预览",
+    "design": "金黄粗笔刷中文，红橙火焰款与蓝紫光感款成对；中心人物遮盖少量文字，两侧人物侧脸作低对比背景；下方细条摆中英辅助文字。另有无真人照片的姓名纯字版。",
+    "copy": [
+      {
+        "text": "钦尽全力",
+        "image": "images/ST-10/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "王楚钦款；首字为钦，采用姓名谐音。"
+      },
+      {
+        "text": "莎出重围",
+        "image": "images/ST-10/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "孙颖莎款；首字为莎，采用姓名谐音。"
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/ST-10/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/ST-10/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "全力以赴",
+        "image": "images/ST-10/04.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "两名选手均有此款。"
+      },
+      {
+        "text": "坚定自信",
+        "image": "images/ST-10/05.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "两名选手均有此款；画面按坚定 / 自信分列人物两侧。"
+      },
+      {
+        "text": "努力而闪耀",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "专注且谦逊",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "Glow with your effort",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "Stay focused, stay humble",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "HOPE",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "王楚钦款中央。"
+      },
+      {
+        "text": "SUN",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "孙颖莎款中央。"
+      },
+      {
+        "text": "QIN, GIVE IT EVERYTHING",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "SHA BREAKS THROUGH",
+        "image": "images/ST-10/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "GO ALL OUT",
+        "image": "images/ST-10/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "BE FIRM AND CONFIDENT",
+        "image": "images/ST-10/05.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "已实际审阅 01—05.webp；01 为系列总览；02 为谐音款；03 姓名款；04 全力以赴款；05 坚定自信款。",
+      "英文及中文辅助字来自图内实际识读；署名、尺寸展示标题不列作口号。",
+      "手机可借鉴金色笔刷大字与同构配色，但人物拼贴和底部小字应另行简化。"
+    ]
+  },
+  {
+    "id": "ST-12",
+    "subject": "莎头（王楚钦、孙颖莎）；广州/新年语境",
+    "kind": "两面手幅设计预览",
+    "design": "红白黑三色，白底红波点、红色波浪顶沿及黑底白星底边；黑色粗字与成对 Q 版人物；粤语句子横排，略带手写错落。",
+    "copy": [
+      {
+        "text": "颖莎楚钦",
+        "image": "images/ST-12/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "我好钟意你哋啊",
+        "image": "images/ST-12/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第一条右侧两行粤语文字。"
+      },
+      {
+        "text": "希望我哋多啲見面",
+        "image": "images/ST-12/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第二条上行，見采用繁体。"
+      },
+      {
+        "text": "新年快樂",
+        "image": "images/ST-12/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第二条下行，樂采用繁体。"
+      },
+      {
+        "text": "你们在 幸福在",
+        "image": "images/ST-12/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "第一条姓名下方小字。"
+      },
+      {
+        "text": "颖莎楚钦 我好喜欢你们啊",
+        "image": "images/ST-12/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "局部可辨",
+        "note": "第一条姓名下方小字；图小、末尾标点不确定，未补标点。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01.webp，并放大两条手幅确认。",
+      "下方更细的手写字及水印未确认，不转写。",
+      "「手幅 广东特别版」是预览页标题，不是手幅主文案。作者正文写明不分享/限制用途；素材只作内部研究。"
+    ]
+  },
+  {
+    "id": "ST-14",
+    "subject": "莎头（王楚钦、孙颖莎）；广州场次",
+    "kind": "两面毛巾手幅设计预览",
+    "design": "深绿色底、橙色超大英文底字和奶油黄手写中文；广州塔、点心竹笼线稿提供地域图形；以两行文字为主，不含真人照片。",
+    "copy": [
+      {
+        "text": "活力大湾区\n魅力新广州",
+        "image": "images/ST-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第一条手幅两行。"
+      },
+      {
+        "text": "欢迎莎头嚟广州\n要乜有乜掂过碌蔗",
+        "image": "images/ST-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第二条手幅两行粤语；无额外标点。"
+      },
+      {
+        "text": "SUNHOPE",
+        "image": "images/ST-14/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "局部可辨",
+        "note": "第一条橙色大底字，被中文遮盖。"
+      },
+      {
+        "text": "SHATOU",
+        "image": "images/ST-14/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "局部可辨",
+        "note": "第二条橙色大底字，被中文遮盖。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01.webp。",
+      "场次文案较长；手机应借鉴绿色/橙色/奶油黄的层级及地域小图形，另做版式适配。",
+      "预览页 TOWEL BANNER、毛巾手幅预览及设计者署名不列入口号。"
+    ]
+  },
+  {
+    "id": "ST-17",
+    "subject": "莎头（王楚钦、孙颖莎）",
+    "kind": "双面毛巾手幅设计预览",
+    "design": "青蓝、深蓝与粉黄点缀，粗块中文字配多层白蓝描边及深色硬阴影；波普网点、拼贴色块、星心与皇冠；反面圆润英文泡泡字。",
+    "copy": [
+      {
+        "text": "楚钦颖莎",
+        "image": "images/ST-17/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "正面第一行四字，按图中顺序记录。"
+      },
+      {
+        "text": "看你们打球好幸福",
+        "image": "images/ST-17/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "正面粉色第二行。"
+      },
+      {
+        "text": "SUN\nHOPE",
+        "image": "images/ST-17/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "反面两行泡泡字。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01.webp，放大确认正面四字与第二行。",
+      "设计装饰较多，但姓名和幸福句分层明确；可借鉴粗描边、阴影及双色主辅文案。",
+      "作者注明仅自印、禁止二传二改与商用；这里只留内部参考。"
+    ]
+  },
+  {
+    "id": "ST-18",
+    "subject": "莎头（王楚钦、孙颖莎）；含单人姓名与祝福款",
+    "kind": "多组照片/文字/卡通手幅设计合集",
+    "design": "共五图：深蓝配红字的双人竞技照片款；红白极窄高字文字款；米黄棕色 Q 版卡通款；红黄及蓝黄粗字祝福款；浅蓝/粉色气球人物款。类型跨度大，均为设计预览而非现场返图。",
+    "copy": [
+      {
+        "text": "莎头加油",
+        "image": "images/ST-18/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "我们来日方长",
+        "image": "images/ST-18/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "Share the glory with you",
+        "image": "images/ST-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "We have a long time ahead of us",
+        "image": "images/ST-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/ST-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/ST-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "祝\n没有、\n孙颖莎王楚钦的\n中国乒乓球队、\n越来越好",
+        "image": "images/ST-18/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "原图错落布局，按可见片段保留换行；上方文案带排斥语义，只留来源证据，不建议列产品候选。"
+      },
+      {
+        "text": "孙颖莎王楚钦\n请健康、\n请专注自身",
+        "image": "images/ST-18/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "下方红底款；姓名、请健康、请专注自身分区域排列。"
+      },
+      {
+        "text": "楚钦",
+        "image": "images/ST-18/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左侧卡通款姓名标签。"
+      },
+      {
+        "text": "王!",
+        "image": "images/ST-18/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左侧卡通款右下大字，感叹号样式。"
+      },
+      {
+        "text": "飒!",
+        "image": "images/ST-18/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右侧卡通款左下大字，感叹号样式。"
+      },
+      {
+        "text": "颖莎",
+        "image": "images/ST-18/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右侧卡通款姓名标签。"
+      },
+      {
+        "text": "LOVE FOR HOPE",
+        "image": "images/ST-18/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "LOVE FOR SUN",
+        "image": "images/ST-18/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "5114",
+        "image": "images/ST-18/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "每个卡通款顶边拆为 5、1、姓名英文、1、4。"
+      },
+      {
+        "text": "莎头\n健康宝",
+        "image": "images/ST-18/04.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "红黄款中央两行。"
+      },
+      {
+        "text": "莎莎楚钦\n平安健康顺遂",
+        "image": "images/ST-18/04.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "蓝黄款中央两行。"
+      },
+      {
+        "text": "SUN AND HOPE",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "成为榜样\n成为力量",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "向上生长",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "生生不息",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "SUN\nSHINE",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "图上分两行。"
+      },
+      {
+        "text": "FIGH\nTING",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "图上将 FIGHTING 拆成两行。"
+      },
+      {
+        "text": "SUNYINGSHA&WANGCHUQIN",
+        "image": "images/ST-18/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "SUNYINGSHA",
+        "image": "images/ST-18/05.webp",
+        "pathType": "主文案",
+        "confidence": "局部可辨",
+        "note": "浅蓝款白色超大英文姓名中段被人物遮挡。"
+      },
+      {
+        "text": "WANGCHUQIN",
+        "image": "images/ST-18/05.webp",
+        "pathType": "主文案",
+        "confidence": "局部可辨",
+        "note": "粉色款白色超大英文姓名中段被人物遮挡。"
+      },
+      {
+        "text": "追着光生长、成为自己的太阳",
+        "image": "images/ST-18/05.webp",
+        "pathType": "辅助文字",
+        "confidence": "局部可辨",
+        "note": "浅蓝款右上白色小条；文字可辨，分隔标点较小。"
+      },
+      {
+        "text": "聚沙成塔、未完待续",
+        "image": "images/ST-18/05.webp",
+        "pathType": "辅助文字",
+        "confidence": "局部可辨",
+        "note": "粉色款右上白色小条；文字可辨，分隔标点较小。"
+      },
+      {
+        "text": "GROW TOWARD THE LIGHT\nBECOME YOUR OWN SUN",
+        "image": "images/ST-18/05.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "ACCUMULATE SMALL\nAMOUNTS TO\nFORM A LARGE SUM",
+        "image": "images/ST-18/05.webp",
+        "pathType": "辅助文字",
+        "confidence": "局部可辨",
+        "note": "粉色款左下白字，较低对比。"
+      }
+    ],
+    "notes": [
+      "已实际审阅 01—05.webp，02、03、04、05 另看原尺寸。",
+      "所有片段均来自图像；没有把笔记标题「手幅归来」当作图中文字。",
+      "02 上方带排斥语义的文案不适合作为公共口号候选；04 的健康祝福类可作为待用户确认方向。",
+      "05 姓名中段被人物遮挡，英文恢复存在不确定性，不能当完整可见原文。",
+      "小号生日、装饰数字和大量水印未逐一抄录。"
+    ]
+  }
+]

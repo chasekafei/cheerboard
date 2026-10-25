@@ -1,0 +1,158 @@
+{
+  "kind": "彩色手写文案／转印贴合集",
+  "subject": "王楚钦、孙颖莎／莎头",
+  "copy": [
+    {
+      "text": "小狮子终究会成为狮子",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中文字分散排在狮子插画两侧。"
+    },
+    {
+      "text": "位置不变 一直到最后",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "混双 天花板",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "聚莎成塔 无限希望",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中确为“莎”，不改成“沙”。"
+    },
+    {
+      "text": "八年确实和 八天不一样",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "少年没有乌托邦 心向远方自明朗",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "闪耀 洛杉矶",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "重庆的“重”是重逢的“重” 重庆的“庆”是庆祝的“庆”",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中两行。"
+    },
+    {
+      "text": "拥抱了一下!",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "赢了 就有答案!!",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "钦尽全力 奔向太阳",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "Wang.C.Q",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "局部可辨",
+      "note": "左端部分被卡通图案遮挡；保留可辨的字母与点号。"
+    },
+    {
+      "text": "莎出重围 拥抱希望",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "Sun.Y.S.",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "局部可辨",
+      "note": "右上角浅粉英文较淡；点号和末尾小点也较浅。"
+    },
+    {
+      "text": "谁敢横刀立马 唯我莎大将军",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "葡萄何时成熟 你要静候再静候",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "球不落地 永不放弃",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "never give up",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "岁岁年年 年年岁岁",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "靠近心脏的左手 回应直白的右手",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "风从青奥起 吹往洛杉矶",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    }
+  ],
+  "notes": [
+    "已逐张查看 01、02.webp。",
+    "每条文案以空格连接图片中的换行；署名水印“下个路口直走或转弯”等不作为正文收录。",
+    "02 上方的粉色英文较淡，已标为局部可辨。"
+  ]
+}

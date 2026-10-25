@@ -1,0 +1,380 @@
+[
+  {
+    "id": "WCQ-03",
+    "subject": "王楚钦、孙颖莎（两款单人手幅）",
+    "kind": "真人照片／励志大字",
+    "design": "深紫到黑渐变；双层人物抠图，一大一小；米白毛笔大字铺在右侧，超大英文姓名作为底纹；少量姓名、生日和英文译句。",
+    "copy": [
+      {
+        "text": "痛苦之上是曙光",
+        "image": "images/WCQ-03/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "今天的太阳比昨天大",
+        "image": "images/WCQ-03/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "手幅左侧部分被人物遮挡；同一张预览底部再次完整写出此句。"
+      },
+      {
+        "text": "Beyond pain lies the dawn.",
+        "image": "images/WCQ-03/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "The sun is bigger today than it was yesterday",
+        "image": "images/WCQ-03/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/WCQ-03/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/WCQ-03/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看 1 张图；底部电影海报式装饰英文未收录。"
+    ]
+  },
+  {
+    "id": "WCQ-04",
+    "subject": "莎头双人",
+    "kind": "纯文字／双面手幅预览",
+    "design": "橙黄渐变底；橙色粗黑描边斜排大字；反面两行短句；星星、奖杯、音符和便签贴纸点缀，整体活泼。",
+    "copy": [
+      {
+        "text": "楚钦颖莎",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "看你们打球 超级幸福啊",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "图中分为两行；保留“超级”和“啊”。"
+      },
+      {
+        "text": "坚定自信",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "健康涨球",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "5114",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "DON’T CARE",
+        "image": "images/WCQ-04/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看 1 张图。"
+    ]
+  },
+  {
+    "id": "WCQ-07",
+    "subject": "王楚钦单人",
+    "kind": "真人照片／情感支持",
+    "design": "紫黑底；金色刷字和喷溅颗粒；正反两版均有人物大幅抠图与半透明比赛图；大字两行，适合高对比远看。",
+    "copy": [
+      {
+        "text": "王楚钦加油 享受比赛",
+        "image": "images/WCQ-07/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "不要头衔 只要你",
+        "image": "images/WCQ-07/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看 1 张图；作者水印未作为文案收录。"
+    ]
+  },
+  {
+    "id": "WCQ-08",
+    "subject": "王楚钦单人",
+    "kind": "真人照片／队长主题",
+    "design": "红黑金运动海报风；奖杯与比赛人物抠图；撕纸边、红黑背景、金色“队长”和“极限”；主文案与队长身份并置，强烈力量感。",
+    "copy": [
+      {
+        "text": "我的人生没有极限",
+        "image": "images/WCQ-08/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "队长",
+        "image": "images/WCQ-08/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "中国乒乓球男队队长",
+        "image": "images/WCQ-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/WCQ-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "HOPE",
+        "image": "images/WCQ-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "CAPTAIN KING",
+        "image": "images/WCQ-08/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看 1 张图；收录的是图中文字，不据此验证人物现时职务；底部装饰性长英文未收录。"
+    ]
+  },
+  {
+    "id": "WCQ-14",
+    "subject": "莎头双人",
+    "kind": "卡通／双面手幅预览",
+    "design": "粉蓝竖条纹上下拼色；圆润泡泡字，灰黑描边加白色外框；双人 Q 版、爱心、星星和胶片框；粉蓝字色交替，甜美可爱。",
+    "copy": [
+      {
+        "text": "Sunhope",
+        "image": "images/WCQ-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "楚钦颖莎 看你们打球好幸福",
+        "image": "images/WCQ-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "图中两行排版，首行为“楚钦颖莎”。"
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/WCQ-14/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/WCQ-14/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "5114",
+        "image": "images/WCQ-14/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看 1 张图；图中有作者水印，未收录为文案。"
+    ]
+  },
+  {
+    "id": "WCQ-15",
+    "subject": "王楚钦、孙颖莎（两款单人毛巾手幅）",
+    "kind": "单字／复古撞色",
+    "design": "方形毛巾参考；左红黄、右蓝黄；超大单字“钦／莎”，棕色描边与米色外轮廓；棋盘格边、绿色生日椭圆、星星；顶栏小字、底栏英文姓名。",
+    "copy": [
+      {
+        "text": "钦",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "莎",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "健康涨球",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "竭尽全力永不言弃",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "明亮的心指引着胜利",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "快乐乒乓",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "HOPE",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "sun",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "0511",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "1104",
+        "image": "images/WCQ-15/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看 1 张图并放大顶部文字；方形毛巾构图可参考配色和字形，比例不同于横幅。"
+    ]
+  },
+  {
+    "id": "WCQ-18",
+    "subject": "王楚钦、孙颖莎（两款单人手幅）",
+    "kind": "真人照片／实物展示",
+    "design": "同版式分色：孙颖莎蓝白，王楚钦红粉；左侧超大白字、彩色描边与偏移阴影，右侧人物抠图；顶部一句短文、乒乓球和奖杯线稿；底部纯色条。实物双手展开可看横幅比例。",
+    "copy": [
+      {
+        "text": "孙颖莎",
+        "image": "images/WCQ-18/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "乒乓世界迷人眼，最爱莎莎小圆脸",
+        "image": "images/WCQ-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "ALL FOR SYS",
+        "image": "images/WCQ-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/WCQ-18/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "王楚钦你最棒，赛场拼搏放光芒",
+        "image": "images/WCQ-18/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      },
+      {
+        "text": "ALL FOR WCQ",
+        "image": "images/WCQ-18/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": ""
+      }
+    ],
+    "notes": [
+      "实际查看全部 2 张实物图；墙面入口文字与展示者衣物不属于手幅内容，未收录。"
+    ]
+  }
+]

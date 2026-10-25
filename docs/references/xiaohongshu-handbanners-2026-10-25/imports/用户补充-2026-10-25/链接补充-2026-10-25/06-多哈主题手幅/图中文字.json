@@ -1,0 +1,136 @@
+{
+  "kind": "双面毛巾手幅实物",
+  "subject": "王楚钦、孙颖莎（两款单人）",
+  "copy": [
+    {
+      "text": "王楚钦",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "纵有千古",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "横有八荒",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "前途似海",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "来日方长",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "ABOVE THE PAIN IS THE LIGHT",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "愿我…人生 没有…极限",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "局部可辨",
+      "note": "下幅人物遮住若干文字；省略号表示遮挡，不从笔记正文补齐。"
+    },
+    {
+      "text": "HOPE",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "TEAM CHINA",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "孙颖莎",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "纵有千古",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "横有八荒",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "前途似海",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "来日方长",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "ABOVE THE PAIN IS THE LIGHT",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "今天…太阳 比昨…天大",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "局部可辨",
+      "note": "下幅文字被人物、奖杯、鲜花遮住；省略号表示遮挡，不补写。"
+    },
+    {
+      "text": "SUN",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "TEAM CHINA",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    }
+  ],
+  "notes": [
+    "已逐张查看 01、02.webp；每张含正反两面实物展示。",
+    "两款反面的大句均有部分被人物抠图遮住，按局部可辨存档。"
+  ]
+}

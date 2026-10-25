@@ -1,0 +1,186 @@
+{
+  "kind": "真人照片手幅预览合集",
+  "subject": "王楚钦",
+  "copy": [
+    {
+      "text": "HOPE",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "赢了 就有答案",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中两行。"
+    },
+    {
+      "text": "聚沙成塔 保持渴望",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": "下幅右上角小字。"
+    },
+    {
+      "text": "HOPE",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "王楚钦",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "heavy spin and then a shield from Wang Chu Qin",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "HOPE",
+      "image": "03.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "王楚钦",
+      "image": "03.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "Oh rocket backhand",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "suddenly I saw him and wow",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "We've always been together",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "HOPE",
+      "image": "04.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "钦尽全力",
+      "image": "04.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "王楚钦",
+      "image": "04.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "LIONHEART",
+      "image": "04.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "HOPE",
+      "image": "05.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "王楚钦",
+      "image": "05.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "狂飙",
+      "image": "05.webp",
+      "type": "主文案",
+      "confidence": "局部可辨",
+      "note": "位于上幅左侧，右部被人物与球拍遮挡。"
+    },
+    {
+      "text": "我想让全世界记…的国家和我的名字",
+      "image": "05.webp",
+      "type": "辅助文字",
+      "confidence": "局部可辨",
+      "note": "中间数个字被举起的手及球拍遮挡；省略号表示图中遮挡，不补写。"
+    },
+    {
+      "text": "HOPE",
+      "image": "06.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "聚沙成塔 保持渴望",
+      "image": "06.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中两行。"
+    },
+    {
+      "text": "坚定的走下去",
+      "image": "06.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": "保留图中的“的”。"
+    },
+    {
+      "text": "王楚钦",
+      "image": "06.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "The Lionheart himself",
+      "image": "06.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "ABOVE THE PAIN LIES THE DAWN",
+      "image": "06.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    }
+  ],
+  "notes": [
+    "已逐张查看 01—06.webp；每张均为两幅手幅的预览。",
+    "大幅姓名遮住部分底层文字，未据残字补齐整句；重复署名水印、出生日期和无法完整辨认的小字未收录。",
+    "01 下幅大字姓名受人物和底图遮挡，此处仅录入其清楚主句；02、03、04、05、06 的清晰姓名分别保留。"
+  ]
+}

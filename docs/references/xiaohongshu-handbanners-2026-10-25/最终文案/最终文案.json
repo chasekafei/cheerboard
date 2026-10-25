@@ -1,0 +1,6539 @@
+{
+  "source": "/Users/mout/Project/xiaohongshu-tools/cheerboard/docs/references/xiaohongshu-handbanners-2026-10-25/文案汇总.csv",
+  "sourceSha256": "c238cf28d34b358070ee8b97f1bef5d34c1186731ab5b12e66b27de2a073c1f3",
+  "sourceRowConvention": "表头为1，首条数据为2；逻辑记录行号，不是CSV物理文本行号",
+  "method": "AI逐条语义判断并明确指定归并关系；程序只执行映射、最高标记及完整性校验，不使用相似度或字符串等价规则决定语义。",
+  "rules": [
+    "所有最终代表句逐字取自当前审核CSV。",
+    "语义同组最高标记决定收录：2优先、1可用、0不收录；全空白组忽略。",
+    "中文姓名及其英文全名/缩写集中为一个姓名组，可用展示形式保留在变体字段。",
+    "同主题但不同含义、不同姓名谐音、完整组合及其单句保留区别。",
+    "原标0和空白同义项参与归并与溯源，不覆盖用户原表，不另造默认文案。"
+  ],
+  "stats": {
+    "sourceRows": 446,
+    "sourceVotes": {
+      "1": 243,
+      "2": 40,
+      "0": 115,
+      "未填": 48
+    },
+    "semanticGroups": 269,
+    "accepted": 165,
+    "priority2": 24,
+    "priority1": 141,
+    "excludedGroups": 93,
+    "blankOnlyGroups": 11,
+    "maxConflicts": 19
+  },
+  "final": [
+    {
+      "canonicalRow": 19,
+      "rows": [
+        19,
+        31,
+        332
+      ],
+      "reason": "钦尽全力与 QIN, GIVE IT EVERYTHING 是同一姓名谐音款；保留与通用全力以赴的使用差别。",
+      "subject": "王楚钦",
+      "category": "姓名谐音",
+      "groupId": "G014",
+      "priority": 2,
+      "canonical": "钦尽全力",
+      "variants": [
+        {
+          "text": "钦尽全力",
+          "rows": [
+            19,
+            332
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "QIN, GIVE IT EVERYTHING",
+          "rows": [
+            31
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C001",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-10",
+        "USR-03"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 20,
+      "rows": [
+        20,
+        32
+      ],
+      "reason": "莎出重围及该款英文说明表达一致；不同主体与完整组合另组。",
+      "subject": "孙颖莎",
+      "category": "姓名谐音",
+      "groupId": "G015",
+      "priority": 2,
+      "canonical": "莎出重围",
+      "variants": [
+        {
+          "text": "莎出重围",
+          "rows": [
+            20
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SHA BREAKS THROUGH",
+          "rows": [
+            32
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C002",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 21,
+      "rows": [
+        9,
+        11,
+        15,
+        21,
+        52,
+        59,
+        72,
+        78,
+        80,
+        81,
+        84,
+        95,
+        110,
+        114,
+        123,
+        124,
+        128,
+        136,
+        142,
+        155,
+        159,
+        168,
+        383,
+        404,
+        408,
+        424
+      ],
+      "reason": "同一人的中文姓名、简称、英文全名及缩写；中国前缀不改变姓名指向。",
+      "subject": "孙颖莎",
+      "category": "姓名",
+      "groupId": "G007",
+      "priority": 2,
+      "canonical": "孙颖莎",
+      "variants": [
+        {
+          "text": "孙颖莎",
+          "rows": [
+            9,
+            15,
+            21,
+            52,
+            78,
+            81,
+            95,
+            110,
+            124,
+            136,
+            142,
+            155,
+            168,
+            383,
+            404
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SunYingsha",
+          "rows": [
+            11
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "颖莎",
+          "rows": [
+            59
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "SUNYINGSHA",
+          "rows": [
+            72
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "CHINA SUN Y.S.",
+          "rows": [
+            80,
+            84
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Sun YingSha",
+          "rows": [
+            114
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Sun Y.S.",
+          "rows": [
+            123
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SUN SHA SHA",
+          "rows": [
+            128
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "莎",
+          "rows": [
+            159
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SUN YING SHA",
+          "rows": [
+            408
+          ],
+          "originalMax": null,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "Sun.Y.S.",
+          "rows": [
+            424
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C003",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-07",
+        "ST-08",
+        "ST-10",
+        "ST-18",
+        "SYS-02",
+        "SYS-07",
+        "SYS-12",
+        "SYS-14",
+        "SYS-19",
+        "SYS-21",
+        "WCQ-03",
+        "WCQ-04",
+        "WCQ-14",
+        "WCQ-15",
+        "WCQ-18",
+        "USR-06",
+        "USR-07",
+        "USR-09"
+      ],
+      "approvedVariants": [
+        "SunYingsha",
+        "SUNYINGSHA",
+        "CHINA SUN Y.S.",
+        "Sun YingSha",
+        "Sun Y.S.",
+        "莎",
+        "Sun.Y.S."
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/689b02c8000000001c03633c?xsec_token=ABjbHhMmXO__0o49uSsTWHR5YgJA4qSB0z5UUrKWbOGy0=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a4f71ec000000000f01f541?xsec_token=ABbwZFzq6xBP-YONg4bjZJa3OV9ImPTk6RMQor2bpD_f4=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a3cac650000000015026792?xsec_token=ABSHSRjEymqH3OsBoT1HfMKs2IhCzjUhCGW7HwEPwrvvw=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6aa5765b000000002802c8a7?xsec_token=ABREpJ_Vs-9FM3wgEC0Llwm3YlJo8IZTWaV0I8q84k9KE=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ad4d71c00000000270348d5?xsec_token=ABJ3toiFMTDa3lfJR4HQXMUm82aVoKlhuHWtRlTKm2S2M=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ab122f00000000035021618?xsec_token=ABgkZp_SI_f7jibkBJyCsnYv1agmpo4Cw2I-Nn_a8Vzx8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6986fe6b000000000a02d807?xsec_token=ABqXWYA25So2DhplyCHOraBd7DlYAt3xGcYYEvTe7XuTg=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ad20eda000000001a0318f1?xsec_token=ABNhwIFZKqf9PHSNHutgeBAX2k3TlhONauOaqX28-4R9E=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8?xsec_token=ABdkxpt8F8jBlkyzrpl5yskY7ws96go4_BAdUu76bDsJQ=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6763f572000000000b0213b0?xsec_token=CB-wPL9aY2F5WUw5IYZ-K5Vav0eX1ZCU5jc2nmeOV69eQ=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 22,
+      "rows": [
+        6,
+        8,
+        16,
+        22,
+        53,
+        56,
+        73,
+        109,
+        135,
+        141,
+        150,
+        156,
+        158,
+        171,
+        324,
+        327,
+        333,
+        336,
+        342,
+        374,
+        398,
+        402,
+        422
+      ],
+      "reason": "同一人的中文姓名、简称、英文全名和缩写；作为一个姓名组，展示异写保留。",
+      "subject": "王楚钦",
+      "category": "姓名",
+      "groupId": "G005",
+      "priority": 2,
+      "canonical": "王楚钦",
+      "variants": [
+        {
+          "text": "王楚钦",
+          "rows": [
+            6,
+            16,
+            22,
+            53,
+            109,
+            135,
+            141,
+            150,
+            156,
+            171,
+            324,
+            327,
+            333,
+            336,
+            342,
+            374,
+            398
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "WangChuqin",
+          "rows": [
+            8
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "楚钦",
+          "rows": [
+            56
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "WANGCHUQIN",
+          "rows": [
+            73
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "钦",
+          "rows": [
+            158
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "WANG CHU QIN",
+          "rows": [
+            402
+          ],
+          "originalMax": null,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "Wang.C.Q",
+          "rows": [
+            422
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C004",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-07",
+        "ST-08",
+        "ST-10",
+        "ST-18",
+        "SYS-14",
+        "WCQ-03",
+        "WCQ-04",
+        "WCQ-08",
+        "WCQ-14",
+        "WCQ-15",
+        "WCQ-18",
+        "USR-03",
+        "USR-06",
+        "USR-07",
+        "USR-09"
+      ],
+      "approvedVariants": [
+        "WangChuqin",
+        "WANGCHUQIN",
+        "钦",
+        "Wang.C.Q"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/689b02c8000000001c03633c?xsec_token=ABjbHhMmXO__0o49uSsTWHR5YgJA4qSB0z5UUrKWbOGy0=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a4f71ec000000000f01f541?xsec_token=ABbwZFzq6xBP-YONg4bjZJa3OV9ImPTk6RMQor2bpD_f4=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ad20eda000000001a0318f1?xsec_token=ABNhwIFZKqf9PHSNHutgeBAX2k3TlhONauOaqX28-4R9E=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a390582000000000f02adf3?xsec_token=ABpqPHR3rlEOTl_ZhJct43KkmMMZZTNmlVOBHoSpnKvXw=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8?xsec_token=ABdkxpt8F8jBlkyzrpl5yskY7ws96go4_BAdUu76bDsJQ=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6763f572000000000b0213b0?xsec_token=CB-wPL9aY2F5WUw5IYZ-K5Vav0eX1ZCU5jc2nmeOV69eQ=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 23,
+      "rows": [
+        10,
+        23,
+        33
+      ],
+      "reason": "全力以赴与 GO ALL OUT 是完整同义表达，按组最高标记 2。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G008",
+      "priority": 2,
+      "canonical": "全力以赴",
+      "variants": [
+        {
+          "text": "全力以赴",
+          "rows": [
+            10,
+            23
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "GO ALL OUT",
+          "rows": [
+            33
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C005",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-07",
+        "ST-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/689b02c8000000001c03633c?xsec_token=ABjbHhMmXO__0o49uSsTWHR5YgJA4qSB0z5UUrKWbOGy0=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 24,
+      "rows": [
+        24,
+        34,
+        139,
+        297,
+        307,
+        315
+      ],
+      "reason": "坚定自信、相信自己及其直接英译，均是自我信任的直接鼓励；坚定为程度加强。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G016",
+      "priority": 2,
+      "canonical": "坚定自信",
+      "variants": [
+        {
+          "text": "坚定自信",
+          "rows": [
+            24,
+            139,
+            297,
+            315
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "BE FIRM AND CONFIDENT",
+          "rows": [
+            34
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "相信自己",
+          "rows": [
+            307
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C006",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-10",
+        "WCQ-04",
+        "USR-02"
+      ],
+      "approvedVariants": [
+        "BE FIRM AND CONFIDENT",
+        "相信自己"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 49,
+      "rows": [
+        7,
+        49,
+        51,
+        302,
+        310,
+        373,
+        378,
+        387
+      ],
+      "reason": "同一来日方长祝愿，主语与英语表达不同；含额外如愿祝福、完整四句古文的组合另组。",
+      "subject": "通用／莎头",
+      "category": "祝愿",
+      "groupId": "G006",
+      "priority": 2,
+      "canonical": "我们来日方长",
+      "variants": [
+        {
+          "text": "来日方长",
+          "rows": [
+            7,
+            373,
+            378,
+            387
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "我们来日方长",
+          "rows": [
+            49
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "We have a long time ahead of us",
+          "rows": [
+            51
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "我们 来日方长",
+          "rows": [
+            302,
+            310
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C007",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-07",
+        "ST-18",
+        "USR-02",
+        "USR-05",
+        "USR-06"
+      ],
+      "approvedVariants": [
+        "来日方长",
+        "我们 来日方长"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/689b02c8000000001c03633c?xsec_token=ABjbHhMmXO__0o49uSsTWHR5YgJA4qSB0z5UUrKWbOGy0=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 107,
+      "rows": [
+        107
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "观赛",
+      "groupId": "G062",
+      "priority": 2,
+      "canonical": "这么远那么贵\n为了莎头我无所谓",
+      "variants": [
+        {
+          "text": "这么远那么贵\n为了莎头我无所谓",
+          "rows": [
+            107
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C008",
+      "tier": "优先收录",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 119,
+      "rows": [
+        119
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "象征称呼",
+      "groupId": "G067",
+      "priority": 2,
+      "canonical": "明亮的心",
+      "variants": [
+        {
+          "text": "明亮的心",
+          "rows": [
+            119
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C009",
+      "tier": "优先收录",
+      "sourceIds": [
+        "SYS-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6adb44bf000000002403ba02?xsec_token=ABnhnkXHiLI4IOByTBQLcYOBW0sl5ZHIi6bybYPJWr40s=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 131,
+      "rows": [
+        131,
+        133,
+        279,
+        344,
+        366,
+        379,
+        388
+      ],
+      "reason": "痛苦之上见曙光的同一比喻；英文将 dawn 宽译为 light 的版本仍属同一完整断言。",
+      "subject": "王楚钦",
+      "category": "语录",
+      "groupId": "G072",
+      "priority": 2,
+      "canonical": "痛苦之上是曙光",
+      "variants": [
+        {
+          "text": "痛苦之上是曙光",
+          "rows": [
+            131,
+            279,
+            366
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Beyond pain lies the dawn.",
+          "rows": [
+            133
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "ABOVE THE PAIN LIES THE DAWN",
+          "rows": [
+            344
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "ABOVE THE PAIN IS THE LIGHT",
+          "rows": [
+            379,
+            388
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C010",
+      "tier": "优先收录",
+      "sourceIds": [
+        "WCQ-03",
+        "USR-01",
+        "USR-03",
+        "USR-05",
+        "USR-06"
+      ],
+      "approvedVariants": [
+        "Beyond pain lies the dawn.",
+        "ABOVE THE PAIN LIES THE DAWN"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ad20eda000000001a0318f1?xsec_token=ABNhwIFZKqf9PHSNHutgeBAX2k3TlhONauOaqX28-4R9E=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 132,
+      "rows": [
+        132,
+        134,
+        389
+      ],
+      "reason": "今天的太阳比昨天大及其英译；带省略号的是同句遮挡记录，保留原样不补字。",
+      "subject": "王楚钦",
+      "category": "语录",
+      "groupId": "G073",
+      "priority": 2,
+      "canonical": "今天的太阳比昨天大",
+      "variants": [
+        {
+          "text": "今天的太阳比昨天大",
+          "rows": [
+            132
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "The sun is bigger today than it was yesterday",
+          "rows": [
+            134
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "今天…太阳 比昨…天大",
+          "rows": [
+            389
+          ],
+          "originalMax": null,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C011",
+      "tier": "优先收录",
+      "sourceIds": [
+        "WCQ-03",
+        "USR-06"
+      ],
+      "approvedVariants": [
+        "The sun is bigger today than it was yesterday"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ad20eda000000001a0318f1?xsec_token=ABNhwIFZKqf9PHSNHutgeBAX2k3TlhONauOaqX28-4R9E=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 140,
+      "rows": [
+        140,
+        160
+      ],
+      "reason": "健康涨球跨来源重复。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G074",
+      "priority": 2,
+      "canonical": "健康涨球",
+      "variants": [
+        {
+          "text": "健康涨球",
+          "rows": [
+            140,
+            160
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C012",
+      "tier": "优先收录",
+      "sourceIds": [
+        "WCQ-04",
+        "WCQ-15"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 143,
+      "rows": [
+        62,
+        143,
+        157
+      ],
+      "reason": "同一 5114 数字符号跨来源重复。",
+      "subject": "莎头",
+      "category": "数字符号",
+      "groupId": "G036",
+      "priority": 2,
+      "canonical": "5114",
+      "variants": [
+        {
+          "text": "5114",
+          "rows": [
+            62,
+            143,
+            157
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C013",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-18",
+        "WCQ-04",
+        "WCQ-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8?xsec_token=ABdkxpt8F8jBlkyzrpl5yskY7ws96go4_BAdUu76bDsJQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 268,
+      "rows": [
+        268
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "加油",
+      "groupId": "G175",
+      "priority": 2,
+      "canonical": "当身体达到了极限 不屈的意志会带你杀出重围",
+      "variants": [
+        {
+          "text": "当身体达到了极限 不屈的意志会带你杀出重围",
+          "rows": [
+            268
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C014",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 286,
+      "rows": [
+        286,
+        425
+      ],
+      "reason": "同一莎头将军对句；采用当前表格的莎头将军，不恢复旧图文字。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G189",
+      "priority": 2,
+      "canonical": "谁敢横刀立马 唯我莎头将军",
+      "variants": [
+        {
+          "text": "谁敢横刀立马 唯我莎头将军",
+          "rows": [
+            286,
+            425
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C015",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-01",
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 289,
+      "rows": [
+        289,
+        305,
+        313
+      ],
+      "reason": "赫杯之上你我永存，空格／出处重复，组取 2。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G192",
+      "priority": 2,
+      "canonical": "赫杯之上 你我永存",
+      "variants": [
+        {
+          "text": "赫杯之上 你我永存",
+          "rows": [
+            289,
+            305,
+            313
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C016",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-01",
+        "USR-02"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 292,
+      "rows": [
+        292
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G195",
+      "priority": 2,
+      "canonical": "如我面对太阳，如你追寻希望",
+      "variants": [
+        {
+          "text": "如我面对太阳，如你追寻希望",
+          "rows": [
+            292
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C017",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 293,
+      "rows": [
+        293
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "姓名谐音",
+      "groupId": "G196",
+      "priority": 2,
+      "canonical": "钦尽全力 莎出重围",
+      "variants": [
+        {
+          "text": "钦尽全力 莎出重围",
+          "rows": [
+            293
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C018",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 296,
+      "rows": [
+        296,
+        314,
+        367
+      ],
+      "reason": "目标远不止于此跨来源重复。",
+      "subject": "王楚钦",
+      "category": "语录",
+      "groupId": "G198",
+      "priority": 2,
+      "canonical": "目标远不止于此",
+      "variants": [
+        {
+          "text": "目标远不止于此",
+          "rows": [
+            296,
+            314,
+            367
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C019",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-02",
+        "USR-05"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 298,
+      "rows": [
+        13,
+        43,
+        47,
+        65,
+        153,
+        298,
+        316
+      ],
+      "reason": "Sun/Hope 双人组合名的连写、换行、AND、&及感叹号异写；单人 SUN/HOPE 另组。",
+      "subject": "莎头",
+      "category": "组合称呼",
+      "groupId": "G010",
+      "priority": 2,
+      "canonical": "Sun & Hope!!",
+      "variants": [
+        {
+          "text": "Sunhope",
+          "rows": [
+            13,
+            153
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SUNHOPE",
+          "rows": [
+            43
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SUN\nHOPE",
+          "rows": [
+            47
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SUN AND HOPE",
+          "rows": [
+            65
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Sun & Hope!!",
+          "rows": [
+            298,
+            316
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C020",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-08",
+        "ST-14",
+        "ST-17",
+        "ST-18",
+        "WCQ-14",
+        "USR-02"
+      ],
+      "approvedVariants": [
+        "Sunhope",
+        "SUNHOPE",
+        "SUN\nHOPE",
+        "SUN AND HOPE"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a4f71ec000000000f01f541?xsec_token=ABbwZFzq6xBP-YONg4bjZJa3OV9ImPTk6RMQor2bpD_f4=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a2e614f000000002003bf73?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvSypixmdaHdOP1NrBMXGB4=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/69a6a4f4000000001503a991?xsec_token=ABHhEKOYUbSCkgXKriYxKlwadfRSA_80dTuug9fyjEccE=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8?xsec_token=ABdkxpt8F8jBlkyzrpl5yskY7ws96go4_BAdUu76bDsJQ=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 299,
+      "rows": [
+        281,
+        299,
+        317,
+        365
+      ],
+      "reason": "同一向顶峰前行、在顶峰相见的愿景，一步步前行及少年热血为语气铺垫；另含光明未来祝愿或前途关系的完整组合另组。",
+      "subject": "通用／莎头",
+      "category": "加油",
+      "groupId": "G185",
+      "priority": 2,
+      "canonical": "顶峰相见",
+      "variants": [
+        {
+          "text": "我们一步步走向顶峰 然后相见",
+          "rows": [
+            281
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "顶峰相见",
+          "rows": [
+            299,
+            317
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "少年热血，顶峰相见",
+          "rows": [
+            365
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C021",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-01",
+        "USR-02",
+        "USR-04"
+      ],
+      "approvedVariants": [
+        "少年热血，顶峰相见"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 320,
+      "rows": [
+        29,
+        151,
+        164,
+        320,
+        323,
+        326,
+        331,
+        335,
+        339,
+        381
+      ],
+      "reason": "HOPE 单人象征文案跨来源重复；与姓名本身和双人组合另组。",
+      "subject": "王楚钦",
+      "category": "象征称呼",
+      "groupId": "G019",
+      "priority": 2,
+      "canonical": "HOPE",
+      "variants": [
+        {
+          "text": "HOPE",
+          "rows": [
+            29,
+            151,
+            164,
+            320,
+            323,
+            326,
+            331,
+            335,
+            339,
+            381
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C022",
+      "tier": "优先收录",
+      "sourceIds": [
+        "ST-10",
+        "WCQ-08",
+        "WCQ-15",
+        "USR-03",
+        "USR-06"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a390582000000000f02adf3?xsec_token=ABpqPHR3rlEOTl_ZhJct43KkmMMZZTNmlVOBHoSpnKvXw=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 334,
+      "rows": [
+        334,
+        343
+      ],
+      "reason": "Lionheart 称呼仅冠词和强调代词不同；双人两种心的完整组合另组。",
+      "subject": "王楚钦",
+      "category": "象征称呼",
+      "groupId": "G208",
+      "priority": 2,
+      "canonical": "LIONHEART",
+      "variants": [
+        {
+          "text": "LIONHEART",
+          "rows": [
+            334
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "The Lionheart himself",
+          "rows": [
+            343
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 2,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C023",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-03"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 369,
+      "rows": [
+        369
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "象征称呼",
+      "groupId": "G231",
+      "priority": 2,
+      "canonical": "One true king",
+      "variants": [
+        {
+          "text": "One true king",
+          "rows": [
+            369
+          ],
+          "originalMax": 2,
+          "inheritedPriority": 2,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C024",
+      "tier": "优先收录",
+      "sourceIds": [
+        "USR-05"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 2,
+      "rows": [
+        2
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "场次文案",
+      "groupId": "G001",
+      "priority": 1,
+      "canonical": "嚟咗廣州",
+      "variants": [
+        {
+          "text": "嚟咗廣州",
+          "rows": [
+            2
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C025",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-03"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2c342e00000000060335bc?xsec_token=ABMssFNNszyB0KtD08lN_c5FhnM3_ZaDJptxOO90l_BO0=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 3,
+      "rows": [
+        3
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "场次文案",
+      "groupId": "G002",
+      "priority": 1,
+      "canonical": "乒超撐莎莎楚钦",
+      "variants": [
+        {
+          "text": "乒超撐莎莎楚钦",
+          "rows": [
+            3
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C026",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-03"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2c342e00000000060335bc?xsec_token=ABMssFNNszyB0KtD08lN_c5FhnM3_ZaDJptxOO90l_BO0=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 5,
+      "rows": [
+        5
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "场次文案",
+      "groupId": "G004",
+      "priority": 1,
+      "canonical": "welcome to 廣州",
+      "variants": [
+        {
+          "text": "welcome to 廣州",
+          "rows": [
+            5
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C027",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-03"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2c342e00000000060335bc?xsec_token=ABMssFNNszyB0KtD08lN_c5FhnM3_ZaDJptxOO90l_BO0=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 25,
+      "rows": [
+        25,
+        27
+      ],
+      "reason": "努力而闪耀及相应完整英文表达。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G017",
+      "priority": 1,
+      "canonical": "努力而闪耀",
+      "variants": [
+        {
+          "text": "努力而闪耀",
+          "rows": [
+            25
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Glow with your effort",
+          "rows": [
+            27
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C028",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-10"
+      ],
+      "approvedVariants": [
+        "Glow with your effort"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 26,
+      "rows": [
+        26,
+        28
+      ],
+      "reason": "专注且谦逊及相应完整英文表达。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G018",
+      "priority": 1,
+      "canonical": "专注且谦逊",
+      "variants": [
+        {
+          "text": "专注且谦逊",
+          "rows": [
+            26
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Stay focused, stay humble",
+          "rows": [
+            28
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C029",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-10"
+      ],
+      "approvedVariants": [
+        "Stay focused, stay humble"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 30,
+      "rows": [
+        30,
+        165,
+        390
+      ],
+      "reason": "SUN 单人象征文案仅大小写与出处不同。",
+      "subject": "孙颖莎",
+      "category": "象征称呼",
+      "groupId": "G020",
+      "priority": 1,
+      "canonical": "SUN",
+      "variants": [
+        {
+          "text": "SUN",
+          "rows": [
+            30,
+            390
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "sun",
+          "rows": [
+            165
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C030",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-10",
+        "WCQ-15",
+        "USR-06"
+      ],
+      "approvedVariants": [
+        "sun"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 36,
+      "rows": [
+        36,
+        40
+      ],
+      "reason": "同一对选手表达喜欢，粤语／普通话及姓名抬头不同。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G021",
+      "priority": 1,
+      "canonical": "我好钟意你哋啊",
+      "variants": [
+        {
+          "text": "我好钟意你哋啊",
+          "rows": [
+            36
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "颖莎楚钦 我好喜欢你们啊",
+          "rows": [
+            40
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C031",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-12"
+      ],
+      "approvedVariants": [
+        "颖莎楚钦 我好喜欢你们啊"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvxTCrDvo5UyGwBBmuoPuQw=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 37,
+      "rows": [
+        37
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G022",
+      "priority": 1,
+      "canonical": "希望我哋多啲見面",
+      "variants": [
+        {
+          "text": "希望我哋多啲見面",
+          "rows": [
+            37
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C032",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-12"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvxTCrDvo5UyGwBBmuoPuQw=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 38,
+      "rows": [
+        38
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "节庆",
+      "groupId": "G023",
+      "priority": 1,
+      "canonical": "新年快樂",
+      "variants": [
+        {
+          "text": "新年快樂",
+          "rows": [
+            38
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C033",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-12"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvxTCrDvo5UyGwBBmuoPuQw=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 39,
+      "rows": [
+        39
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G024",
+      "priority": 1,
+      "canonical": "你们在 幸福在",
+      "variants": [
+        {
+          "text": "你们在 幸福在",
+          "rows": [
+            39
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C034",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-12"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvxTCrDvo5UyGwBBmuoPuQw=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 42,
+      "rows": [
+        42
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "场次文案",
+      "groupId": "G026",
+      "priority": 1,
+      "canonical": "欢迎莎头嚟广州\n要乜有乜掂过碌蔗",
+      "variants": [
+        {
+          "text": "欢迎莎头嚟广州\n要乜有乜掂过碌蔗",
+          "rows": [
+            42
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C035",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2e614f000000002003bf73?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvSypixmdaHdOP1NrBMXGB4=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 45,
+      "rows": [
+        4,
+        35,
+        44,
+        45,
+        71,
+        137
+      ],
+      "reason": "同一双人组合的姓名顺序、称呼和英文姓名异写。",
+      "subject": "莎头",
+      "category": "组合称呼",
+      "groupId": "G003",
+      "priority": 1,
+      "canonical": "楚钦颖莎",
+      "variants": [
+        {
+          "text": "莎莎楚钦",
+          "rows": [
+            4
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "颖莎楚钦",
+          "rows": [
+            35
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SHATOU",
+          "rows": [
+            44
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "楚钦颖莎",
+          "rows": [
+            45,
+            137
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "SUNYINGSHA&WANGCHUQIN",
+          "rows": [
+            71
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C036",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-03",
+        "ST-12",
+        "ST-14",
+        "ST-17",
+        "ST-18",
+        "WCQ-04"
+      ],
+      "approvedVariants": [
+        "莎莎楚钦",
+        "颖莎楚钦",
+        "SHATOU",
+        "SUNYINGSHA&WANGCHUQIN"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a2c342e00000000060335bc?xsec_token=ABMssFNNszyB0KtD08lN_c5FhnM3_ZaDJptxOO90l_BO0=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvxTCrDvo5UyGwBBmuoPuQw=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a2e614f000000002003bf73?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvSypixmdaHdOP1NrBMXGB4=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/69a6a4f4000000001503a991?xsec_token=ABHhEKOYUbSCkgXKriYxKlwadfRSA_80dTuug9fyjEccE=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 46,
+      "rows": [
+        46,
+        104,
+        111,
+        138,
+        154
+      ],
+      "reason": "看你们打球好幸福；姓名抬头、超级／好、语气词及排版不改变核心含义。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G027",
+      "priority": 1,
+      "canonical": "看你们打球好幸福",
+      "variants": [
+        {
+          "text": "看你们打球好幸福",
+          "rows": [
+            46
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "楚钦颖莎\n看你们打球好幸福",
+          "rows": [
+            104,
+            111
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "看你们打球 超级幸福啊",
+          "rows": [
+            138
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "楚钦颖莎 看你们打球好幸福",
+          "rows": [
+            154
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C037",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-17",
+        "SYS-14",
+        "WCQ-04",
+        "WCQ-14"
+      ],
+      "approvedVariants": [
+        "楚钦颖莎\n看你们打球好幸福",
+        "看你们打球 超级幸福啊",
+        "楚钦颖莎 看你们打球好幸福"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/69a6a4f4000000001503a991?xsec_token=ABHhEKOYUbSCkgXKriYxKlwadfRSA_80dTuug9fyjEccE=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8?xsec_token=ABdkxpt8F8jBlkyzrpl5yskY7ws96go4_BAdUu76bDsJQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 48,
+      "rows": [
+        48,
+        70,
+        188,
+        248
+      ],
+      "reason": "加油及此语境下 fighting 为同一直接鼓劲，姓名抬头与英文作为展示变体。",
+      "subject": "通用／莎头",
+      "category": "加油",
+      "groupId": "G028",
+      "priority": 1,
+      "canonical": "莎头加油",
+      "variants": [
+        {
+          "text": "莎头加油",
+          "rows": [
+            48
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "FIGH\nTING",
+          "rows": [
+            70
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "fighting",
+          "rows": [
+            188,
+            248
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C038",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18",
+        "USR-01"
+      ],
+      "approvedVariants": [
+        "FIGH\nTING",
+        "fighting"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 54,
+      "rows": [
+        54
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G030",
+      "priority": 1,
+      "canonical": "祝\n没有、\n孙颖莎王楚钦的\n中国乒乓球队、\n越来越好",
+      "variants": [
+        {
+          "text": "祝\n没有、\n孙颖莎王楚钦的\n中国乒乓球队、\n越来越好",
+          "rows": [
+            54
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C039",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 55,
+      "rows": [
+        55
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "祝愿",
+      "groupId": "G031",
+      "priority": 1,
+      "canonical": "孙颖莎王楚钦\n请健康、\n请专注自身",
+      "variants": [
+        {
+          "text": "孙颖莎王楚钦\n请健康、\n请专注自身",
+          "rows": [
+            55
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C040",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 60,
+      "rows": [
+        60
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G034",
+      "priority": 1,
+      "canonical": "LOVE FOR HOPE",
+      "variants": [
+        {
+          "text": "LOVE FOR HOPE",
+          "rows": [
+            60
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C041",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 61,
+      "rows": [
+        61
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "球迷表达",
+      "groupId": "G035",
+      "priority": 1,
+      "canonical": "LOVE FOR SUN",
+      "variants": [
+        {
+          "text": "LOVE FOR SUN",
+          "rows": [
+            61
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C042",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 64,
+      "rows": [
+        64
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "祝愿",
+      "groupId": "G038",
+      "priority": 1,
+      "canonical": "莎莎楚钦\n平安健康顺遂",
+      "variants": [
+        {
+          "text": "莎莎楚钦\n平安健康顺遂",
+          "rows": [
+            64
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C043",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 66,
+      "rows": [
+        66
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G039",
+      "priority": 1,
+      "canonical": "成为榜样\n成为力量",
+      "variants": [
+        {
+          "text": "成为榜样\n成为力量",
+          "rows": [
+            66
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C044",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 67,
+      "rows": [
+        67
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G040",
+      "priority": 1,
+      "canonical": "向上生长",
+      "variants": [
+        {
+          "text": "向上生长",
+          "rows": [
+            67
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C045",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 68,
+      "rows": [
+        68
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G041",
+      "priority": 1,
+      "canonical": "生生不息",
+      "variants": [
+        {
+          "text": "生生不息",
+          "rows": [
+            68
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C046",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 69,
+      "rows": [
+        69
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "英文表达",
+      "groupId": "G042",
+      "priority": 1,
+      "canonical": "SUN\nSHINE",
+      "variants": [
+        {
+          "text": "SUN\nSHINE",
+          "rows": [
+            69
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C047",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 74,
+      "rows": [
+        74,
+        76
+      ],
+      "reason": "追光生长、成为自己的太阳，两个分句与英文整体对应。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G043",
+      "priority": 1,
+      "canonical": "追着光生长、成为自己的太阳",
+      "variants": [
+        {
+          "text": "追着光生长、成为自己的太阳",
+          "rows": [
+            74
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "GROW TOWARD THE LIGHT\nBECOME YOUR OWN SUN",
+          "rows": [
+            76
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C048",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [
+        "GROW TOWARD THE LIGHT\nBECOME YOUR OWN SUN"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 75,
+      "rows": [
+        75
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "鼓励",
+      "groupId": "G044",
+      "priority": 1,
+      "canonical": "聚沙成塔、未完待续",
+      "variants": [
+        {
+          "text": "聚沙成塔、未完待续",
+          "rows": [
+            75
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C049",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 77,
+      "rows": [
+        77
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "英文表达",
+      "groupId": "G045",
+      "priority": 1,
+      "canonical": "ACCUMULATE SMALL\nAMOUNTS TO\nFORM A LARGE SUM",
+      "variants": [
+        {
+          "text": "ACCUMULATE SMALL\nAMOUNTS TO\nFORM A LARGE SUM",
+          "rows": [
+            77
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C050",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 79,
+      "rows": [
+        79,
+        308
+      ],
+      "reason": "保持热爱保持专注／专注自己的热爱均表达专注于所爱之事。",
+      "subject": "通用／孙颖莎",
+      "category": "鼓励",
+      "groupId": "G046",
+      "priority": 1,
+      "canonical": "保持热爱，保持专注",
+      "variants": [
+        {
+          "text": "保持热爱，保持专注",
+          "rows": [
+            79
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "专注自己的热爱",
+          "rows": [
+            308
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C051",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-02",
+        "USR-02"
+      ],
+      "approvedVariants": [
+        "专注自己的热爱"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a3cac650000000015026792?xsec_token=ABSHSRjEymqH3OsBoT1HfMKs2IhCzjUhCGW7HwEPwrvvw=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 82,
+      "rows": [
+        82
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "球迷表达",
+      "groupId": "G047",
+      "priority": 1,
+      "canonical": "感谢你成为孙颖莎",
+      "variants": [
+        {
+          "text": "感谢你成为孙颖莎",
+          "rows": [
+            82
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C052",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-07"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6aa5765b000000002802c8a7?xsec_token=ABREpJ_Vs-9FM3wgEC0Llwm3YlJo8IZTWaV0I8q84k9KE=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 85,
+      "rows": [
+        85,
+        87
+      ],
+      "reason": "保持热爱＋全力以赴完整两句与英译对应；与单独全力以赴分开。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G049",
+      "priority": 1,
+      "canonical": "保持热爱\n全力以赴",
+      "variants": [
+        {
+          "text": "保持热爱\n全力以赴",
+          "rows": [
+            85
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Keep your passion, give it your all.",
+          "rows": [
+            87
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 1,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C053",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a379acc0000000011014ba8?xsec_token=AB1VLn7hD7KF5flrWsSlQ_NG0CCe7adWkfZNRwa0r_1DQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 93,
+      "rows": [
+        93
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "生日",
+      "groupId": "G053",
+      "priority": 1,
+      "canonical": "不管几岁\n开心万岁",
+      "variants": [
+        {
+          "text": "不管几岁\n开心万岁",
+          "rows": [
+            93
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C054",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-12"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ad4d71c00000000270348d5?xsec_token=ABJ3toiFMTDa3lfJR4HQXMUm82aVoKlhuHWtRlTKm2S2M=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 94,
+      "rows": [
+        90,
+        91,
+        92,
+        94,
+        99,
+        117,
+        118,
+        129,
+        130
+      ],
+      "reason": "同一生日祝福；加姓名、中英双语及语气符号作为展示变体，不另占主清单。",
+      "subject": "通用／孙颖莎",
+      "category": "生日",
+      "groupId": "G052",
+      "priority": 1,
+      "canonical": "生日快乐",
+      "variants": [
+        {
+          "text": "孙颖莎\n生日快乐",
+          "rows": [
+            90,
+            92,
+            129
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "Happy Birthday",
+          "rows": [
+            91,
+            130
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "生日快乐",
+          "rows": [
+            94
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "生日快乐～",
+          "rows": [
+            99
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "HAPPY BIRTHDAY\n生日快乐",
+          "rows": [
+            117
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "HAPPY BIRTHDAY",
+          "rows": [
+            118
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C055",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-12",
+        "SYS-18",
+        "SYS-25"
+      ],
+      "approvedVariants": [
+        "孙颖莎\n生日快乐",
+        "Happy Birthday",
+        "生日快乐～",
+        "HAPPY BIRTHDAY\n生日快乐",
+        "HAPPY BIRTHDAY"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ad4d71c00000000270348d5?xsec_token=ABJ3toiFMTDa3lfJR4HQXMUm82aVoKlhuHWtRlTKm2S2M=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6adb44bf000000002403ba02?xsec_token=ABnhnkXHiLI4IOByTBQLcYOBW0sl5ZHIi6bybYPJWr40s=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ad48dbf000000002701c569?xsec_token=ABJ3toiFMTDa3lfJR4HQXMUncwtkeGi6Jv0K8y_WMM5o4=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 100,
+      "rows": [
+        100
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "趣味互动",
+      "groupId": "G056",
+      "priority": 1,
+      "canonical": "孙颖莎\n你皮紧一点",
+      "variants": [
+        {
+          "text": "孙颖莎\n你皮紧一点",
+          "rows": [
+            100
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C056",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 101,
+      "rows": [
+        101
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "趣味互动",
+      "groupId": "G057",
+      "priority": 1,
+      "canonical": "王楚钦\n你皮紧一点",
+      "variants": [
+        {
+          "text": "王楚钦\n你皮紧一点",
+          "rows": [
+            101
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C057",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 102,
+      "rows": [
+        102
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G058",
+      "priority": 1,
+      "canonical": "如果全世界都指责你\n那我带你去见莎头",
+      "variants": [
+        {
+          "text": "如果全世界都指责你\n那我带你去见莎头",
+          "rows": [
+            102
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C058",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 103,
+      "rows": [
+        103
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G059",
+      "priority": 1,
+      "canonical": "这么顶那么稳\n看莎头我很心安",
+      "variants": [
+        {
+          "text": "这么顶那么稳\n看莎头我很心安",
+          "rows": [
+            103
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C059",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 105,
+      "rows": [
+        105
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "观赛",
+      "groupId": "G060",
+      "priority": 1,
+      "canonical": "你们说球场见\n于是我又来了",
+      "variants": [
+        {
+          "text": "你们说球场见\n于是我又来了",
+          "rows": [
+            105
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C060",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 115,
+      "rows": [
+        115,
+        230
+      ],
+      "reason": "奔向太阳跨来源重复；带姓名谐音的完整对句另组。",
+      "subject": "孙颖莎",
+      "category": "加油",
+      "groupId": "G065",
+      "priority": 1,
+      "canonical": "奔向太阳",
+      "variants": [
+        {
+          "text": "奔向太阳",
+          "rows": [
+            115,
+            230
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C061",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14",
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 116,
+      "rows": [
+        116
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G066",
+      "priority": 1,
+      "canonical": "镌刻的是我们的八年",
+      "variants": [
+        {
+          "text": "镌刻的是我们的八年",
+          "rows": [
+            116
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C062",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 121,
+      "rows": [
+        121,
+        127,
+        167
+      ],
+      "reason": "同一孙颖莎生日的月日／完整日期显示方式；原文字作为数字标识保留。",
+      "subject": "孙颖莎",
+      "category": "数字符号",
+      "groupId": "G069",
+      "priority": 1,
+      "canonical": "1104",
+      "variants": [
+        {
+          "text": "1104",
+          "rows": [
+            121,
+            167
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "2000.11.04",
+          "rows": [
+            127
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C063",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-18",
+        "SYS-21",
+        "WCQ-15"
+      ],
+      "approvedVariants": [
+        "2000.11.04"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6adb44bf000000002403ba02?xsec_token=ABnhnkXHiLI4IOByTBQLcYOBW0sl5ZHIi6bybYPJWr40s=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6986fe6b000000000a02d807?xsec_token=ABqXWYA25So2DhplyCHOraBd7DlYAt3xGcYYEvTe7XuTg=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 122,
+      "rows": [
+        122
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "英文表达",
+      "groupId": "G070",
+      "priority": 1,
+      "canonical": "Keep Shining",
+      "variants": [
+        {
+          "text": "Keep Shining",
+          "rows": [
+            122
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C064",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-19"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ab122f00000000035021618?xsec_token=ABgkZp_SI_f7jibkBJyCsnYv1agmpo4Cw2I-Nn_a8Vzx8=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 125,
+      "rows": [
+        125,
+        126
+      ],
+      "reason": "赢到他们习惯为止及其完整英译。",
+      "subject": "孙颖莎",
+      "category": "加油",
+      "groupId": "G071",
+      "priority": 1,
+      "canonical": "赢到他们\n习惯为止",
+      "variants": [
+        {
+          "text": "赢到他们\n习惯为止",
+          "rows": [
+            125
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "WIN UNTIL THEY GET USED TO IT",
+          "rows": [
+            126
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C065",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-21"
+      ],
+      "approvedVariants": [
+        "WIN UNTIL THEY GET USED TO IT"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6986fe6b000000000a02d807?xsec_token=ABqXWYA25So2DhplyCHOraBd7DlYAt3xGcYYEvTe7XuTg=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 145,
+      "rows": [
+        145
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "加油",
+      "groupId": "G076",
+      "priority": 1,
+      "canonical": "王楚钦加油 享受比赛",
+      "variants": [
+        {
+          "text": "王楚钦加油 享受比赛",
+          "rows": [
+            145
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C066",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-07"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ac0c41f0000000018004f61?xsec_token=ABH7bPH8LtYJHG9Uf_X7nx_A-CbpdSIR8kw8Ao20rnshs=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 148,
+      "rows": [
+        148,
+        149,
+        152
+      ],
+      "reason": "同一王楚钦队长称呼的长短版和英文展示；作为文字归档，不据此验证现时职务。",
+      "subject": "王楚钦",
+      "category": "称呼",
+      "groupId": "G079",
+      "priority": 1,
+      "canonical": "队长",
+      "variants": [
+        {
+          "text": "队长",
+          "rows": [
+            148
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "中国乒乓球男队队长",
+          "rows": [
+            149
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "CAPTAIN KING",
+          "rows": [
+            152
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C067",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-08"
+      ],
+      "approvedVariants": [
+        "中国乒乓球男队队长",
+        "CAPTAIN KING"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a390582000000000f02adf3?xsec_token=ABpqPHR3rlEOTl_ZhJct43KkmMMZZTNmlVOBHoSpnKvXw=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 161,
+      "rows": [
+        161
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G080",
+      "priority": 1,
+      "canonical": "竭尽全力永不言弃",
+      "variants": [
+        {
+          "text": "竭尽全力永不言弃",
+          "rows": [
+            161
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C068",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-15"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 163,
+      "rows": [
+        163
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G082",
+      "priority": 1,
+      "canonical": "快乐乒乓",
+      "variants": [
+        {
+          "text": "快乐乒乓",
+          "rows": [
+            163
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C069",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-15"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 166,
+      "rows": [
+        166
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "数字符号",
+      "groupId": "G083",
+      "priority": 1,
+      "canonical": "0511",
+      "variants": [
+        {
+          "text": "0511",
+          "rows": [
+            166
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C070",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-15"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 169,
+      "rows": [
+        169
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "球迷表达",
+      "groupId": "G084",
+      "priority": 1,
+      "canonical": "乒乓世界迷人眼，最爱莎莎小圆脸",
+      "variants": [
+        {
+          "text": "乒乓世界迷人眼，最爱莎莎小圆脸",
+          "rows": [
+            169
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C071",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 170,
+      "rows": [
+        170
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "球迷表达",
+      "groupId": "G085",
+      "priority": 1,
+      "canonical": "ALL FOR SYS",
+      "variants": [
+        {
+          "text": "ALL FOR SYS",
+          "rows": [
+            170
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C072",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 172,
+      "rows": [
+        172
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "加油",
+      "groupId": "G086",
+      "priority": 1,
+      "canonical": "王楚钦你最棒，赛场拼搏放光芒",
+      "variants": [
+        {
+          "text": "王楚钦你最棒，赛场拼搏放光芒",
+          "rows": [
+            172
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C073",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 173,
+      "rows": [
+        173
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G087",
+      "priority": 1,
+      "canonical": "ALL FOR WCQ",
+      "variants": [
+        {
+          "text": "ALL FOR WCQ",
+          "rows": [
+            173
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C074",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-18"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed"
+      ]
+    },
+    {
+      "canonicalRow": 177,
+      "rows": [
+        177,
+        241
+      ],
+      "reason": "莎莎吃面包吗跨来源重复，以用户已经改短后的表格为准。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G091",
+      "priority": 1,
+      "canonical": "莎莎吃面包吗",
+      "variants": [
+        {
+          "text": "莎莎吃面包吗",
+          "rows": [
+            177,
+            241
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C075",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 178,
+      "rows": [
+        178
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "主页签名",
+      "groupId": "G092",
+      "priority": 1,
+      "canonical": "他说她是天才",
+      "variants": [
+        {
+          "text": "他说她是天才",
+          "rows": [
+            178
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C076",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 181,
+      "rows": [
+        181
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G095",
+      "priority": 1,
+      "canonical": "拥有你们就拥有全世界",
+      "variants": [
+        {
+          "text": "拥有你们就拥有全世界",
+          "rows": [
+            181
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C077",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 182,
+      "rows": [
+        182
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "姓名谐音",
+      "groupId": "G096",
+      "priority": 1,
+      "canonical": "钦听幸福的声音会上颖",
+      "variants": [
+        {
+          "text": "钦听幸福的声音会上颖",
+          "rows": [
+            182
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C078",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 183,
+      "rows": [
+        183
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G097",
+      "priority": 1,
+      "canonical": "养只猫猫叫耶耶",
+      "variants": [
+        {
+          "text": "养只猫猫叫耶耶",
+          "rows": [
+            183
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C079",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 184,
+      "rows": [
+        184,
+        235
+      ],
+      "reason": "你告诉他们我叫小豆包跨来源重复。",
+      "subject": "孙颖莎／莎头",
+      "category": "互动语录",
+      "groupId": "G098",
+      "priority": 1,
+      "canonical": "你告诉他们我叫小豆包",
+      "variants": [
+        {
+          "text": "你告诉他们我叫小豆包",
+          "rows": [
+            184,
+            235
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C080",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 185,
+      "rows": [
+        185
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "球迷表达",
+      "groupId": "G099",
+      "priority": 1,
+      "canonical": "一颗真心足矣",
+      "variants": [
+        {
+          "text": "一颗真心足矣",
+          "rows": [
+            185
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C081",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 186,
+      "rows": [
+        186
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G100",
+      "priority": 1,
+      "canonical": "美丽的夜景",
+      "variants": [
+        {
+          "text": "美丽的夜景",
+          "rows": [
+            186
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C082",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 187,
+      "rows": [
+        187,
+        196
+      ],
+      "reason": "相拥透明心脏的同一当前表格文案，保留原字形。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G101",
+      "priority": 1,
+      "canonical": "愛是两颗相擁的透明心臓",
+      "variants": [
+        {
+          "text": "愛是两颗相擁的透明心臓",
+          "rows": [
+            187,
+            196
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C083",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 192,
+      "rows": [
+        192
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G105",
+      "priority": 1,
+      "canonical": "我们心脏同频 始终共振",
+      "variants": [
+        {
+          "text": "我们心脏同频 始终共振",
+          "rows": [
+            192
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C084",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 193,
+      "rows": [
+        193
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G106",
+      "priority": 1,
+      "canonical": "東京的雨淋不濕巴黎",
+      "variants": [
+        {
+          "text": "東京的雨淋不濕巴黎",
+          "rows": [
+            193
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C085",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 195,
+      "rows": [
+        195
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "组合称呼",
+      "groupId": "G108",
+      "priority": 1,
+      "canonical": "家有万分双世一💭🤍",
+      "variants": [
+        {
+          "text": "家有万分双世一💭🤍",
+          "rows": [
+            195
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C086",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 198,
+      "rows": [
+        198
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "观赛",
+      "groupId": "G110",
+      "priority": 1,
+      "canonical": "颤抖的镜头是我呼之欲出的心跳",
+      "variants": [
+        {
+          "text": "颤抖的镜头是我呼之欲出的心跳",
+          "rows": [
+            198
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C087",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 203,
+      "rows": [
+        203
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "球迷表达",
+      "groupId": "G115",
+      "priority": 1,
+      "canonical": "他们质疑真心 那我就用真心换真心",
+      "variants": [
+        {
+          "text": "他们质疑真心 那我就用真心换真心",
+          "rows": [
+            203
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C088",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 205,
+      "rows": [
+        205
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "观赛",
+      "groupId": "G117",
+      "priority": 1,
+      "canonical": "这一次 场馆中也有了我的呐喊声",
+      "variants": [
+        {
+          "text": "这一次 场馆中也有了我的呐喊声",
+          "rows": [
+            205
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C089",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 213,
+      "rows": [
+        213
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "观赛",
+      "groupId": "G125",
+      "priority": 1,
+      "canonical": "想用手机记录你 又怕眼睛错过你",
+      "variants": [
+        {
+          "text": "想用手机记录你 又怕眼睛错过你",
+          "rows": [
+            213
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C090",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 215,
+      "rows": [
+        215
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "球迷表达",
+      "groupId": "G127",
+      "priority": 1,
+      "canonical": "邓布利多 你说的对 爱是世界上最伟大的魔法",
+      "variants": [
+        {
+          "text": "邓布利多 你说的对 爱是世界上最伟大的魔法",
+          "rows": [
+            215
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C091",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 222,
+      "rows": [
+        222
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "观赛",
+      "groupId": "G134",
+      "priority": 1,
+      "canonical": "镜头翻转 对准爱的人",
+      "variants": [
+        {
+          "text": "镜头翻转 对准爱的人",
+          "rows": [
+            222
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C092",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 226,
+      "rows": [
+        226
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G138",
+      "priority": 1,
+      "canonical": "好微妙啊 你才微妙",
+      "variants": [
+        {
+          "text": "好微妙啊 你才微妙",
+          "rows": [
+            226
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C093",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 227,
+      "rows": [
+        227
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G139",
+      "priority": 1,
+      "canonical": "莎莎的绿茶呢",
+      "variants": [
+        {
+          "text": "莎莎的绿茶呢",
+          "rows": [
+            227
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C094",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 229,
+      "rows": [
+        229
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G141",
+      "priority": 1,
+      "canonical": "这枚金牌是我们最美好的开始",
+      "variants": [
+        {
+          "text": "这枚金牌是我们最美好的开始",
+          "rows": [
+            229
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C095",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 231,
+      "rows": [
+        231
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G142",
+      "priority": 1,
+      "canonical": "我俩说打冠军再让他捏一下",
+      "variants": [
+        {
+          "text": "我俩说打冠军再让他捏一下",
+          "rows": [
+            231
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C096",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 233,
+      "rows": [
+        233
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G144",
+      "priority": 1,
+      "canonical": "这次她也心甘情愿让我捏了",
+      "variants": [
+        {
+          "text": "这次她也心甘情愿让我捏了",
+          "rows": [
+            233
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C097",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 234,
+      "rows": [
+        234,
+        419
+      ],
+      "reason": "拥抱了一下，仅感叹号变化。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G145",
+      "priority": 1,
+      "canonical": "拥抱了一下",
+      "variants": [
+        {
+          "text": "拥抱了一下",
+          "rows": [
+            234
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "拥抱了一下!",
+          "rows": [
+            419
+          ],
+          "originalMax": null,
+          "inheritedPriority": 1,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C098",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 238,
+      "rows": [
+        238
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G148",
+      "priority": 1,
+      "canonical": "你不会过了五年还这样吧",
+      "variants": [
+        {
+          "text": "你不会过了五年还这样吧",
+          "rows": [
+            238
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C099",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 239,
+      "rows": [
+        239
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G149",
+      "priority": 1,
+      "canonical": "天才 非常好",
+      "variants": [
+        {
+          "text": "天才 非常好",
+          "rows": [
+            239
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C100",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 240,
+      "rows": [
+        240
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎／莎头",
+      "category": "互动语录",
+      "groupId": "G150",
+      "priority": 1,
+      "canonical": "注意称呼小豆包",
+      "variants": [
+        {
+          "text": "注意称呼小豆包",
+          "rows": [
+            240
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C101",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 242,
+      "rows": [
+        242
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G151",
+      "priority": 1,
+      "canonical": "九珍是肯德基的",
+      "variants": [
+        {
+          "text": "九珍是肯德基的",
+          "rows": [
+            242
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C102",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 243,
+      "rows": [
+        243
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G152",
+      "priority": 1,
+      "canonical": "你是世界上接我发球接最好的人",
+      "variants": [
+        {
+          "text": "你是世界上接我发球接最好的人",
+          "rows": [
+            243
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C103",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 244,
+      "rows": [
+        244
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G153",
+      "priority": 1,
+      "canonical": "叫谁搭档呢",
+      "variants": [
+        {
+          "text": "叫谁搭档呢",
+          "rows": [
+            244
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C104",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 245,
+      "rows": [
+        245
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G154",
+      "priority": 1,
+      "canonical": "他老爱捏我脸",
+      "variants": [
+        {
+          "text": "他老爱捏我脸",
+          "rows": [
+            245
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C105",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 246,
+      "rows": [
+        246
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G155",
+      "priority": 1,
+      "canonical": "赢了带你绕一圈",
+      "variants": [
+        {
+          "text": "赢了带你绕一圈",
+          "rows": [
+            246
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C106",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 247,
+      "rows": [
+        247
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G156",
+      "priority": 1,
+      "canonical": "杭州相见了一下",
+      "variants": [
+        {
+          "text": "杭州相见了一下",
+          "rows": [
+            247
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C107",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 249,
+      "rows": [
+        249
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G157",
+      "priority": 1,
+      "canonical": "我们只有一对",
+      "variants": [
+        {
+          "text": "我们只有一对",
+          "rows": [
+            249
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C108",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 250,
+      "rows": [
+        250
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎／莎头",
+      "category": "互动语录",
+      "groupId": "G158",
+      "priority": 1,
+      "canonical": "回去请吃饭吧小豆包",
+      "variants": [
+        {
+          "text": "回去请吃饭吧小豆包",
+          "rows": [
+            250
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C109",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 251,
+      "rows": [
+        108,
+        251
+      ],
+      "reason": "我们未来／新的开始是时间前缀，核心均为共同继续努力。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G063",
+      "priority": 1,
+      "canonical": "新的开始 我们继续努力",
+      "variants": [
+        {
+          "text": "我们未来\n继续努力",
+          "rows": [
+            108
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "新的开始 我们继续努力",
+          "rows": [
+            251
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C110",
+      "tier": "可用",
+      "sourceIds": [
+        "SYS-14",
+        "USR-01"
+      ],
+      "approvedVariants": [
+        "我们未来\n继续努力"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 252,
+      "rows": [
+        252
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G159",
+      "priority": 1,
+      "canonical": "他在我身边 我觉得还是挺踏实的吧",
+      "variants": [
+        {
+          "text": "他在我身边 我觉得还是挺踏实的吧",
+          "rows": [
+            252
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C111",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 254,
+      "rows": [
+        254
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G161",
+      "priority": 1,
+      "canonical": "坚定昂！走",
+      "variants": [
+        {
+          "text": "坚定昂！走",
+          "rows": [
+            254
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C112",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 255,
+      "rows": [
+        255
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G162",
+      "priority": 1,
+      "canonical": "我们两个是从无到有一直这么配过来的吧",
+      "variants": [
+        {
+          "text": "我们两个是从无到有一直这么配过来的吧",
+          "rows": [
+            255
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C113",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 256,
+      "rows": [
+        256
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G163",
+      "priority": 1,
+      "canonical": "我搭档呢 也挺可爱的 然后吧场上打球也挺有样",
+      "variants": [
+        {
+          "text": "我搭档呢 也挺可爱的 然后吧场上打球也挺有样",
+          "rows": [
+            256
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C114",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 258,
+      "rows": [
+        258
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G165",
+      "priority": 1,
+      "canonical": "残缺的玉叫做王 王加三笔叫做狂",
+      "variants": [
+        {
+          "text": "残缺的玉叫做王 王加三笔叫做狂",
+          "rows": [
+            258
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C115",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 259,
+      "rows": [
+        259
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G166",
+      "priority": 1,
+      "canonical": "什么年少轻狂 我只知道胜者为王",
+      "variants": [
+        {
+          "text": "什么年少轻狂 我只知道胜者为王",
+          "rows": [
+            259
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C116",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 260,
+      "rows": [
+        260
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G167",
+      "priority": 1,
+      "canonical": "别定义我 你还不够格",
+      "variants": [
+        {
+          "text": "别定义我 你还不够格",
+          "rows": [
+            260
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C117",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 261,
+      "rows": [
+        261
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G168",
+      "priority": 1,
+      "canonical": "实力一直有 你还不配我出手",
+      "variants": [
+        {
+          "text": "实力一直有 你还不配我出手",
+          "rows": [
+            261
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C118",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 262,
+      "rows": [
+        262
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "称呼",
+      "groupId": "G169",
+      "priority": 1,
+      "canonical": "25岁领军中国男乒",
+      "variants": [
+        {
+          "text": "25岁领军中国男乒",
+          "rows": [
+            262
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C119",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 263,
+      "rows": [
+        263,
+        272
+      ],
+      "reason": "议论／超越同句的 1 与 0 冲突，组取 1。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G170",
+      "priority": 1,
+      "canonical": "议论我有什么用 超越我才算本事",
+      "variants": [
+        {
+          "text": "议论我有什么用 超越我才算本事",
+          "rows": [
+            263,
+            272
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C120",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 264,
+      "rows": [
+        264
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G171",
+      "priority": 1,
+      "canonical": "我从先农台来 要到领奖台去",
+      "variants": [
+        {
+          "text": "我从先农台来 要到领奖台去",
+          "rows": [
+            264
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C121",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 265,
+      "rows": [
+        265
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "球迷表达",
+      "groupId": "G172",
+      "priority": 1,
+      "canonical": "不为盛名而来，不因低谷而去。",
+      "variants": [
+        {
+          "text": "不为盛名而来，不因低谷而去。",
+          "rows": [
+            265
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C122",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 276,
+      "rows": [
+        162,
+        276,
+        304,
+        312
+      ],
+      "reason": "明亮的心指引胜利的简略／完整句式，未把短标题明亮的心并入升级。",
+      "subject": "孙颖莎",
+      "category": "加油",
+      "groupId": "G081",
+      "priority": 1,
+      "canonical": "明亮的心将指引着她 把胜利带回",
+      "variants": [
+        {
+          "text": "明亮的心指引着胜利",
+          "rows": [
+            162
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "明亮的心将指引着她 把胜利带回",
+          "rows": [
+            276
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "明亮的心 将指引着她 把胜利带回",
+          "rows": [
+            304,
+            312
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C123",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-15",
+        "USR-01",
+        "USR-02"
+      ],
+      "approvedVariants": [
+        "明亮的心指引着胜利",
+        "明亮的心 将指引着她 把胜利带回"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 277,
+      "rows": [
+        277
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G182",
+      "priority": 1,
+      "canonical": "开了花的休斯敦",
+      "variants": [
+        {
+          "text": "开了花的休斯敦",
+          "rows": [
+            277
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C124",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 278,
+      "rows": [
+        278
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G183",
+      "priority": 1,
+      "canonical": "拼了命的南阳",
+      "variants": [
+        {
+          "text": "拼了命的南阳",
+          "rows": [
+            278
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C125",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 287,
+      "rows": [
+        287,
+        435
+      ],
+      "reason": "完整左右手奇迹对句，传奇／荣耀为近义尾词；三句组合另组。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G190",
+      "priority": 1,
+      "canonical": "许一个左手奇迹 续一个右手传奇",
+      "variants": [
+        {
+          "text": "许一个左手奇迹 续一个右手传奇",
+          "rows": [
+            287
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "许一个左手的奇迹，续一个右手的荣耀",
+          "rows": [
+            435
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C126",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-10"
+      ],
+      "approvedVariants": [
+        "许一个左手的奇迹，续一个右手的荣耀"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 291,
+      "rows": [
+        291
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G194",
+      "priority": 1,
+      "canonical": "用一颗心脏去震动另一颗心脏",
+      "variants": [
+        {
+          "text": "用一颗心脏去震动另一颗心脏",
+          "rows": [
+            291
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C127",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 295,
+      "rows": [
+        295
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G197",
+      "priority": 1,
+      "canonical": "南阳十二颠 留你在身边",
+      "variants": [
+        {
+          "text": "南阳十二颠 留你在身边",
+          "rows": [
+            295
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C128",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 300,
+      "rows": [
+        300,
+        318
+      ],
+      "reason": "祖国荣誉高于一切，空白重复项继承正选。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G199",
+      "priority": 1,
+      "canonical": "祖国荣誉 高于一切",
+      "variants": [
+        {
+          "text": "祖国荣誉 高于一切",
+          "rows": [
+            300,
+            318
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C129",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-02"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 301,
+      "rows": [
+        290,
+        301,
+        319,
+        416
+      ],
+      "reason": "同一少年没有乌托邦双句，骄阳／远方为意象异写；保留两个当前表格版本。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G193",
+      "priority": 1,
+      "canonical": "少年没有乌托邦 心向远方自明朗",
+      "variants": [
+        {
+          "text": "少年没有乌托邦 心向骄阳自明朗",
+          "rows": [
+            290
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "少年没有乌托邦 心向远方自明朗",
+          "rows": [
+            301,
+            319,
+            416
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C130",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-02",
+        "USR-09"
+      ],
+      "approvedVariants": [
+        "少年没有乌托邦 心向骄阳自明朗"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 306,
+      "rows": [
+        306
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G200",
+      "priority": 1,
+      "canonical": "一切都是最好的",
+      "variants": [
+        {
+          "text": "一切都是最好的",
+          "rows": [
+            306
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C131",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-02"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 321,
+      "rows": [
+        321,
+        420
+      ],
+      "reason": "赢了就有答案，仅感叹号变化。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G202",
+      "priority": 1,
+      "canonical": "赢了 就有答案",
+      "variants": [
+        {
+          "text": "赢了 就有答案",
+          "rows": [
+            321
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "赢了 就有答案!!",
+          "rows": [
+            420
+          ],
+          "originalMax": null,
+          "inheritedPriority": 1,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C132",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-03",
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 322,
+      "rows": [
+        322,
+        340
+      ],
+      "reason": "聚沙成塔保持渴望，空白重复项继承正选；莎字谐音加无限希望的对句另组。",
+      "subject": "王楚钦",
+      "category": "加油",
+      "groupId": "G203",
+      "priority": 1,
+      "canonical": "聚沙成塔 保持渴望",
+      "variants": [
+        {
+          "text": "聚沙成塔 保持渴望",
+          "rows": [
+            322,
+            340
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C133",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-03"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67bf0eb6000000002902da91?xsec_token=CBeS4t6zt3_m28QQFYQ0iJcEU4DdCFekloHWxi94IVQ_4=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 349,
+      "rows": [
+        349
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "组合称呼",
+      "groupId": "G216",
+      "priority": 1,
+      "canonical": "The Bright Heart\nThe Lion Heart",
+      "variants": [
+        {
+          "text": "The Bright Heart\nThe Lion Heart",
+          "rows": [
+            349
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C134",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 350,
+      "rows": [
+        350
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G217",
+      "priority": 1,
+      "canonical": "太阳永不坠落 希望永不破灭",
+      "variants": [
+        {
+          "text": "太阳永不坠落 希望永不破灭",
+          "rows": [
+            350
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C135",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 351,
+      "rows": [
+        50,
+        351
+      ],
+      "reason": "与你共享荣光及其完整英语表达。",
+      "subject": "通用／莎头",
+      "category": "球迷表达",
+      "groupId": "G029",
+      "priority": 1,
+      "canonical": "与你共享荣光",
+      "variants": [
+        {
+          "text": "Share the glory with you",
+          "rows": [
+            50
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "与你共享荣光",
+          "rows": [
+            351
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C136",
+      "tier": "可用",
+      "sourceIds": [
+        "ST-18",
+        "USR-04"
+      ],
+      "approvedVariants": [
+        "Share the glory with you"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 352,
+      "rows": [
+        352
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G218",
+      "priority": 1,
+      "canonical": "我们都在对方的前途里\n顶峰相见",
+      "variants": [
+        {
+          "text": "我们都在对方的前途里\n顶峰相见",
+          "rows": [
+            352
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C137",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 353,
+      "rows": [
+        353
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "祝愿",
+      "groupId": "G219",
+      "priority": 1,
+      "canonical": "那就祝我们都有光明的未来 顶峰相见",
+      "variants": [
+        {
+          "text": "那就祝我们都有光明的未来 顶峰相见",
+          "rows": [
+            353
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C138",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 354,
+      "rows": [
+        354
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G220",
+      "priority": 1,
+      "canonical": "眼神注视的方向就是爱的方向",
+      "variants": [
+        {
+          "text": "眼神注视的方向就是爱的方向",
+          "rows": [
+            354
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C139",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 355,
+      "rows": [
+        280,
+        285,
+        355
+      ],
+      "reason": "步伐一致／同频共振的人不会走散，为同一共同前行、不离散的承诺。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G184",
+      "priority": 1,
+      "canonical": "同频共振的人不会走散",
+      "variants": [
+        {
+          "text": "步伐一致的人不会走散",
+          "rows": [
+            280,
+            285
+          ],
+          "originalMax": 0,
+          "inheritedPriority": 1,
+          "explicitlyApproved": false
+        },
+        {
+          "text": "同频共振的人不会走散",
+          "rows": [
+            355
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C140",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 362,
+      "rows": [
+        362
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "鼓励",
+      "groupId": "G227",
+      "priority": 1,
+      "canonical": "坚持你所热爱的，追逐你所相信的。",
+      "variants": [
+        {
+          "text": "坚持你所热爱的，追逐你所相信的。",
+          "rows": [
+            362
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C141",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 364,
+      "rows": [
+        364
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G229",
+      "priority": 1,
+      "canonical": "她是烈焰，他是长风",
+      "variants": [
+        {
+          "text": "她是烈焰，他是长风",
+          "rows": [
+            364
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C142",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-04"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67eca655000000001a00690f?xsec_token=CBPBDhG4wulnDLDgdxObxnhZwllvTcyBcOBvdWd1UmPNs=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 368,
+      "rows": [
+        368
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "象征称呼",
+      "groupId": "G230",
+      "priority": 1,
+      "canonical": "无限渴望",
+      "variants": [
+        {
+          "text": "无限渴望",
+          "rows": [
+            368
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C143",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-05"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 371,
+      "rows": [
+        176,
+        303,
+        311,
+        371
+      ],
+      "reason": "学会快乐、未来见的同一祝愿，仅希望／你／能等语气增减。",
+      "subject": "王楚钦",
+      "category": "语录",
+      "groupId": "G090",
+      "priority": 1,
+      "canonical": "希望你能学会快乐 未来见",
+      "variants": [
+        {
+          "text": "希望你学会快乐 未来见",
+          "rows": [
+            176
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "学会快乐 未来见",
+          "rows": [
+            303,
+            311
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "希望你能学会快乐 未来见",
+          "rows": [
+            371
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C144",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-02",
+        "USR-05"
+      ],
+      "approvedVariants": [
+        "希望你学会快乐 未来见",
+        "学会快乐 未来见"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/6787b1840000000017002b98?xsec_token=CBJZK79J99YpKxtzXmvpgXcWfX3o6gIMeuaiMuFqpFWT8=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 372,
+      "rows": [
+        147,
+        372,
+        380
+      ],
+      "reason": "人生没有极限的陈述／愿望异写；局部文字只参与同组溯源，不补字。",
+      "subject": "王楚钦",
+      "category": "语录",
+      "groupId": "G078",
+      "priority": 1,
+      "canonical": "愿我的人生没有极限",
+      "variants": [
+        {
+          "text": "我的人生没有极限",
+          "rows": [
+            147
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "愿我的人生没有极限",
+          "rows": [
+            372
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "愿我…人生 没有…极限",
+          "rows": [
+            380
+          ],
+          "originalMax": null,
+          "inheritedPriority": 1,
+          "explicitlyApproved": false
+        }
+      ],
+      "finalId": "C145",
+      "tier": "可用",
+      "sourceIds": [
+        "WCQ-08",
+        "USR-05",
+        "USR-06"
+      ],
+      "approvedVariants": [
+        "我的人生没有极限"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6a390582000000000f02adf3?xsec_token=ABpqPHR3rlEOTl_ZhJct43KkmMMZZTNmlVOBHoSpnKvXw=&xsec_source=pc_feed",
+        "https://www.xiaohongshu.com/explore/67a871360000000018019553?xsec_token=CBlZreaJW-1hgPVRbftLqyxdsjligF12tDRxyI9ij-dqY=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 375,
+      "rows": [
+        375
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "祝愿",
+      "groupId": "G233",
+      "priority": 1,
+      "canonical": "纵有千古\n横有八荒\n前途似海\n来日方长",
+      "variants": [
+        {
+          "text": "纵有千古\n横有八荒\n前途似海\n来日方长",
+          "rows": [
+            375
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C146",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-06"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 382,
+      "rows": [
+        382,
+        391
+      ],
+      "reason": "TEAM CHINA 跨来源重复，空白项继承 1。",
+      "subject": "通用",
+      "category": "称呼",
+      "groupId": "G236",
+      "priority": 1,
+      "canonical": "TEAM CHINA",
+      "variants": [
+        {
+          "text": "TEAM CHINA",
+          "rows": [
+            382,
+            391
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C147",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-06"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/684cca4e0000000023015caf?xsec_token=CB986ih-A7pqOEdKvLMP7h7I3k9Xrsrl7zJNy2aVETBaE=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 393,
+      "rows": [
+        393,
+        399
+      ],
+      "reason": "不要低估胜利者之心的同一句，空白项继承 1。",
+      "subject": "王楚钦",
+      "category": "球迷表达",
+      "groupId": "G239",
+      "priority": 1,
+      "canonical": "你不要低估一颗 胜利者 的心，他的名字叫王楚钦",
+      "variants": [
+        {
+          "text": "你不要低估一颗 胜利者 的心，他的名字叫王楚钦",
+          "rows": [
+            393,
+            399
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C148",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-07"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6763f572000000000b0213b0?xsec_token=CB-wPL9aY2F5WUw5IYZ-K5Vav0eX1ZCU5jc2nmeOV69eQ=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 395,
+      "rows": [
+        395,
+        400,
+        406
+      ],
+      "reason": "面对太阳的英文半句跨图重复；不把我／你中文完整对句吞入。",
+      "subject": "莎头",
+      "category": "英文表达",
+      "groupId": "G241",
+      "priority": 1,
+      "canonical": "AS I FACING THE SUN",
+      "variants": [
+        {
+          "text": "AS I FACING THE SUN",
+          "rows": [
+            395,
+            400,
+            406
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C149",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-07"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6763f572000000000b0213b0?xsec_token=CB-wPL9aY2F5WUw5IYZ-K5Vav0eX1ZCU5jc2nmeOV69eQ=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 396,
+      "rows": [
+        396,
+        401,
+        407
+      ],
+      "reason": "追逐希望的英文半句跨图重复；不擅改英语人称或语法。",
+      "subject": "莎头",
+      "category": "英文表达",
+      "groupId": "G242",
+      "priority": 1,
+      "canonical": "AS I CHASING THE HOPE",
+      "variants": [
+        {
+          "text": "AS I CHASING THE HOPE",
+          "rows": [
+            396,
+            401,
+            407
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C150",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-07"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6763f572000000000b0213b0?xsec_token=CB-wPL9aY2F5WUw5IYZ-K5Vav0eX1ZCU5jc2nmeOV69eQ=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 409,
+      "rows": [
+        409
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "姓名谐音",
+      "groupId": "G243",
+      "priority": 1,
+      "canonical": "山河楚天阔，岁月共长钦",
+      "variants": [
+        {
+          "text": "山河楚天阔，岁月共长钦",
+          "rows": [
+            409
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C151",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-08"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/6924329e000000000d03d72f?xsec_token=CBjN-LvP06hoSl_kYEn20YWJ4fA2PdagMe1GKV8FhrBW8=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 413,
+      "rows": [
+        413
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G246",
+      "priority": 1,
+      "canonical": "混双 天花板",
+      "variants": [
+        {
+          "text": "混双 天花板",
+          "rows": [
+            413
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C152",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 415,
+      "rows": [
+        228,
+        415
+      ],
+      "reason": "八年与八天的同一比较，长版补出给你发消息的语境。",
+      "subject": "莎头",
+      "category": "互动语录",
+      "groupId": "G140",
+      "priority": 1,
+      "canonical": "八年确实和 八天不一样",
+      "variants": [
+        {
+          "text": "给你发了八年确实和发了八天的不一样",
+          "rows": [
+            228
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "八年确实和 八天不一样",
+          "rows": [
+            415
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C153",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-09"
+      ],
+      "approvedVariants": [
+        "给你发了八年确实和发了八天的不一样"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 417,
+      "rows": [
+        417
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G248",
+      "priority": 1,
+      "canonical": "闪耀 洛杉矶",
+      "variants": [
+        {
+          "text": "闪耀 洛杉矶",
+          "rows": [
+            417
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C154",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 418,
+      "rows": [
+        418
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "场次文案",
+      "groupId": "G249",
+      "priority": 1,
+      "canonical": "重庆的“重”是重逢的“重” 重庆的“庆”是庆祝的“庆”",
+      "variants": [
+        {
+          "text": "重庆的“重”是重逢的“重” 重庆的“庆”是庆祝的“庆”",
+          "rows": [
+            418
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C155",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 421,
+      "rows": [
+        421
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "王楚钦",
+      "category": "姓名谐音",
+      "groupId": "G250",
+      "priority": 1,
+      "canonical": "钦尽全力 奔向太阳",
+      "variants": [
+        {
+          "text": "钦尽全力 奔向太阳",
+          "rows": [
+            421
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C156",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 423,
+      "rows": [
+        423
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "孙颖莎",
+      "category": "姓名谐音",
+      "groupId": "G251",
+      "priority": 1,
+      "canonical": "莎出重围 拥抱希望",
+      "variants": [
+        {
+          "text": "莎出重围 拥抱希望",
+          "rows": [
+            423
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C157",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 427,
+      "rows": [
+        427
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "加油",
+      "groupId": "G253",
+      "priority": 1,
+      "canonical": "球不落地 永不放弃",
+      "variants": [
+        {
+          "text": "球不落地 永不放弃",
+          "rows": [
+            427
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C158",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 428,
+      "rows": [
+        428
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "通用",
+      "category": "英文表达",
+      "groupId": "G254",
+      "priority": 1,
+      "canonical": "never give up",
+      "variants": [
+        {
+          "text": "never give up",
+          "rows": [
+            428
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C159",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 431,
+      "rows": [
+        431,
+        437
+      ],
+      "reason": "风从青奥起至洛杉矶的同一行程隐喻，往／到不改变意思。",
+      "subject": "莎头",
+      "category": "加油",
+      "groupId": "G257",
+      "priority": 1,
+      "canonical": "风从青奥起 吹往洛杉矶",
+      "variants": [
+        {
+          "text": "风从青奥起 吹往洛杉矶",
+          "rows": [
+            431
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "风从青奥起，吹到洛杉矶",
+          "rows": [
+            437
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C160",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-09",
+        "USR-10"
+      ],
+      "approvedVariants": [
+        "风从青奥起，吹到洛杉矶"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68d67e7f000000000e03072b?xsec_token=CBgGXnlgEQZAowUywO7JPGZ4U61MFEe-Xnsqa1HLM6fyA=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 432,
+      "rows": [
+        432
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G258",
+      "priority": 1,
+      "canonical": "两个人相互辉映，光芒胜过夜晚繁星",
+      "variants": [
+        {
+          "text": "两个人相互辉映，光芒胜过夜晚繁星",
+          "rows": [
+            432
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C161",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 433,
+      "rows": [
+        283,
+        433
+      ],
+      "reason": "良人扶我青云志、相逢已是上上签，同句仅空格和逗号不同。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G187",
+      "priority": 1,
+      "canonical": "良人扶我青云志，相逢已是上上签",
+      "variants": [
+        {
+          "text": "良人扶我青云志 相逢已是上上签",
+          "rows": [
+            283
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        },
+        {
+          "text": "良人扶我青云志，相逢已是上上签",
+          "rows": [
+            433
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C162",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-01",
+        "USR-10"
+      ],
+      "approvedVariants": [
+        "良人扶我青云志 相逢已是上上签"
+      ],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/68ce42aa000000001300de38?xsec_token=CBb17EExjDBv5QShvj9VUsOu7w6t6Xn2GNhc2d8A71rRE=&xsec_source=app_share",
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 436,
+      "rows": [
+        436
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G259",
+      "priority": 1,
+      "canonical": "爱是赛场上唯一合法且被允许的兴奋剂",
+      "variants": [
+        {
+          "text": "爱是赛场上唯一合法且被允许的兴奋剂",
+          "rows": [
+            436
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C163",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 439,
+      "rows": [
+        439
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G261",
+      "priority": 1,
+      "canonical": "在天才云集的天坛东路 她是他口中唯一的天才",
+      "variants": [
+        {
+          "text": "在天才云集的天坛东路 她是他口中唯一的天才",
+          "rows": [
+            439
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C164",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    },
+    {
+      "canonicalRow": 441,
+      "rows": [
+        441
+      ],
+      "reason": "完整含义或使用语境独立保留，未发现应合并的同义项。",
+      "subject": "莎头",
+      "category": "球迷表达",
+      "groupId": "G263",
+      "priority": 1,
+      "canonical": "布宜诺斯艾利斯刮起的青春风暴席卷整个巴黎",
+      "variants": [
+        {
+          "text": "布宜诺斯艾利斯刮起的青春风暴席卷整个巴黎",
+          "rows": [
+            441
+          ],
+          "originalMax": 1,
+          "inheritedPriority": 1,
+          "explicitlyApproved": true
+        }
+      ],
+      "finalId": "C165",
+      "tier": "可用",
+      "sourceIds": [
+        "USR-10"
+      ],
+      "approvedVariants": [],
+      "sourceUrls": [
+        "https://www.xiaohongshu.com/explore/67923c950000000029012f8d?xsec_token=CBVp5XbcfSZ7BbVqy7DKUh0EB2evxHOPKbYaPggJMs1wM=&xsec_source=app_share"
+      ]
+    }
+  ]
+}

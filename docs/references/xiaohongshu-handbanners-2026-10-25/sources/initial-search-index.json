@@ -1,0 +1,2028 @@
+{
+  "collectedDate": "2026-10-25",
+  "platform": "小红书",
+  "browser": "ego lite",
+  "keywords": [
+    "莎头手幅",
+    "王楚钦手幅",
+    "孙颖莎手幅"
+  ],
+  "noteCount": 24,
+  "imageCount": 40,
+  "uniqueImageCount": 39,
+  "duplicateImageGroups": [
+    [
+      "images/SYS-12/02.webp",
+      "images/SYS-25/01.webp"
+    ]
+  ],
+  "references": [
+    {
+      "id": "ST-03",
+      "keyword": "莎头手幅",
+      "subject": "莎头（王楚钦、孙颖莎）；广州乒超场次",
+      "kind": "两面手幅设计预览",
+      "title": "🫓广州乒超见～",
+      "author": "French fries大王_",
+      "displayedDate": "编辑于 06-13",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a2c342e00000000060335bc?xsec_token=ABMssFNNszyB0KtD08lN_c5FhnM3_ZaDJptxOO90l_BO0=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a2c342e00000000060335bc",
+      "caption": "手幅的意思是：来到广州，为乒超赛场的莎莎楚钦加油／莎莎楚钦欢迎来到广州\n上ps课摸鱼弄的\n后续会摸索一些有广州元素的物料\n#3003 #乒超总决赛 #广州 #莎头#5114 #线下",
+      "sourceUsageNotes": [],
+      "design": "奶油粉底、洋红大字、粗白描边；上下两条横幅；人物抠图在两侧，星形与心形少量点缀。文字断笔与倾斜带来活泼感。",
+      "copy": [
+        {
+          "text": "嚟咗廣州",
+          "image": "images/ST-03/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第一条上行，粤语；圖中文字廣为繁体。"
+        },
+        {
+          "text": "乒超撐莎莎楚钦",
+          "image": "images/ST-03/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第一条下行；撐采用手旁加掌形字，原图混用简繁。"
+        },
+        {
+          "text": "莎莎楚钦",
+          "image": "images/ST-03/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第二条上行。"
+        },
+        {
+          "text": "welcome to廣州",
+          "image": "images/ST-03/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第二条下行；英文与廣州混排。"
+        }
+      ],
+      "notes": "已实际审阅 01.webp。；城市与赛事文字具有场次语境；不应误归为通用口号。人物抠图仅用于观察层级。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/ec385f89c0010426fe0a66c31a43c1d0/notes_pre_post/1040g3k0321aripq3na6g5nojgn1g8qg9gsqa8ho!nd_dft_wgth_webp_3",
+          "path": "images/ST-03/01.webp",
+          "bytes": 114498,
+          "sha256": "e304605cd561b9c58cda87fd01ddce3ad7b92eaf128a4daf64e0da3a57c3c21e"
+        }
+      ]
+    },
+    {
+      "id": "ST-07",
+      "keyword": "莎头手幅",
+      "subject": "王楚钦、孙颖莎（各一款）",
+      "kind": "毛巾手幅预览及独立平面稿",
+      "title": "莎头毛巾手幅自印分享",
+      "author": "A hug_",
+      "displayedDate": "2025-08-12",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/689b02c8000000001c03633c?xsec_token=ABjbHhMmXO__0o49uSsTWHR5YgJA4qSB0z5UUrKWbOGy0=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/689b02c8000000001c03633c",
+      "caption": "🍟自取 开放自印   🚫一切商用🚫二传二改\n尺寸是35×75的\n#莎头 #自制手幅 #手幅",
+      "sourceUsageNotes": [
+        "🍟自取 开放自印   🚫一切商用🚫二传二改"
+      ],
+      "design": "红金火焰与蓝色水纹成对出现；白色毛笔姓名为主视觉，细线英文手写叠于姓名下缘；角落一句短语。红款有龙形，蓝款有鲨鱼形。",
+      "copy": [
+        {
+          "text": "王楚钦",
+          "image": "images/ST-07/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "来日方长",
+          "image": "images/ST-07/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "WangChuqin",
+          "image": "images/ST-07/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "连写英文姓名，未人为补空格。"
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/ST-07/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "全力以赴",
+          "image": "images/ST-07/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "SunYingsha",
+          "image": "images/ST-07/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "连写英文姓名，未人为补空格。"
+        }
+      ],
+      "notes": "已实际审阅 01—03.webp；01 为两款合并预览，02、03 为对应平面稿。；作者正文标明仅自印、禁止商用及二传二改；此处为内部参考。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/fd762ae0adc352fac6f35d43f1466e7b/notes_pre_post/1040g3k031l329u8ejq705p48e2t75arq9d01eog!nd_dft_wlteh_webp_3",
+          "path": "images/ST-07/01.webp",
+          "bytes": 428266,
+          "sha256": "24573c2d289b1358424261b8876d9dd132431d0b658dac94932be4be79440b3d"
+        },
+        {
+          "index": 2,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/cd1050d175bb0ab53c9feb543cc1e1d9/notes_pre_post/1040g3k031l329uou2g005p48e2t75arqo4h8dd0!nd_dft_wgth_webp_3",
+          "path": "images/ST-07/02.webp",
+          "bytes": 251418,
+          "sha256": "68062f8ef47731f3bc1f54e79c73a581ff8fd9cb0ff902bbc0062572181e9da9"
+        },
+        {
+          "index": 3,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/1ee8436baaf302973101b17e7737b891/notes_pre_post/1040g3k031l329uf6ia005p48e2t75arqs8m45k0!nd_dft_wgth_webp_3",
+          "path": "images/ST-07/03.webp",
+          "bytes": 298624,
+          "sha256": "b857a9129bcd22d0d3aa467d0fef026a4982fac0ad73374cf5a96942775c17a8"
+        }
+      ]
+    },
+    {
+      "id": "ST-08",
+      "keyword": "莎头手幅",
+      "subject": "莎头（王楚钦、孙颖莎）；大连乒超场次",
+      "kind": "两面手幅设计预览",
+      "title": "🍟｜自印乒超联赛手幅～🍟",
+      "author": "🍟猫儿喵喵喵～（拥有俩宝亲签版）",
+      "displayedDate": "07-09",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a4f71ec000000000f01f541?xsec_token=ABbwZFzq6xBP-YONg4bjZJa3OV9ImPTk6RMQor2bpD_f4=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a4f71ec000000000f01f541",
+      "caption": "🍟已经迫不及了～\n🎉手幅分享～\n💕赛场上的汗水是青春的注脚，少年们用热血点燃赛场，每一次击掌都是梦想的接力，这就是青春最美的模样💖\n#自制手幅 #乒乓球 #手幅 #5114莎头 #莎头周边 #莎头5114 #5114 #莎头壁纸 #饭圈美工 #物料设计",
+      "sourceUsageNotes": [],
+      "design": "浅蓝与奶黄配色、水波与贝壳泡泡营造清凉感；蓝色英文连写字作背景主层，选手照片分列或拼贴；深蓝城市与赛事名突出。",
+      "copy": [
+        {
+          "text": "大连",
+          "image": "images/ST-08/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "三条手幅预览中均可见。"
+        },
+        {
+          "text": "Sunhope",
+          "image": "images/ST-08/01.webp",
+          "pathType": "主文案",
+          "confidence": "局部可辨",
+          "note": "下方手幅英文连写字可辨为 Sunhope；上方版本被人物部分遮挡，不以标题补写。"
+        },
+        {
+          "text": "中国乒乓球超级联赛",
+          "image": "images/ST-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/ST-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/ST-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "深圳大学",
+          "image": "images/ST-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "下方手幅照片旁标签。"
+        },
+        {
+          "text": "山东魏桥",
+          "image": "images/ST-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "下方手幅照片旁标签。"
+        }
+      ],
+      "notes": "已实际审阅 01.webp。；中间的「乒超联赛手幅」是展示页标题，不是手幅上的主文案，未混入。；小号装饰英文与密集水印未录入；该例照片占比高，不宜直接缩小为手机模板。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/dbcd6109a6fb714f79e82f8282df76a3/notes_pre_post/1040g3k0322d8q0686u6g5p1rtuj3johncdgnsm8!nd_dft_wlteh_webp_3",
+          "path": "images/ST-08/01.webp",
+          "bytes": 381478,
+          "sha256": "972ad34690cdf86da997fdde045ec9eab5a116739d095d5ece1e48cc0d91308d"
+        }
+      ]
+    },
+    {
+      "id": "ST-10",
+      "keyword": "莎头手幅",
+      "subject": "王楚钦、孙颖莎（同构成对款）",
+      "kind": "3:1 手幅多款设计预览",
+      "title": "✨赛场上这组手幅辨识度拉满哦！",
+      "author": "椒盐JY",
+      "displayedDate": "编辑于 03-18",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809?xsec_token=ABlFVBTHmhWIQnSY2goOgE4s9dnex39Odr7ircAZ4xgO8=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/69b984ce000000001a02b809",
+      "caption": "宝子们！为孙颖莎和王楚钦量身定制的应援手幅终于出炉啦\n赛场上举起这组手幅辨识度拉满哦，拍照也巨出片～\n正面文字各有3种，大家自行搭配哦\n\t\n尺寸：45×15cm或30×10cm\n大小手幅通用比例3:1\n#王楚钦#孙颖莎\n#大头#莎莎#手幅 #自印 #物料 #应援 #产出 #5114",
+      "sourceUsageNotes": [
+        "#大头#莎莎#手幅 #自印 #物料 #应援 #产出 #5114"
+      ],
+      "design": "金黄粗笔刷中文，红橙火焰款与蓝紫光感款成对；中心人物遮盖少量文字，两侧人物侧脸作低对比背景；下方细条摆中英辅助文字。另有无真人照片的姓名纯字版。",
+      "copy": [
+        {
+          "text": "钦尽全力",
+          "image": "images/ST-10/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "王楚钦款；首字为钦，采用姓名谐音。"
+        },
+        {
+          "text": "莎出重围",
+          "image": "images/ST-10/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "孙颖莎款；首字为莎，采用姓名谐音。"
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/ST-10/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/ST-10/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "全力以赴",
+          "image": "images/ST-10/04.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "两名选手均有此款。"
+        },
+        {
+          "text": "坚定自信",
+          "image": "images/ST-10/05.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "两名选手均有此款；画面按坚定 / 自信分列人物两侧。"
+        },
+        {
+          "text": "努力而闪耀",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "专注且谦逊",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "Glow with your effort",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "Stay focused, stay humble",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "HOPE",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "王楚钦款中央。"
+        },
+        {
+          "text": "SUN",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "孙颖莎款中央。"
+        },
+        {
+          "text": "QIN, GIVE IT EVERYTHING",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "SHA BREAKS THROUGH",
+          "image": "images/ST-10/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "GO ALL OUT",
+          "image": "images/ST-10/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "BE FIRM AND CONFIDENT",
+          "image": "images/ST-10/05.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "已实际审阅 01—05.webp；01 为系列总览；02 为谐音款；03 姓名款；04 全力以赴款；05 坚定自信款。；英文及中文辅助字来自图内实际识读；署名、尺寸展示标题不列作口号。；手机可借鉴金色笔刷大字与同构配色，但人物拼贴和底部小字应另行简化。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/56df8853dd8ec17f7215c6bf294ca039/notes_pre_post/1040g3k831tqrg0j072005pgahcphhv1frg5nvo0!nd_dft_wlteh_webp_3",
+          "path": "images/ST-10/01.webp",
+          "bytes": 378138,
+          "sha256": "38a4bea4f9eed3ef1f7e0b0609842b4a553f6dcf71912a4d6bd0967c988bcb33"
+        },
+        {
+          "index": 2,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/5abccfb0e5f89fb1c69eea8f5b311383/notes_pre_post/1040g3k831tqrg0v172005pgahcphhv1fccuiteo!nd_dft_wgth_webp_3",
+          "path": "images/ST-10/02.webp",
+          "bytes": 321004,
+          "sha256": "65dccbcf4745e95e337709be1531c61e293785881d1b286b6ec5260dcd53dfac"
+        },
+        {
+          "index": 3,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/90e5f782251726d290b5fdd4303819e4/notes_pre_post/1040g3k831tqrg0s7ne005pgahcphhv1f46stu08!nd_dft_wgth_webp_3",
+          "path": "images/ST-10/03.webp",
+          "bytes": 250838,
+          "sha256": "0bd416f28e0be4761129b6b428a41f0c579625ea75a3c10763ca206e53b860ad"
+        },
+        {
+          "index": 4,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/21f23b5381777dc6ead9ba69dfb921f0/notes_pre_post/1040g3k831tqrg0ot72005pgahcphhv1fmrit82o!nd_dft_wgth_webp_3",
+          "path": "images/ST-10/04.webp",
+          "bytes": 313166,
+          "sha256": "b78602fb97e3b7ea247639afb5abfb5c1ae5d7146277b8e1b6c6e6aeb81d0172"
+        },
+        {
+          "index": 5,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/b77868881f573c46dbbd31cb97d6e7d5/notes_pre_post/1040g3k831tqrg0le7q005pgahcphhv1f25i0u4o!nd_dft_wgth_webp_3",
+          "path": "images/ST-10/05.webp",
+          "bytes": 324172,
+          "sha256": "c637e592c3b37c3012331fd13bf99455adb24a10bf62a87e04a48e7976b010e7"
+        }
+      ]
+    },
+    {
+      "id": "ST-12",
+      "keyword": "莎头手幅",
+      "subject": "莎头（王楚钦、孙颖莎）；广州/新年语境",
+      "kind": "两面手幅设计预览",
+      "title": "🫓｜广州见啦！",
+      "author": "Cyyyy^^",
+      "displayedDate": "编辑于 06-14",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvxTCrDvo5UyGwBBmuoPuQw=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a2e7a4a0000000035033141",
+      "caption": "美工是我自己哈哈哈哈！持续进步ing！【突然发现自己ID少打了一个^】\n🈲一切（不分享谢谢大家）\n因为稿子是多出我当时好像是自用吧我记得 仅用于线下发放哦！我们广州乒超见\n伸手肯定有，到时候没票我也高低去派一下（不许不给我票！）\n祝大家都有原价票期待见面嘻嘻嘻\n#3003 #5114 #广州乒超总决赛 #来票 #手幅 #美工",
+      "sourceUsageNotes": [
+        "🈲一切（不分享谢谢大家）"
+      ],
+      "design": "红白黑三色，白底红波点、红色波浪顶沿及黑底白星底边；黑色粗字与成对 Q 版人物；粤语句子横排，略带手写错落。",
+      "copy": [
+        {
+          "text": "颖莎楚钦",
+          "image": "images/ST-12/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "我好钟意你哋啊",
+          "image": "images/ST-12/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第一条右侧两行粤语文字。"
+        },
+        {
+          "text": "希望我哋多啲見面",
+          "image": "images/ST-12/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第二条上行，見采用繁体。"
+        },
+        {
+          "text": "新年快樂",
+          "image": "images/ST-12/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第二条下行，樂采用繁体。"
+        },
+        {
+          "text": "你们在 幸福在",
+          "image": "images/ST-12/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "第一条姓名下方小字。"
+        },
+        {
+          "text": "颖莎楚钦 我好喜欢你们啊",
+          "image": "images/ST-12/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "局部可辨",
+          "note": "第一条姓名下方小字；图小、末尾标点不确定，未补标点。"
+        }
+      ],
+      "notes": "已实际审阅 01.webp，并放大两条手幅确认。；下方更细的手写字及水印未确认，不转写。；「手幅 广东特别版」是预览页标题，不是手幅主文案。作者正文写明不分享/限制用途；素材只作内部研究。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/ac88ac296bd85478fefcceb86372b86a/notes_pre_post/1040g3k0321d2i7n370605ofva2v41p1vjba73q0!nd_dft_wlteh_webp_3",
+          "path": "images/ST-12/01.webp",
+          "bytes": 207874,
+          "sha256": "b6f75c081ad60b5978f997b45b8e1a1de4547399f728e884e999c1e1623b5042"
+        }
+      ]
+    },
+    {
+      "id": "ST-14",
+      "keyword": "莎头手幅",
+      "subject": "莎头（王楚钦、孙颖莎）；广州场次",
+      "kind": "两面毛巾手幅设计预览",
+      "title": "广州总决赛见咯",
+      "author": "想被四叶草砸中^",
+      "displayedDate": "编辑于 06-15",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a2e614f000000002003bf73?xsec_token=ABM55pNiYSH-Bb6mVY50MJcvSypixmdaHdOP1NrBMXGB4=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a2e614f000000002003bf73",
+      "caption": "欢迎孩子们嚟广州———\n要乜有乜 掂过碌蔗(^^)💪🏻\n\t\n#5114 #3003#莎頭 #孙颖莎 #王楚钦 #广州乒超总决赛",
+      "sourceUsageNotes": [],
+      "design": "深绿色底、橙色超大英文底字和奶油黄手写中文；广州塔、点心竹笼线稿提供地域图形；以两行文字为主，不含真人照片。",
+      "copy": [
+        {
+          "text": "活力大湾区\n魅力新广州",
+          "image": "images/ST-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第一条手幅两行。"
+        },
+        {
+          "text": "欢迎莎头嚟广州\n要乜有乜掂过碌蔗",
+          "image": "images/ST-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第二条手幅两行粤语；无额外标点。"
+        },
+        {
+          "text": "SUNHOPE",
+          "image": "images/ST-14/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "局部可辨",
+          "note": "第一条橙色大底字，被中文遮盖。"
+        },
+        {
+          "text": "SHATOU",
+          "image": "images/ST-14/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "局部可辨",
+          "note": "第二条橙色大底字，被中文遮盖。"
+        }
+      ],
+      "notes": "已实际审阅 01.webp。；场次文案较长；手机应借鉴绿色/橙色/奶油黄的层级及地域小图形，另做版式适配。；预览页 TOWEL BANNER、毛巾手幅预览及设计者署名不列入口号。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/00c553e3a976cd1d664629ef147c2706/1040g008321e0e2clnu005ni0qp9g8s3q293bu1o!nd_dft_wlteh_webp_3",
+          "path": "images/ST-14/01.webp",
+          "bytes": 182052,
+          "sha256": "9a4989bdb4d170821034fc4788c06ca391988682e34a3dd5c91a217f793818f3"
+        }
+      ]
+    },
+    {
+      "id": "ST-17",
+      "keyword": "莎头手幅",
+      "subject": "莎头（王楚钦、孙颖莎）",
+      "kind": "双面毛巾手幅设计预览",
+      "title": "💙依旧是毛巾手幅💙",
+      "author": "PPPPOTATO_",
+      "displayedDate": "03-03",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/69a6a4f4000000001503a991?xsec_token=ABHhEKOYUbSCkgXKriYxKlwadfRSA_80dTuug9fyjEccE=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/69a6a4f4000000001503a991",
+      "caption": "🌟自印分享\n（75x35cm）\n\t\n⚠️只能自印!!!!只能自印!!!! 只能自印!!!!\n📩自证取图\n\t\n🈲二传二改🈲博爱🈲商用\n（不用关注我）\n\t\n#3003 #5114",
+      "sourceUsageNotes": [
+        "🌟自印分享",
+        "⚠️只能自印!!!!只能自印!!!! 只能自印!!!!",
+        "🈲二传二改🈲博爱🈲商用"
+      ],
+      "design": "青蓝、深蓝与粉黄点缀，粗块中文字配多层白蓝描边及深色硬阴影；波普网点、拼贴色块、星心与皇冠；反面圆润英文泡泡字。",
+      "copy": [
+        {
+          "text": "楚钦颖莎",
+          "image": "images/ST-17/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "正面第一行四字，按图中顺序记录。"
+        },
+        {
+          "text": "看你们打球好幸福",
+          "image": "images/ST-17/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "正面粉色第二行。"
+        },
+        {
+          "text": "SUN\nHOPE",
+          "image": "images/ST-17/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "反面两行泡泡字。"
+        }
+      ],
+      "notes": "已实际审阅 01.webp，放大确认正面四字与第二行。；设计装饰较多，但姓名和幸福句分层明确；可借鉴粗描边、阴影及双色主辅文案。；作者注明仅自印、禁止二传二改与商用；这里只留内部参考。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/6601d3c001dd4ab90358a307e4e63abc/notes_pre_post/1040g3k031t8dqguk68005o3fne2g99s62o2g8ag!nd_dft_wlteh_webp_3",
+          "path": "images/ST-17/01.webp",
+          "bytes": 301820,
+          "sha256": "390348864e1cb7b917454e1e77db809ab196e0a8def8e18e420ce88ccec9af96"
+        }
+      ]
+    },
+    {
+      "id": "ST-18",
+      "keyword": "莎头手幅",
+      "subject": "莎头（王楚钦、孙颖莎）；含单人姓名与祝福款",
+      "kind": "多组照片/文字/卡通手幅设计合集",
+      "title": "手幅归来",
+      "author": "小陈在这呢🎃",
+      "displayedDate": "编辑于 10-12 江苏",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3?xsec_token=ABhT2ibliJYWdvb4lo8uSa_T21W2B3GZWEOGS5VhEI2ts=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6acc2476000000001403b8b3",
+      "caption": "#手幅 #5114 #3003",
+      "sourceUsageNotes": [],
+      "design": "共五图：深蓝配红字的双人竞技照片款；红白极窄高字文字款；米黄棕色 Q 版卡通款；红黄及蓝黄粗字祝福款；浅蓝/粉色气球人物款。类型跨度大，均为设计预览而非现场返图。",
+      "copy": [
+        {
+          "text": "莎头加油",
+          "image": "images/ST-18/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "我们来日方长",
+          "image": "images/ST-18/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "Share the glory with you",
+          "image": "images/ST-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "We have a long time ahead of us",
+          "image": "images/ST-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/ST-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/ST-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "祝\n没有、\n孙颖莎王楚钦的\n中国乒乓球队、\n越来越好",
+          "image": "images/ST-18/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "原图错落布局，按可见片段保留换行；上方文案带排斥语义，只留来源证据，不建议列产品候选。"
+        },
+        {
+          "text": "孙颖莎王楚钦\n请健康、\n请专注自身",
+          "image": "images/ST-18/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "下方红底款；姓名、请健康、请专注自身分区域排列。"
+        },
+        {
+          "text": "楚钦",
+          "image": "images/ST-18/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左侧卡通款姓名标签。"
+        },
+        {
+          "text": "王!",
+          "image": "images/ST-18/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左侧卡通款右下大字，感叹号样式。"
+        },
+        {
+          "text": "飒!",
+          "image": "images/ST-18/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右侧卡通款左下大字，感叹号样式。"
+        },
+        {
+          "text": "颖莎",
+          "image": "images/ST-18/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右侧卡通款姓名标签。"
+        },
+        {
+          "text": "LOVE FOR HOPE",
+          "image": "images/ST-18/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "LOVE FOR SUN",
+          "image": "images/ST-18/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "5114",
+          "image": "images/ST-18/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "每个卡通款顶边拆为 5、1、姓名英文、1、4。"
+        },
+        {
+          "text": "莎头\n健康宝",
+          "image": "images/ST-18/04.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "红黄款中央两行。"
+        },
+        {
+          "text": "莎莎楚钦\n平安健康顺遂",
+          "image": "images/ST-18/04.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "蓝黄款中央两行。"
+        },
+        {
+          "text": "SUN AND HOPE",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "成为榜样\n成为力量",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "向上生长",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "生生不息",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "SUN\nSHINE",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "图上分两行。"
+        },
+        {
+          "text": "FIGH\nTING",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "图上将 FIGHTING 拆成两行。"
+        },
+        {
+          "text": "SUNYINGSHA&WANGCHUQIN",
+          "image": "images/ST-18/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "SUNYINGSHA",
+          "image": "images/ST-18/05.webp",
+          "pathType": "主文案",
+          "confidence": "局部可辨",
+          "note": "浅蓝款白色超大英文姓名中段被人物遮挡。"
+        },
+        {
+          "text": "WANGCHUQIN",
+          "image": "images/ST-18/05.webp",
+          "pathType": "主文案",
+          "confidence": "局部可辨",
+          "note": "粉色款白色超大英文姓名中段被人物遮挡。"
+        },
+        {
+          "text": "追着光生长、成为自己的太阳",
+          "image": "images/ST-18/05.webp",
+          "pathType": "辅助文字",
+          "confidence": "局部可辨",
+          "note": "浅蓝款右上白色小条；文字可辨，分隔标点较小。"
+        },
+        {
+          "text": "聚沙成塔、未完待续",
+          "image": "images/ST-18/05.webp",
+          "pathType": "辅助文字",
+          "confidence": "局部可辨",
+          "note": "粉色款右上白色小条；文字可辨，分隔标点较小。"
+        },
+        {
+          "text": "GROW TOWARD THE LIGHT\nBECOME YOUR OWN SUN",
+          "image": "images/ST-18/05.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "ACCUMULATE SMALL\nAMOUNTS TO\nFORM A LARGE SUM",
+          "image": "images/ST-18/05.webp",
+          "pathType": "辅助文字",
+          "confidence": "局部可辨",
+          "note": "粉色款左下白字，较低对比。"
+        }
+      ],
+      "notes": "已实际审阅 01—05.webp，02、03、04、05 另看原尺寸。；所有片段均来自图像；没有把笔记标题「手幅归来」当作图中文字。；02 上方带排斥语义的文案不适合作为公共口号候选；04 的健康祝福类可作为待用户确认方向。；05 姓名中段被人物遮挡，英文恢复存在不确定性，不能当完整可见原文。；小号生日、装饰数字和大量水印未逐一抄录。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/351cbb9f087818a12b74f28171380bf4/1040g00832671kl265000401gp70if0oh23i06i0!nd_dft_wlteh_webp_3",
+          "path": "images/ST-18/01.webp",
+          "bytes": 221302,
+          "sha256": "3fd9c1d822bb17761c0408080dd9e30f59527642006ada282acc3241859f54b8"
+        },
+        {
+          "index": 2,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/d30fd1c4d1337c7fe25f6c94a92ddc07/1040g00832671kl26500g401gp70if0oh6meilt0!nd_dft_wlteh_webp_3",
+          "path": "images/ST-18/02.webp",
+          "bytes": 114712,
+          "sha256": "09a2b59f166e167672b0c8ecdc4226da9ef75b07cb9e657ff94877229424be5d"
+        },
+        {
+          "index": 3,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/7b35cbc94e2c4335e1c5229946b75c65/1040g00832671kl265010401gp70if0ohopb1oh0!nd_dft_wgth_webp_3",
+          "path": "images/ST-18/03.webp",
+          "bytes": 187020,
+          "sha256": "397708562ed6542cf39399a9ddd4a628fc28adb3773adcabe3057db0092b4dad"
+        },
+        {
+          "index": 4,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/6a806a8147949c23a0f441d08727122f/1040g00832671kl26501g401gp70if0oh3qtcplg!nd_dft_wgth_webp_3",
+          "path": "images/ST-18/04.webp",
+          "bytes": 158948,
+          "sha256": "607082dc7bd45a0d348e344f32ec2e19e8211517c65aa01ae095ce2f04a6b20f"
+        },
+        {
+          "index": 5,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/64267336dfe7afb621923a8c32724cfb/1040g00832671kl265020401gp70if0oh5fa9geo!nd_dft_wgth_webp_3",
+          "path": "images/ST-18/05.webp",
+          "bytes": 114192,
+          "sha256": "fed884aa4319983f56e48ab84f85aa1fe598e0c68cc18b9422d639b07bf84edd"
+        }
+      ]
+    },
+    {
+      "id": "SYS-02",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "纯字紫金横向手幅预览",
+      "title": "（无标题）",
+      "author": "莎莎是个小太阳🌞|1104",
+      "displayedDate": "06-25",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a3cac650000000015026792?xsec_token=ABSHSRjEymqH3OsBoT1HfMKs2IhCzjUhCGW7HwEPwrvvw=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a3cac650000000015026792",
+      "caption": "真的真的超级无敌想要紫金手幅\n有哪位宝宝出啊",
+      "sourceUsageNotes": [],
+      "design": "紫底、金黄色超粗姓名，右下角乒乓球拍图标；细横线分出顶栏和底栏，主体不放人物照片。姓名占据绝大多数面积，可供灯牌大字版参考。",
+      "copy": [
+        {
+          "text": "孙颖莎",
+          "image": "images/SYS-02/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "正中三字大字。"
+        },
+        {
+          "text": "保持热爱，保持专注",
+          "image": "images/SYS-02/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "手幅上边栏，与 CHINA SUN Y.S. 并排。"
+        },
+        {
+          "text": "CHINA SUN Y.S.",
+          "image": "images/SYS-02/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "顶栏英文姓名缩写。"
+        }
+      ],
+      "notes": "已查看唯一图片。底栏有一整句勇士主题小字，图像清晰度不足以逐字确认，未强行补全文。；外层“紫金手幅”属于预览标题，不是手幅主体文案。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/6b826e99793816931c501267ff713a72/notes_pre_post/1040g3k8321qu5pq0na705ojuch38cso1fndcsh0!nd_dft_wgth_webp_3",
+          "path": "images/SYS-02/01.webp",
+          "bytes": 33092,
+          "sha256": "2913348ae1b30daa846c38f94aee4d77799fb0ad4d50187b8d9e2511a26be8db"
+        }
+      ]
+    },
+    {
+      "id": "SYS-07",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "带标注的商品截图／纯字紫金毛巾手幅",
+      "title": "（无标题）",
+      "author": "云间予莎",
+      "displayedDate": "编辑于 09-12",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6aa5765b000000002802c8a7?xsec_token=ABREpJ_Vs-9FM3wgEC0Llwm3YlJo8IZTWaV0I8q84k9KE=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6aa5765b000000002802c8a7",
+      "caption": "不要买假的紫金手幅 真的紫金手幅不需要买#莎唯 #孙颖莎 #1104",
+      "sourceUsageNotes": [
+        "不要买假的紫金手幅 真的紫金手幅不需要买#莎唯 #孙颖莎 #1104"
+      ],
+      "design": "紫底金字、超粗姓名居中，顶部与底部均留细横线；与 SYS-02 相近，但上、下边栏文案不同。外层是手机商品页截图，下半部有巨大手写“假”字覆盖。",
+      "copy": [
+        {
+          "text": "孙颖莎",
+          "image": "images/SYS-07/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "手幅正中姓名。"
+        },
+        {
+          "text": "感谢你成为孙颖莎",
+          "image": "images/SYS-07/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "顶部小字。"
+        },
+        {
+          "text": "在梦想面前永远支持孙颖莎",
+          "image": "images/SYS-07/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "底栏逐字留空排版。"
+        },
+        {
+          "text": "CHINA SUN Y.S.",
+          "image": "images/SYS-07/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "顶部英文缩写。"
+        }
+      ],
+      "notes": "已查看唯一图片；保留截图中的“假”字语境，不把它当作干净设计稿。；外层“紫耀生金（毛巾手幅）”是商品预览标题。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/1f4e7ef6e45f81e62a42c0c916e20f70/notes_pre_post/1040g3k832518s7133c705o63b8a08clv22dinjo!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-07/01.webp",
+          "bytes": 186716,
+          "sha256": "0bac5d588b395018e849de71c328100fbd11deb8fdb5d370d5885339ef9ed011"
+        }
+      ]
+    },
+    {
+      "id": "SYS-10",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "人物照片双面横向手幅预览",
+      "title": "👸“我还要准备下一场比赛”",
+      "author": "Mayyy",
+      "displayedDate": "06-21",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a379acc0000000011014ba8?xsec_token=AB1VLn7hD7KF5flrWsSlQ_NG0CCe7adWkfZNRwa0r_1DQ=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a379acc0000000011014ba8",
+      "caption": "手幅\n-45*15/30*10（已预留3mm）\n-莎丝可✉️取图自印[回招呼]\n#孙颖莎 #1104 #莎唯",
+      "sourceUsageNotes": [
+        "-莎丝可✉️取图自印[回招呼]"
+      ],
+      "design": "浅紫色水彩与烟雾渐变，白色毛笔大字，赛场人物抠图与半透明动作照叠加。两面分别以热爱和下一场比赛为中心，人物与文案分列。",
+      "copy": [
+        {
+          "text": "保持热爱\n全力以赴",
+          "image": "images/SYS-10/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "上方手幅，两行白色书法字。"
+        },
+        {
+          "text": "我还要准备下一场比赛",
+          "image": "images/SYS-10/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "下方手幅白色书法字；此处只记录图中文字，不认定为已核实的本人原话。"
+        },
+        {
+          "text": "Keep your passion, give it your all.",
+          "image": "images/SYS-10/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "上方手幅右上角英文。"
+        },
+        {
+          "text": "I still need to get ready for the next match.",
+          "image": "images/SYS-10/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "下方手幅中文下面的英文。"
+        },
+        {
+          "text": "Hail to Sun",
+          "image": "images/SYS-10/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "与 20001104 同组的小字。"
+        }
+      ],
+      "notes": "已查看唯一图片。作者署名、水印、外层“手幅预览”标题未计入应援文案。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/0aa8f2c5ca82e8b174eb90b6f4478a42/notes_uhdr/1040g3qo321lvsgkhn4l05psf860ji1e29p2omh0!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-10/01.webp",
+          "bytes": 60968,
+          "sha256": "b0166571e72826b2d5261edfe050f614289e4eb6dbe0bf547b81563717b73169"
+        }
+      ]
+    },
+    {
+      "id": "SYS-12",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "生日手幅与小卡、明信片、拍立得成套预览",
+      "title": "（无标题）",
+      "author": "season",
+      "displayedDate": "编辑于 6天前 湖南",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ad4d71c00000000270348d5?xsec_token=ABJ3toiFMTDa3lfJR4HQXMUm82aVoKlhuHWtRlTKm2S2M=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ad4d71c00000000270348d5",
+      "caption": "孙颖莎生日\n手幅/明信片/小卡\n开放授权\n🈲商用\n#手幅 #自制手幅  #明信片设计\n#有想法轻松发 #3003#5114❤️ #孙颖莎生日快乐 #官方大大求流量",
+      "sourceUsageNotes": [
+        "开放授权",
+        "🈲商用"
+      ],
+      "design": "共四张：01 是整套拼贴总览；02 是横向双面生日手幅，以橙黄、青蓝、紫色配合照片拼贴和星芒；03 是青蓝舞台灯架背景的明信片正反面，人物白描边、蛋糕贴纸和粉色标签；04 是粉色格纹甜品主题小卡，蛋糕、苹果、小熊和白描边姓名。",
+      "copy": [
+        {
+          "text": "孙颖莎\n生日快乐",
+          "image": "images/SYS-12/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "总览图左侧横幅可见；02 提供同一手幅的更大预览。"
+        },
+        {
+          "text": "Happy Birthday",
+          "image": "images/SYS-12/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "下方手幅橙色大号斜体英文。"
+        },
+        {
+          "text": "孙颖莎\n生日快乐",
+          "image": "images/SYS-12/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "两面横幅均有姓名和生日祝福。"
+        },
+        {
+          "text": "不管几岁\n开心万岁",
+          "image": "images/SYS-12/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "明信片正面粉色标签，背面也以“#不管几岁 开心万岁”重复出现。"
+        },
+        {
+          "text": "生日快乐",
+          "image": "images/SYS-12/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "明信片小照片及便签上的标签。"
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/SYS-12/04.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右侧小卡三个姓名大字呈错位竖排。"
+        },
+        {
+          "text": "小莎甜品",
+          "image": "images/SYS-12/04.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左侧小卡左下，四字分两行。"
+        },
+        {
+          "text": "小莎甜品铺",
+          "image": "images/SYS-12/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "两张小卡底部店招式装饰文字。"
+        },
+        {
+          "text": "今日开张",
+          "image": "images/SYS-12/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "右侧小卡顶栏。"
+        },
+        {
+          "text": "生日快乐～",
+          "image": "images/SYS-12/04.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "左侧小卡顶栏。"
+        }
+      ],
+      "notes": "四张图片均已逐张查看。小卡、明信片文案与横幅文案已在 note 中区分。；SYS-25/01 与本条 02 是同一张生日手幅预览，后续统计宜去重。；明信片上另有一个绿色昵称标签，字形不够确定，未纳入。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/411a1433323e535a114a1562bab840f6/notes_pre_post/1040g3k8326fhe3d74ed04a2lf0dss2m8pj4bhkg!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-12/01.webp",
+          "bytes": 276106,
+          "sha256": "7aa2f8d3f3532d616288fa89cbd755e3828576a99fce9f13a681a867badffff3"
+        },
+        {
+          "index": 2,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/8bf1db31888ce88aaa558ce9109a9e33/notes_pre_post/1040g3k8326fhe3h2l6004a2lf0dss2m8mc18j0o!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-12/02.webp",
+          "bytes": 214958,
+          "sha256": "630936903092c121bafb0684d083aec6dc86b7680d0b4db9b6137bb5613b56ea"
+        },
+        {
+          "index": 3,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/284fe3815e036802acf18d853889b841/notes_pre_post/1040g3k8326fhe3d74eb04a2lf0dss2m8gb4nh08!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-12/03.webp",
+          "bytes": 268204,
+          "sha256": "2243bca8a19478f211449fe2bf4ac20dee5726ad691ec3faba3248ad0cbbcaa9"
+        },
+        {
+          "index": 4,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/b2d2945eee5dd6c49728470ba63612e1/notes_pre_post/1040g3k8326fhe3d74ecg4a2lf0dss2m8s18vsfo!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-12/04.webp",
+          "bytes": 121614,
+          "sha256": "c44280d10d2b796d6991916b6511038519edd1ca3a651fdc7636a12fc116722b"
+        }
+      ]
+    },
+    {
+      "id": "SYS-14",
+      "keyword": "孙颖莎手幅",
+      "subject": "莎头／孙颖莎／王楚钦",
+      "kind": "多款手幅实物合集与近拍",
+      "title": "÷手幅",
+      "author": "🦁🦈🍟莎&钦🍟",
+      "displayedDate": "编辑于 4天前 上海",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a?xsec_token=ABMSnT42num6EHJpT5Plx9aOq8t9W5dEfWCO7Z2aKfpjI=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a932cbe000000000400b34a",
+      "caption": "纸质，毛巾手幅都有。纸质0.4/张，毛巾8/条，邮5。满20可包邮。",
+      "sourceUsageNotes": [],
+      "design": "01 展示多种现成横幅：黑底星座连线纯字、蓝底撞色谐音字、白底黑字签名与人物、粉色玫瑰土味风、冠军照片拼贴、姓名大字重影；02 展示黑底蓝字横幅、粉蓝人物成对竖幅及 Q 版冠军插画；03 为黑粉冠军照片毛巾近拍，部分文字被照片边缘裁切。",
+      "copy": [
+        {
+          "text": "孙颖莎\n你皮紧一点",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左上白底黑字款，配人物抠图与感叹号。"
+        },
+        {
+          "text": "王楚钦\n你皮紧一点",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左列第二张白底黑字款。"
+        },
+        {
+          "text": "如果全世界都指责你\n那我带你去见莎头",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右上浅色插画款；“莎头”两字在右侧纵向错位排版。此处按句意阅读顺序合并原图行列。"
+        },
+        {
+          "text": "这么顶那么稳\n看莎头我很心安",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右列蓝底款，“顶”“稳”“头”等字着色强调。"
+        },
+        {
+          "text": "楚钦颖莎\n看你们打球好幸福",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左列黑底蓝字星座连线款；02 为近照，字体更清楚。"
+        },
+        {
+          "text": "你们说球场见\n于是我又来了",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左列黑底粉字星座连线款。"
+        },
+        {
+          "text": "霸道酸甜爱上我",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左列粉色玫瑰款。"
+        },
+        {
+          "text": "这么远那么贵\n为了莎头我无所谓",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左下蓝底纯字款。"
+        },
+        {
+          "text": "我们未来\n继续努力",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右列深蓝人物拼贴款，左右各一组大字。"
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右侧倒数第二张，蓝字与黄色大字底影。"
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/SYS-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "右下粉色姓名大字款。"
+        },
+        {
+          "text": "楚钦颖莎\n看你们打球好幸福",
+          "image": "images/SYS-14/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "上方黑底蓝字款近照，与 01 同款。"
+        },
+        {
+          "text": "最喜欢的时刻是夺冠时刻",
+          "image": "images/SYS-14/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "底部 Q 版举杯手幅，青蓝大字中“夺冠时刻”为橙色。"
+        },
+        {
+          "text": "夺冠时刻",
+          "image": "images/SYS-14/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "Q 版人物旁也有独立贴纸字。"
+        },
+        {
+          "text": "Sun YingSha",
+          "image": "images/SYS-14/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "Q 版手幅大号白字蓝描边英文姓名。"
+        },
+        {
+          "text": "奔向太阳",
+          "image": "images/SYS-14/03.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "左下第二行白字，上一行只显示“…力以赴”，首字被照片左边缘裁去，未补字。"
+        },
+        {
+          "text": "镌刻的是我们的八年",
+          "image": "images/SYS-14/03.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "顶边小字后半句；前半句只看到“赫杜塞克杯上”等局部，不补全。"
+        }
+      ],
+      "notes": "三张图片均已逐张查看。此笔记虽属于 SYS 搜索结果，但实际包含莎头双人、孙颖莎单人和王楚钦单人款。；03 顶部主文案被人物、折痕和照片边缘遮挡，仅记录可以确定的片段，不据熟悉句型补全。；01 右列黑粉拼贴另有勇士主题低清小字，未逐字确认，因此不收入文案库。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/121769fec211034493dbf4b41235c13a/notes_pre_post/1040g3k0324fd9eh27u5g400q6tk2qu1p5sa64g8!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-14/01.webp",
+          "bytes": 375614,
+          "sha256": "8795efbbed0900a8c7bc7e2b32f2a120a678c8a123e39929dd8c98a8d0da120f"
+        },
+        {
+          "index": 2,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/b7e2268fae5d3d58d1620a1276974c8e/1040g008324fd9ebf7a4g400q6tk2qu1pqq69iu8!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-14/02.webp",
+          "bytes": 319864,
+          "sha256": "56820ca68d1f1548c3bfd3298c58e20499b8adad833a538945c24ce9105b4977"
+        },
+        {
+          "index": 3,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/57a37076922c8d6bec0cb01a2159065a/1040g008324fd9ebf7a30400q6tk2qu1plalsglg!nd_dft_wgth_webp_3",
+          "path": "images/SYS-14/03.webp",
+          "bytes": 257110,
+          "sha256": "20ed3a9859dab1ed1b582c56660e8a4ad74c614f99bf601228054455eec75bbd"
+        }
+      ]
+    },
+    {
+      "id": "SYS-18",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "生日照片双面手幅预览",
+      "title": "生日手幅",
+      "author": "爱吃番茄酱_（见过莎头版）",
+      "displayedDate": "1天前 江西",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6adb44bf000000002403ba02?xsec_token=ABnhnkXHiLI4IOByTBQLcYOBW0sl5ZHIi6bybYPJWr40s=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6adb44bf000000002403ba02",
+      "caption": "无任何不良引导仅做孙颖莎26岁生日贺图 也是配平了今年头生日的手幅～\n#手幅 #3003 #孙颖莎",
+      "sourceUsageNotes": [],
+      "design": "紫蓝底与浅黄渐变，白黄色大字，多个举杯或持奖照片沿横轴拼贴；两面均以生日祝福为主，其中一面人物更密集。预览标注 450*150，但未显示单位。",
+      "copy": [
+        {
+          "text": "HAPPY BIRTHDAY\n生日快乐",
+          "image": "images/SYS-18/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第一面左侧英文与中文祝福。"
+        },
+        {
+          "text": "HAPPY BIRTHDAY",
+          "image": "images/SYS-18/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第二面顶部横排大字。"
+        },
+        {
+          "text": "明亮的心",
+          "image": "images/SYS-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "第二面右上角。"
+        },
+        {
+          "text": "HAIL TO SUN FIERCE AND BRIGHT",
+          "image": "images/SYS-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "第一面右上角细字。"
+        },
+        {
+          "text": "1104",
+          "image": "images/SYS-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "第二面左上日期符号。"
+        }
+      ],
+      "notes": "已查看唯一图片。外层“生日手幅预览”“Infinite Desire”等未作为横幅主文案。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/58696ec86aac9943602c735a86933600/notes_pre_post/1040g3k8326lq582jl0l05nr6025g91vu9mmg7r0!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-18/01.webp",
+          "bytes": 165718,
+          "sha256": "4cdcd4ea8bca991bb162027176d9147fbc625bf78f18dd43a98cc6b9a054179e"
+        }
+      ]
+    },
+    {
+      "id": "SYS-19",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "Q 版插画毛巾手幅实物照",
+      "title": "ಥ﹏ಥ",
+      "author": "努力小兔",
+      "displayedDate": "09-21",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ab122f00000000035021618?xsec_token=ABgkZp_SI_f7jibkBJyCsnYv1agmpo4Cw2I-Nn_a8Vzx8=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ab122f00000000035021618",
+      "caption": "这种有没有办法挂在墙上啊#孙颖莎 #周边 #手幅 #求助",
+      "sourceUsageNotes": [],
+      "design": "橙色与灰蓝色大面积拼接；左侧 Q 版人物闭眼笑、双手握拳，右侧大号白色手写英文，背景隐约重复乒乓球拍和球的线稿；版式主次明确、无真人照片。",
+      "copy": [
+        {
+          "text": "Keep Shining",
+          "image": "images/SYS-19/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "白色手写英文分两行，末尾字母略靠右边缘但可辨。"
+        },
+        {
+          "text": "Sun Y.S.",
+          "image": "images/SYS-19/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "右下白色姓名缩写。"
+        }
+      ],
+      "notes": "已查看唯一图片。文字有布料折痕，但主要文案可辨。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/09ad5e41ca2de2078858dcd37ca7f4da/note_pre_post_uhdr/1040g3r0325cln3ob58005nu4ueog89546iv67r0!nd_dft_wgth_webp_3",
+          "path": "images/SYS-19/01.webp",
+          "bytes": 335760,
+          "sha256": "860067ceb705db3b66e2d787cd5f2caf393ce5a8da85e7d2e74f13542766ba8f"
+        }
+      ]
+    },
+    {
+      "id": "SYS-21",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "黑粉冠军照片双面手幅预览",
+      "title": "宝宝老师，你要的手幅设计是这样子吗",
+      "author": "Rosemary迷",
+      "displayedDate": "02-07",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6986fe6b000000000a02d807?xsec_token=ABqXWYA25So2DhplyCHOraBd7DlYAt3xGcYYEvTe7XuTg=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6986fe6b000000000a02d807",
+      "caption": "孙颖莎手幅｜好久之前做的手幅，终于有机会放出来啦～\n#手幅 #美工 #饭圈美工 #饭圈设计 #孙颖莎",
+      "sourceUsageNotes": [],
+      "design": "黑底、玫红大号窄体英文作底纹，白色超粗中文压在人物和奖杯旁；两面均使用冠军举杯或持花照片，第二面在预览中旋转 90 度展示。黑、白、玫红强对比，姓名与短句分组。",
+      "copy": [
+        {
+          "text": "孙颖莎",
+          "image": "images/SYS-21/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "第一面左侧姓名，第二面也有姓名大字。"
+        },
+        {
+          "text": "赢到他们\n习惯为止",
+          "image": "images/SYS-21/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "两面重复出现的主句。"
+        },
+        {
+          "text": "WIN UNTIL THEY GET USED TO IT",
+          "image": "images/SYS-21/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "中文主句的配套英文。"
+        },
+        {
+          "text": "2000.11.04",
+          "image": "images/SYS-21/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "生日日期装饰。"
+        },
+        {
+          "text": "SUN SHA SHA",
+          "image": "images/SYS-21/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": "三行英文名字块。"
+        }
+      ],
+      "notes": "已查看唯一图片。外层英文长段作为装饰存在，不全部收录，避免混入核心灯牌文案。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/b5caa1b6d045357787d870c0c6318cba/spectrum/1040g34o31s9gld6o561048k9vfuh1vmgh980mvg!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-21/01.webp",
+          "bytes": 165176,
+          "sha256": "dd1fcc4d1e7b9cdf69a44a8d2819efbbb9089a87e68d76ae54c363ae9a1fe241"
+        }
+      ]
+    },
+    {
+      "id": "SYS-25",
+      "keyword": "孙颖莎手幅",
+      "subject": "孙颖莎",
+      "kind": "生日照片双面手幅预览／与 SYS-12 重复设计",
+      "title": "（无标题）",
+      "author": "season",
+      "displayedDate": "6天前 湖南",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ad48dbf000000002701c569?xsec_token=ABJ3toiFMTDa3lfJR4HQXMUncwtkeGi6Jv0K8y_WMM5o4=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ad48dbf000000002701c569",
+      "caption": "孙颖莎生日 手幅\n太久没做手幅了，都有点手生了\n#手幅 #自制手幅 #生日快樂#有想法轻松发  #3003 #5114❤️ #官方大大求流量",
+      "sourceUsageNotes": [],
+      "design": "与 SYS-12/02 同一张设计预览：上面三张人物抠图加橙色英文底字，下面黑紫底配橙色 Happy Birthday、白色胶囊姓名和祝福标签，黄色页脚与星芒装饰。",
+      "copy": [
+        {
+          "text": "孙颖莎\n生日快乐",
+          "image": "images/SYS-25/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "横幅主体标签，与 SYS-12/02 重复。"
+        },
+        {
+          "text": "Happy Birthday",
+          "image": "images/SYS-25/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "下方手幅橙色斜体大字。"
+        }
+      ],
+      "notes": "已查看唯一图片。与 SYS-12/02 是同款同画面，不应在独立设计数量中重复计数。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/e43ed203685fcdace86c2587d2f3fe1b/notes_pre_post/1040g3k8326f8f30ul6d04a2lf0dss2m85vksrd0!nd_dft_wlteh_webp_3",
+          "path": "images/SYS-25/01.webp",
+          "bytes": 214958,
+          "sha256": "630936903092c121bafb0684d083aec6dc86b7680d0b4db9b6137bb5613b56ea"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-03",
+      "keyword": "王楚钦手幅",
+      "subject": "王楚钦、孙颖莎（两款单人手幅）",
+      "kind": "真人照片／励志大字",
+      "title": "痛苦之上是曙光＆今天的太阳比昨天大",
+      "author": "吃一口面包_st🦈🦁（6.0和酸甜见面版）",
+      "displayedDate": "10-16 北京",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ad20eda000000001a0318f1?xsec_token=ABNhwIFZKqf9PHSNHutgeBAX2k3TlhONauOaqX28-4R9E=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ad20eda000000001a0318f1",
+      "caption": "亲爱的王楚钦孙颖莎 请永远坚定的做自己 相信自己 从籍籍无名到人声鼎沸 你们走的每一步都算数[抽泣R]\n我会祝福你们的整个人生 感谢现役\n坚定自信 我们来日方长\n#3003 #手幅",
+      "sourceUsageNotes": [],
+      "design": "深紫到黑渐变；双层人物抠图，一大一小；米白毛笔大字铺在右侧，超大英文姓名作为底纹；少量姓名、生日和英文译句。",
+      "copy": [
+        {
+          "text": "痛苦之上是曙光",
+          "image": "images/WCQ-03/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "今天的太阳比昨天大",
+          "image": "images/WCQ-03/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "手幅左侧部分被人物遮挡；同一张预览底部再次完整写出此句。"
+        },
+        {
+          "text": "Beyond pain lies the dawn.",
+          "image": "images/WCQ-03/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "The sun is bigger today than it was yesterday",
+          "image": "images/WCQ-03/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/WCQ-03/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/WCQ-03/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看 1 张图；底部电影海报式装饰英文未收录。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/9b4e2d2861ce8a5a6c71adc2a8cc6a34/notes_pre_post/1040g3k8326cqglic56005o02hjbgbpc2tgqjnt8!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-03/01.webp",
+          "bytes": 210800,
+          "sha256": "16709bd4a71649c8de9b178539678ced1c1b81b8aa0aead02a6123ecfc8fd739"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-04",
+      "keyword": "王楚钦手幅",
+      "subject": "莎头双人",
+      "kind": "纯文字／双面手幅预览",
+      "title": "莎头手幅",
+      "author": "芝士土豆倪🧀",
+      "displayedDate": "10-14 广西",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad?xsec_token=ABbKo1PH7boUJegf66taU484hBbuoojgnd8LTjgxu_i5Q=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ace5c88000000001c02fcad",
+      "caption": "王楚钦孙颖莎，你们知道吗，看你们打球真的好幸福啊啊啊！！\n#5114#手幅设计 #手幅",
+      "sourceUsageNotes": [],
+      "design": "橙黄渐变底；橙色粗黑描边斜排大字；反面两行短句；星星、奖杯、音符和便签贴纸点缀，整体活泼。",
+      "copy": [
+        {
+          "text": "楚钦颖莎",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "看你们打球 超级幸福啊",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "图中分为两行；保留“超级”和“啊”。"
+        },
+        {
+          "text": "坚定自信",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "健康涨球",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "5114",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "DON’T CARE",
+          "image": "images/WCQ-04/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看 1 张图。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251331/a70e5f4e691e87ae6d24d6892ff2511c/notes_pre_post/1040g3k032697165r50005ogi4dhk0o14kmmem6o!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-04/01.webp",
+          "bytes": 140380,
+          "sha256": "76eb36d16f2156f7e625a9ffd0188483bf68b215bbeaed307828ff36aba9c31b"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-07",
+      "keyword": "王楚钦手幅",
+      "subject": "王楚钦单人",
+      "kind": "真人照片／情感支持",
+      "title": "（无标题）",
+      "author": "馒头炖花卷🦁（见过楚钦）",
+      "displayedDate": "10-03 四川",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ac0c41f0000000018004f61?xsec_token=ABH7bPH8LtYJHG9Uf_X7nx_A-CbpdSIR8kw8Ao20rnshs=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ac0c41f0000000018004f61",
+      "caption": "做成毛巾手幅和手幅哪个更合适#王楚钦 #手幅#0511",
+      "sourceUsageNotes": [],
+      "design": "紫黑底；金色刷字和喷溅颗粒；正反两版均有人物大幅抠图与半透明比赛图；大字两行，适合高对比远看。",
+      "copy": [
+        {
+          "text": "王楚钦加油 享受比赛",
+          "image": "images/WCQ-07/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "不要头衔 只要你",
+          "image": "images/WCQ-07/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看 1 张图；作者水印未作为文案收录。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251332/9c195ed3b82f7df479d7aef2c743141c/notes_pre_post/1040g3k8325ru390glgd05pnt8u7nc1mpl2mjf90!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-07/01.webp",
+          "bytes": 95496,
+          "sha256": "0328be563e0b6f0fe12b86a22dbc3c1ce2ccdbcfc7da548e7ce24b289920e7ae"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-08",
+      "keyword": "王楚钦手幅",
+      "subject": "王楚钦单人",
+      "kind": "真人照片／队长主题",
+      "title": "存个队长手幅～",
+      "author": "今晚不熬夜",
+      "displayedDate": "编辑于 06-22",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6a390582000000000f02adf3?xsec_token=ABpqPHR3rlEOTl_ZhJct43KkmMMZZTNmlVOBHoSpnKvXw=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6a390582000000000f02adf3",
+      "caption": "一直想做的真人手幅 终于出稿啦#王楚钦",
+      "sourceUsageNotes": [],
+      "design": "红黑金运动海报风；奖杯与比赛人物抠图；撕纸边、红黑背景、金色“队长”和“极限”；主文案与队长身份并置，强烈力量感。",
+      "copy": [
+        {
+          "text": "我的人生没有极限",
+          "image": "images/WCQ-08/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "队长",
+          "image": "images/WCQ-08/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "中国乒乓球男队队长",
+          "image": "images/WCQ-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/WCQ-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "HOPE",
+          "image": "images/WCQ-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "CAPTAIN KING",
+          "image": "images/WCQ-08/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看 1 张图；收录的是图中文字，不据此验证人物现时职务；底部装饰性长英文未收录。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251332/901742b75ff47456d4f005fa2636521f/notes_pre_post/1040g3k8321nbqosgn00g49khisjkgrh76iq8kl8!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-08/01.webp",
+          "bytes": 262896,
+          "sha256": "fd4126fc976ddbb5f2f484c1645912686a9f0a2d51f37fc21769daf550efe807"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-14",
+      "keyword": "王楚钦手幅",
+      "subject": "莎头双人",
+      "kind": "卡通／双面手幅预览",
+      "title": "楚钦颖莎看你们打球好幸福🥰",
+      "author": "悦悦不是月月",
+      "displayedDate": "10-04 河北",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8?xsec_token=ABdkxpt8F8jBlkyzrpl5yskY7ws96go4_BAdUu76bDsJQ=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ac25256000000001803a5d8",
+      "caption": "🔟🈷️🈶稿位｜客单仅展示🈲all｜\n#饭圈产出 #产出 #饭圈美工 #混双 #国乒 #莎頭 #孙颖莎 #王楚钦 #手幅 #饭圈设计",
+      "sourceUsageNotes": [
+        "🔟🈷️🈶稿位｜客单仅展示🈲all｜"
+      ],
+      "design": "粉蓝竖条纹上下拼色；圆润泡泡字，灰黑描边加白色外框；双人 Q 版、爱心、星星和胶片框；粉蓝字色交替，甜美可爱。",
+      "copy": [
+        {
+          "text": "Sunhope",
+          "image": "images/WCQ-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "楚钦颖莎 看你们打球好幸福",
+          "image": "images/WCQ-14/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": "图中两行排版，首行为“楚钦颖莎”。"
+        },
+        {
+          "text": "孙颖莎",
+          "image": "images/WCQ-14/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/WCQ-14/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "5114",
+          "image": "images/WCQ-14/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看 1 张图；图中有作者水印，未收录为文案。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251332/7cfafc09a61573a7f2997fc281861748/1040g2sg325teo8jl4a005ngba5g086c5p9993j0!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-14/01.webp",
+          "bytes": 190528,
+          "sha256": "1e77bd1ea700e8675ed0f31b42ff75c0772f5a920aafd28ae720ab8888d386af"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-15",
+      "keyword": "王楚钦手幅",
+      "subject": "王楚钦、孙颖莎（两款单人毛巾手幅）",
+      "kind": "单字／复古撞色",
+      "title": "北满毛巾手幅互换～",
+      "author": "YiYi",
+      "displayedDate": "10-06 广东",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0?xsec_token=ABAYH_Qe6nZnxVtLifEejjd6GawgWyO00-AxdvMiT57yI=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ac4a50f0000000015015ec0",
+      "caption": "会发一些伸手的物料\n8号下午，毛巾手幅互换，感兴趣的姐妹可以滴滴我～\n#北京 #北京大满贯 #孙颖莎 #5114 #王楚钦 #乒乓球",
+      "sourceUsageNotes": [],
+      "design": "方形毛巾参考；左红黄、右蓝黄；超大单字“钦／莎”，棕色描边与米色外轮廓；棋盘格边、绿色生日椭圆、星星；顶栏小字、底栏英文姓名。",
+      "copy": [
+        {
+          "text": "钦",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "莎",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "健康涨球",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "竭尽全力永不言弃",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "明亮的心指引着胜利",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "快乐乒乓",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "HOPE",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "sun",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "0511",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "1104",
+          "image": "images/WCQ-15/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看 1 张图并放大顶部文字；方形毛巾构图可参考配色和字形，比例不同于横幅。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251332/0a3bc040df56b5da0d506a99e444c7bf/1040g2sg325vn8d9444e05na900ikkhtqfdp0mv8!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-15/01.webp",
+          "bytes": 82048,
+          "sha256": "d8ff7433fc1140acf329ce7a0e5af09de27babe1b6412bfad2f8bc06d878faee"
+        }
+      ]
+    },
+    {
+      "id": "WCQ-18",
+      "keyword": "王楚钦手幅",
+      "subject": "王楚钦、孙颖莎（两款单人手幅）",
+      "kind": "真人照片／实物展示",
+      "title": "莎头手幅分享，实况直出看质感",
+      "author": "追梦国王",
+      "displayedDate": "09-27 广东",
+      "collectedDate": "2026-10-25",
+      "sourceUrl": "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50?xsec_token=ABx3HOaKYq8Jn-e3aYTDVKFN_ojgftN1pp0j4ToaTMMTQ=&xsec_source=pc_feed",
+      "canonicalUrl": "https://www.xiaohongshu.com/explore/6ab8d7470000000018028b50",
+      "caption": "为你们举起手幅，也会为你们感到自豪！\n健康涨球。\n#孙颖莎 #王楚钦 #莎头 #手幅 #莎头物料 #5114 #自制手幅 #应援 #酸甜 #3003",
+      "sourceUsageNotes": [],
+      "design": "同版式分色：孙颖莎蓝白，王楚钦红粉；左侧超大白字、彩色描边与偏移阴影，右侧人物抠图；顶部一句短文、乒乓球和奖杯线稿；底部纯色条。实物双手展开可看横幅比例。",
+      "copy": [
+        {
+          "text": "孙颖莎",
+          "image": "images/WCQ-18/01.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "乒乓世界迷人眼，最爱莎莎小圆脸",
+          "image": "images/WCQ-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "ALL FOR SYS",
+          "image": "images/WCQ-18/01.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦",
+          "image": "images/WCQ-18/02.webp",
+          "pathType": "主文案",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "王楚钦你最棒，赛场拼搏放光芒",
+          "image": "images/WCQ-18/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        },
+        {
+          "text": "ALL FOR WCQ",
+          "image": "images/WCQ-18/02.webp",
+          "pathType": "辅助文字",
+          "confidence": "清晰",
+          "note": ""
+        }
+      ],
+      "notes": "实际查看全部 2 张实物图；墙面入口文字与展示者衣物不属于手幅内容，未收录。",
+      "status": "图中实录，待用户确认；尚未写入产品文案库",
+      "images": [
+        {
+          "index": 1,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/f84b91c760b87ca3413afbc917ec8d4d/note_pre_post_uhdr/1040g3r0325k6e8utl6005pefh3hhedpnppvdki8!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-18/01.webp",
+          "bytes": 265796,
+          "sha256": "8cc47dca1de56e3d9e74da450d64fbd5e85d53dea857c957449504cc688bdb68"
+        },
+        {
+          "index": 2,
+          "url": "https://sns-webpic-qc.xhscdn.com/202610251333/f39181253d6cc24bc186e9643e43d520/note_pre_post_uhdr/1040g3r0325k6e8utl60g5pefh3hhedpn8hpfnno!nd_dft_wlteh_webp_3",
+          "path": "images/WCQ-18/02.webp",
+          "bytes": 263662,
+          "sha256": "90be3d1901eb6269fa21bde77c9c1961fa9569647048550e61139c906143da91"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "mergedDate": "2026-10-25",
+  "canonicalDirectory": "xiaohongshu-handbanners-2026-10-25",
+  "imports": [
+    {
+      "previousDirectory": "手幅和文案收集",
+      "currentDirectory": "imports/用户补充-2026-10-25",
+      "originalIndex": "imports/用户补充-2026-10-25/原始收藏索引.json",
+      "localImageCount": 16,
+      "sourceNoteCount": 10,
+      "sourceImageCount": 38
+    }
+  ],
+  "initialIndexSnapshot": "sources/initial-search-index.json",
+  "oldEntryPoints": [
+    "../手幅和文案收集/README.md",
+    "../手幅和文案收集/index.html"
+  ]
+}

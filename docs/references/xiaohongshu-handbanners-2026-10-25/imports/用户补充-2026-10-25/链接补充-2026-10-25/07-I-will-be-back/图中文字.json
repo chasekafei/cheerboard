@@ -1,0 +1,129 @@
+{
+  "kind": "真人照片双面手幅预览",
+  "subject": "王楚钦、孙颖莎（两款单人）",
+  "copy": [
+    {
+      "text": "I will be back",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "你不要低估一颗 胜利者 的心，他的名字叫王楚钦",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中引号句，分两行；“胜利者”用金色强调。"
+    },
+    {
+      "text": "坚定自己，孙颖莎不会放弃的",
+      "image": "01.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": "图中引号句，分两行。"
+    },
+    {
+      "text": "AS I FACING THE SUN",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "AS I CHASING THE HOPE",
+      "image": "01.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "I will be back",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "王楚钦",
+      "image": "02.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "你不要低估一颗 胜利者 的心，他的名字叫王楚钦",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": "与 01 重复。"
+    },
+    {
+      "text": "AS I FACING THE SUN",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "AS I CHASING THE HOPE",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "WANG CHU QIN",
+      "image": "02.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "I will be back",
+      "image": "03.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "孙颖莎",
+      "image": "03.webp",
+      "type": "主文案",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "坚定自己，孙颖莎不会放弃的",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": "与 01 重复。"
+    },
+    {
+      "text": "AS I FACING THE SUN",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "AS I CHASING THE HOPE",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    },
+    {
+      "text": "SUN YING SHA",
+      "image": "03.webp",
+      "type": "辅助文字",
+      "confidence": "清晰",
+      "note": ""
+    }
+  ],
+  "notes": [
+    "已逐张查看 01—03.webp；01 为双人款总览，02、03 分别展示两位的正反面。",
+    "英文按图片原有字词与大小写保留；重复作者水印、生日与被人物遮挡的英文底字未收录。"
+  ]
+}

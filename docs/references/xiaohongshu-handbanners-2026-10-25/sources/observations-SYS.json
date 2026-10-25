@@ -1,0 +1,478 @@
+[
+  {
+    "id": "SYS-02",
+    "subject": "孙颖莎",
+    "kind": "纯字紫金横向手幅预览",
+    "design": "紫底、金黄色超粗姓名，右下角乒乓球拍图标；细横线分出顶栏和底栏，主体不放人物照片。姓名占据绝大多数面积，可供灯牌大字版参考。",
+    "copy": [
+      {
+        "text": "孙颖莎",
+        "image": "images/SYS-02/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "正中三字大字。"
+      },
+      {
+        "text": "保持热爱，保持专注",
+        "image": "images/SYS-02/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "手幅上边栏，与 CHINA SUN Y.S. 并排。"
+      },
+      {
+        "text": "CHINA SUN Y.S.",
+        "image": "images/SYS-02/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "顶栏英文姓名缩写。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片。底栏有一整句勇士主题小字，图像清晰度不足以逐字确认，未强行补全文。",
+      "外层“紫金手幅”属于预览标题，不是手幅主体文案。"
+    ]
+  },
+  {
+    "id": "SYS-07",
+    "subject": "孙颖莎",
+    "kind": "带标注的商品截图／纯字紫金毛巾手幅",
+    "design": "紫底金字、超粗姓名居中，顶部与底部均留细横线；与 SYS-02 相近，但上、下边栏文案不同。外层是手机商品页截图，下半部有巨大手写“假”字覆盖。",
+    "copy": [
+      {
+        "text": "孙颖莎",
+        "image": "images/SYS-07/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "手幅正中姓名。"
+      },
+      {
+        "text": "感谢你成为孙颖莎",
+        "image": "images/SYS-07/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "顶部小字。"
+      },
+      {
+        "text": "在梦想面前永远支持孙颖莎",
+        "image": "images/SYS-07/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "底栏逐字留空排版。"
+      },
+      {
+        "text": "CHINA SUN Y.S.",
+        "image": "images/SYS-07/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "顶部英文缩写。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片；保留截图中的“假”字语境，不把它当作干净设计稿。",
+      "外层“紫耀生金（毛巾手幅）”是商品预览标题。"
+    ]
+  },
+  {
+    "id": "SYS-10",
+    "subject": "孙颖莎",
+    "kind": "人物照片双面横向手幅预览",
+    "design": "浅紫色水彩与烟雾渐变，白色毛笔大字，赛场人物抠图与半透明动作照叠加。两面分别以热爱和下一场比赛为中心，人物与文案分列。",
+    "copy": [
+      {
+        "text": "保持热爱\n全力以赴",
+        "image": "images/SYS-10/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "上方手幅，两行白色书法字。"
+      },
+      {
+        "text": "我还要准备下一场比赛",
+        "image": "images/SYS-10/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "下方手幅白色书法字；此处只记录图中文字，不认定为已核实的本人原话。"
+      },
+      {
+        "text": "Keep your passion, give it your all.",
+        "image": "images/SYS-10/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "上方手幅右上角英文。"
+      },
+      {
+        "text": "I still need to get ready for the next match.",
+        "image": "images/SYS-10/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "下方手幅中文下面的英文。"
+      },
+      {
+        "text": "Hail to Sun",
+        "image": "images/SYS-10/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "与 20001104 同组的小字。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片。作者署名、水印、外层“手幅预览”标题未计入应援文案。"
+    ]
+  },
+  {
+    "id": "SYS-12",
+    "subject": "孙颖莎",
+    "kind": "生日手幅与小卡、明信片、拍立得成套预览",
+    "design": "共四张：01 是整套拼贴总览；02 是横向双面生日手幅，以橙黄、青蓝、紫色配合照片拼贴和星芒；03 是青蓝舞台灯架背景的明信片正反面，人物白描边、蛋糕贴纸和粉色标签；04 是粉色格纹甜品主题小卡，蛋糕、苹果、小熊和白描边姓名。",
+    "copy": [
+      {
+        "text": "孙颖莎\n生日快乐",
+        "image": "images/SYS-12/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "总览图左侧横幅可见；02 提供同一手幅的更大预览。"
+      },
+      {
+        "text": "Happy Birthday",
+        "image": "images/SYS-12/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "下方手幅橙色大号斜体英文。"
+      },
+      {
+        "text": "孙颖莎\n生日快乐",
+        "image": "images/SYS-12/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "两面横幅均有姓名和生日祝福。"
+      },
+      {
+        "text": "不管几岁\n开心万岁",
+        "image": "images/SYS-12/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "明信片正面粉色标签，背面也以“#不管几岁 开心万岁”重复出现。"
+      },
+      {
+        "text": "生日快乐",
+        "image": "images/SYS-12/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "明信片小照片及便签上的标签。"
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/SYS-12/04.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右侧小卡三个姓名大字呈错位竖排。"
+      },
+      {
+        "text": "小莎甜品",
+        "image": "images/SYS-12/04.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左侧小卡左下，四字分两行。"
+      },
+      {
+        "text": "小莎甜品铺",
+        "image": "images/SYS-12/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "两张小卡底部店招式装饰文字。"
+      },
+      {
+        "text": "今日开张",
+        "image": "images/SYS-12/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "右侧小卡顶栏。"
+      },
+      {
+        "text": "生日快乐～",
+        "image": "images/SYS-12/04.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "左侧小卡顶栏。"
+      }
+    ],
+    "notes": [
+      "四张图片均已逐张查看。小卡、明信片文案与横幅文案已在 note 中区分。",
+      "SYS-25/01 与本条 02 是同一张生日手幅预览，后续统计宜去重。",
+      "明信片上另有一个绿色昵称标签，字形不够确定，未纳入。"
+    ]
+  },
+  {
+    "id": "SYS-14",
+    "subject": "莎头／孙颖莎／王楚钦",
+    "kind": "多款手幅实物合集与近拍",
+    "design": "01 展示多种现成横幅：黑底星座连线纯字、蓝底撞色谐音字、白底黑字签名与人物、粉色玫瑰土味风、冠军照片拼贴、姓名大字重影；02 展示黑底蓝字横幅、粉蓝人物成对竖幅及 Q 版冠军插画；03 为黑粉冠军照片毛巾近拍，部分文字被照片边缘裁切。",
+    "copy": [
+      {
+        "text": "孙颖莎\n你皮紧一点",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左上白底黑字款，配人物抠图与感叹号。"
+      },
+      {
+        "text": "王楚钦\n你皮紧一点",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左列第二张白底黑字款。"
+      },
+      {
+        "text": "如果全世界都指责你\n那我带你去见莎头",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右上浅色插画款；“莎头”两字在右侧纵向错位排版。此处按句意阅读顺序合并原图行列。"
+      },
+      {
+        "text": "这么顶那么稳\n看莎头我很心安",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右列蓝底款，“顶”“稳”“头”等字着色强调。"
+      },
+      {
+        "text": "楚钦颖莎\n看你们打球好幸福",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左列黑底蓝字星座连线款；02 为近照，字体更清楚。"
+      },
+      {
+        "text": "你们说球场见\n于是我又来了",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左列黑底粉字星座连线款。"
+      },
+      {
+        "text": "霸道酸甜爱上我",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左列粉色玫瑰款。"
+      },
+      {
+        "text": "这么远那么贵\n为了莎头我无所谓",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左下蓝底纯字款。"
+      },
+      {
+        "text": "我们未来\n继续努力",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右列深蓝人物拼贴款，左右各一组大字。"
+      },
+      {
+        "text": "王楚钦",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右侧倒数第二张，蓝字与黄色大字底影。"
+      },
+      {
+        "text": "孙颖莎",
+        "image": "images/SYS-14/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "右下粉色姓名大字款。"
+      },
+      {
+        "text": "楚钦颖莎\n看你们打球好幸福",
+        "image": "images/SYS-14/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "上方黑底蓝字款近照，与 01 同款。"
+      },
+      {
+        "text": "最喜欢的时刻是夺冠时刻",
+        "image": "images/SYS-14/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "底部 Q 版举杯手幅，青蓝大字中“夺冠时刻”为橙色。"
+      },
+      {
+        "text": "夺冠时刻",
+        "image": "images/SYS-14/02.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "Q 版人物旁也有独立贴纸字。"
+      },
+      {
+        "text": "Sun YingSha",
+        "image": "images/SYS-14/02.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "Q 版手幅大号白字蓝描边英文姓名。"
+      },
+      {
+        "text": "奔向太阳",
+        "image": "images/SYS-14/03.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "左下第二行白字，上一行只显示“…力以赴”，首字被照片左边缘裁去，未补字。"
+      },
+      {
+        "text": "镌刻的是我们的八年",
+        "image": "images/SYS-14/03.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "顶边小字后半句；前半句只看到“赫杜塞克杯上”等局部，不补全。"
+      }
+    ],
+    "notes": [
+      "三张图片均已逐张查看。此笔记虽属于 SYS 搜索结果，但实际包含莎头双人、孙颖莎单人和王楚钦单人款。",
+      "03 顶部主文案被人物、折痕和照片边缘遮挡，仅记录可以确定的片段，不据熟悉句型补全。",
+      "01 右列黑粉拼贴另有勇士主题低清小字，未逐字确认，因此不收入文案库。"
+    ]
+  },
+  {
+    "id": "SYS-18",
+    "subject": "孙颖莎",
+    "kind": "生日照片双面手幅预览",
+    "design": "紫蓝底与浅黄渐变，白黄色大字，多个举杯或持奖照片沿横轴拼贴；两面均以生日祝福为主，其中一面人物更密集。预览标注 450*150，但未显示单位。",
+    "copy": [
+      {
+        "text": "HAPPY BIRTHDAY\n生日快乐",
+        "image": "images/SYS-18/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第一面左侧英文与中文祝福。"
+      },
+      {
+        "text": "HAPPY BIRTHDAY",
+        "image": "images/SYS-18/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第二面顶部横排大字。"
+      },
+      {
+        "text": "明亮的心",
+        "image": "images/SYS-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "第二面右上角。"
+      },
+      {
+        "text": "HAIL TO SUN FIERCE AND BRIGHT",
+        "image": "images/SYS-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "第一面右上角细字。"
+      },
+      {
+        "text": "1104",
+        "image": "images/SYS-18/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "第二面左上日期符号。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片。外层“生日手幅预览”“Infinite Desire”等未作为横幅主文案。"
+    ]
+  },
+  {
+    "id": "SYS-19",
+    "subject": "孙颖莎",
+    "kind": "Q 版插画毛巾手幅实物照",
+    "design": "橙色与灰蓝色大面积拼接；左侧 Q 版人物闭眼笑、双手握拳，右侧大号白色手写英文，背景隐约重复乒乓球拍和球的线稿；版式主次明确、无真人照片。",
+    "copy": [
+      {
+        "text": "Keep Shining",
+        "image": "images/SYS-19/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "白色手写英文分两行，末尾字母略靠右边缘但可辨。"
+      },
+      {
+        "text": "Sun Y.S.",
+        "image": "images/SYS-19/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "右下白色姓名缩写。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片。文字有布料折痕，但主要文案可辨。"
+    ]
+  },
+  {
+    "id": "SYS-21",
+    "subject": "孙颖莎",
+    "kind": "黑粉冠军照片双面手幅预览",
+    "design": "黑底、玫红大号窄体英文作底纹，白色超粗中文压在人物和奖杯旁；两面均使用冠军举杯或持花照片，第二面在预览中旋转 90 度展示。黑、白、玫红强对比，姓名与短句分组。",
+    "copy": [
+      {
+        "text": "孙颖莎",
+        "image": "images/SYS-21/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "第一面左侧姓名，第二面也有姓名大字。"
+      },
+      {
+        "text": "赢到他们\n习惯为止",
+        "image": "images/SYS-21/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "两面重复出现的主句。"
+      },
+      {
+        "text": "WIN UNTIL THEY GET USED TO IT",
+        "image": "images/SYS-21/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "中文主句的配套英文。"
+      },
+      {
+        "text": "2000.11.04",
+        "image": "images/SYS-21/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "生日日期装饰。"
+      },
+      {
+        "text": "SUN SHA SHA",
+        "image": "images/SYS-21/01.webp",
+        "pathType": "辅助文字",
+        "confidence": "清晰",
+        "note": "三行英文名字块。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片。外层英文长段作为装饰存在，不全部收录，避免混入核心灯牌文案。"
+    ]
+  },
+  {
+    "id": "SYS-25",
+    "subject": "孙颖莎",
+    "kind": "生日照片双面手幅预览／与 SYS-12 重复设计",
+    "design": "与 SYS-12/02 同一张设计预览：上面三张人物抠图加橙色英文底字，下面黑紫底配橙色 Happy Birthday、白色胶囊姓名和祝福标签，黄色页脚与星芒装饰。",
+    "copy": [
+      {
+        "text": "孙颖莎\n生日快乐",
+        "image": "images/SYS-25/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "横幅主体标签，与 SYS-12/02 重复。"
+      },
+      {
+        "text": "Happy Birthday",
+        "image": "images/SYS-25/01.webp",
+        "pathType": "主文案",
+        "confidence": "清晰",
+        "note": "下方手幅橙色斜体大字。"
+      }
+    ],
+    "notes": [
+      "已查看唯一图片。与 SYS-12/02 是同款同画面，不应在独立设计数量中重复计数。"
+    ]
+  }
+]
