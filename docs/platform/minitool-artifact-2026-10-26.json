@@ -1,0 +1,48 @@
+{
+  "verifiedDate": "2026-10-26",
+  "skillVersion": "1.8.0",
+  "skillArchiveSha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
+  "zipBytes": 2426400,
+  "zipSha256": "734976a8fe807dad84485087422b72ddfe73555749fe716155918b7bf851a459",
+  "uncompressedBytes": 2527997,
+  "files": [
+    {
+      "path": "assets/app.css",
+      "bytes": 41084,
+      "sha256": "c43bb847eef55e7579ce52666dcc25639c27de794d078d82235bc2a99b053e09"
+    },
+    {
+      "path": "assets/app.js",
+      "bytes": 86424,
+      "sha256": "c600f150ff486151b82069bda60bc980c63c817ec363472ec544416af287cf43"
+    },
+    {
+      "path": "fonts/CheerboardHandwriting.woff2",
+      "bytes": 1084100,
+      "sha256": "e01fcf657f81f81beda366e027877c54cfeaee5f36cdcf5bcda1f40396218e4e"
+    },
+    {
+      "path": "fonts/CheerboardSans.woff2",
+      "bytes": 671696,
+      "sha256": "a998dd36847bb8b94b7470ae7252856ef14ffb56a50b12ef90e5d0a1f9478ab9"
+    },
+    {
+      "path": "fonts/CheerboardTube.woff2",
+      "bytes": 628168,
+      "sha256": "02f20fd3ae4c531e687779631dae924028c43e828af9c83deb79cecf874027f6"
+    },
+    {
+      "path": "fonts/licenses.json",
+      "bytes": 15832,
+      "sha256": "4dac8d6c4efbd8445ea7bddcaa4533fcfe2c78e4328a400b55eb958b5f70b4f9"
+    },
+    {
+      "path": "index.html",
+      "bytes": 693,
+      "sha256": "aecccdbd3848f748d0d1b68b25e27da472c605aac1ad032ca40c12834a8697a9"
+    }
+  ],
+  "auditWarnings": [
+    "ZIP exceeds the official recommended 2 MiB target; remains below the official 10 MiB hard limit and the project 3 MiB budget. Three offline fonts retain common Chinese character coverage."
+  ]
+}
