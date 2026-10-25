@@ -1,4 +1,9 @@
 export const DEFAULT_DOT_EMOJI = '🏓';
+export const DEFAULT_LIGHT_TEXT = '点击屏幕修改文案或样式';
+export const MIN_FONT_SCALE = 70;
+export const MAX_FONT_SCALE = 200;
+export const MIN_DOT_DENSITY = 0;
+export const MAX_DOT_DENSITY = 3;
 const MAX_EMOJI_CODE_POINTS = 32;
 
 function regionalIndicator(code: number): boolean {

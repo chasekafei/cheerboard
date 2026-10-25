@@ -1,6 +1,7 @@
 import { getTemplate, type Design } from './catalog.ts';
-import { normalizeDotEmoji } from './design-values.ts';
+import { normalizeDotEmoji, MIN_DOT_DENSITY, MAX_DOT_DENSITY, MIN_FONT_SCALE, MAX_FONT_SCALE } from './design-values.ts';
 import { getBoardFont, TUBE_FONT } from './fonts.ts';
+import { getTextLines } from './text-layout.ts';
 
 type RenderOptions = { width?: number; height?: number; offset?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
@@ -10,6 +11,10 @@ const INK = '#172657';
 let dotMask: HTMLCanvasElement | null = null;
 let dotMaskKey = '';
 let dotMaskPixels: Uint8ClampedArray | null = null;
+let ghostLayer: HTMLCanvasElement | null = null;
+let ghostLayerKey = '';
+const MAX_GHOST_EDGE = 2048;
+const MAX_GHOST_PIXELS = 2_000_000;
 const dotSprites = new Map<string, HTMLCanvasElement>();
 const MAX_DOT_SPRITES = 32;
 const DOT_SAMPLE_SCALE = 4;
@@ -19,6 +24,7 @@ type Paint = string | CanvasGradient;
 export function invalidateFontCache(): void {
   dotMaskKey = '';
   dotMaskPixels = null;
+  ghostLayerKey = '';
 }
 
 function boardFont(design: Design, size: number): string {
@@ -207,35 +213,6 @@ function sticker(ctx: Context, design: Design, x: number, y: number, radius: num
   ctx.restore();
 }
 
-// Keep combining marks, variation selectors and joined emoji together when wrapping.
-function graphemes(text: string): string[] {
-  const result: string[] = [];
-  Array.from(text).forEach((character) => {
-    const code = character.codePointAt(0) || 0;
-    const previous = result[result.length - 1] || '';
-    if (result.length && (code === 0x200d || /\u200d$/.test(previous) || code === 0xfe0f || code === 0xfe0e || (code >= 0x300 && code <= 0x36f) || (code >= 0x1f3fb && code <= 0x1f3ff))) result[result.length - 1] += character;
-    else result.push(character);
-  });
-  return result;
-}
-
-function linesFor(text: string, layout: Design['layout']): string[] {
-  const normalized = text.trim() || '加油';
-  if (layout === 'single') return [normalized.replace(/\n/g, ' ')];
-  const manual = normalized.split(/\r?\n/);
-  if (manual.length > 1) return [manual[0], manual.slice(1).join(' ')];
-  const parts = graphemes(normalized);
-  if (parts.length < 2) return [normalized];
-  const middle = Math.ceil(parts.length / 2);
-  let split = middle;
-  // A nearby space keeps English words intact without dropping any content.
-  for (let distance = 0; distance <= Math.floor(parts.length * 0.2); distance++) {
-    if (parts[middle + distance] === ' ') { split = middle + distance; break; }
-    if (parts[middle - distance] === ' ') { split = middle - distance; break; }
-  }
-  return [parts.slice(0, split).join('').trim(), parts.slice(split).join('').trim()];
-}
-
 function drawBackground(ctx: Context, design: Design, width: number, height: number, accent: string): void {
   const unit = Math.min(width, height);
   const id = design.templateId;
@@ -315,6 +292,81 @@ function drawBackground(ctx: Context, design: Design, width: number, height: num
     if (id === 'H2') ctx.setLineDash([unit * 0.016, unit * 0.012]);
     roundedRect(ctx, inset, inset, width - inset * 2, height - inset * 2, id === 'H3' ? unit * 0.003 : unit * 0.04);
     ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function ghostText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number,
+  accent: string, viewportWidth: number, viewportHeight: number, textScaleX: number): void {
+  ctx.save();
+  try {
+    const font = boardFont(design, fontSize);
+    ctx.font = font;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const metrics = ctx.measureText(line);
+    const shift = fontSize * 0.02;
+    const leftInk = Number.isFinite(metrics.actualBoundingBoxLeft) ? Math.max(metrics.width / 2, metrics.actualBoundingBoxLeft) : metrics.width / 2;
+    const rightInk = Number.isFinite(metrics.actualBoundingBoxRight) ? Math.max(metrics.width / 2, metrics.actualBoundingBoxRight) : metrics.width / 2;
+    const ascent = Number.isFinite(metrics.actualBoundingBoxAscent) ? Math.max(0, metrics.actualBoundingBoxAscent) : fontSize * 0.75;
+    const descent = Number.isFinite(metrics.actualBoundingBoxDescent) ? Math.max(0, metrics.actualBoundingBoxDescent) : fontSize * 0.75;
+    // The caller scales around x. Convert the viewport back into those local
+    // coordinates before clipping, so compressed-but-fitting letters survive.
+    const visibleLeft = x - x / textScaleX;
+    const visibleRight = x + (viewportWidth - x) / textScaleX;
+    const left = Math.max(visibleLeft, x - leftInk - shift - 2);
+    const right = Math.min(visibleRight, x + rightInk + shift + 2);
+    const top = Math.max(0, y - ascent - shift - 2);
+    const bottom = Math.min(viewportHeight, y + descent + shift + 2);
+    const width = right - left;
+    const height = bottom - top;
+    if (width <= 0 || height <= 0) return;
+    // Capacity depends only on the viewport and its horizontal scale, never on
+    // the current line's length or scrolling offset. Unequal lines can reuse
+    // the same bitmap without repeatedly reallocating it within each frame.
+    const visibleWidth = viewportWidth / textScaleX;
+    const sampleScale = Math.min(1, MAX_GHOST_EDGE / visibleWidth, MAX_GHOST_EDGE / viewportHeight,
+      Math.sqrt(MAX_GHOST_PIXELS / (visibleWidth * viewportHeight)));
+    const capacityWidth = Math.max(1, Math.floor(visibleWidth * sampleScale));
+    const capacityHeight = Math.max(1, Math.floor(viewportHeight * sampleScale));
+    const pixelsWide = Math.min(capacityWidth, Math.max(1, Math.ceil(width * sampleScale)));
+    const pixelsHigh = Math.min(capacityHeight, Math.max(1, Math.ceil(height * sampleScale)));
+    const layer = ghostLayer || (ghostLayer = document.createElement('canvas'));
+    if (layer.width !== capacityWidth) layer.width = capacityWidth;
+    if (layer.height !== capacityHeight) layer.height = capacityHeight;
+    const layerContext = layer.getContext('2d');
+    if (!layerContext) return;
+    const key = JSON.stringify([font, line, design.foreground, accent, x, y, left, top, width, height,
+      capacityWidth, capacityHeight, pixelsWide, pixelsHigh]);
+    if (key !== ghostLayerKey) {
+      layerContext.save();
+      try {
+        layerContext.setTransform(1, 0, 0, 1, 0, 0);
+        layerContext.clearRect(0, 0, pixelsWide, pixelsHigh);
+        layerContext.scale(pixelsWide / width, pixelsHigh / height);
+        layerContext.translate(-left, -top);
+        layerContext.font = font;
+        layerContext.textAlign = 'center';
+        layerContext.textBaseline = 'middle';
+        layerContext.globalAlpha = 1;
+        layerContext.shadowBlur = 0;
+        layerContext.globalCompositeOperation = 'lighter';
+        layerContext.fillStyle = design.foreground;
+        layerContext.fillText(line, x - shift, y - shift);
+        layerContext.fillStyle = accent;
+        layerContext.fillText(line, x + shift, y + shift);
+      } finally {
+        layerContext.restore();
+      }
+      ghostLayerKey = key;
+    }
+    // The background never participates in the additive mix: flatten the
+    // isolated transparent text layer with ordinary source-over compositing.
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.shadowBlur = 0;
+    ctx.drawImage(layer, 0, 0, pixelsWide, pixelsHigh, left, top, width, height);
+  } finally {
     ctx.restore();
   }
 }
@@ -426,17 +478,17 @@ function dotSprite(design: Design, spacing: number, color: string): HTMLCanvasEl
   return sprite;
 }
 
-function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number, bounds: TextBounds): void {
+function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number, bounds: TextBounds, textScaleX: number): void {
   // Keep enough cells across each glyph after auto-fitting, within a fixed
   // viewport budget. Supersampling preserves counters without eroding strokes.
-  const density = Math.round(bounded(design.dotDensity, 1, 3, 2));
-  const glyphCells = [0, 26, 34, 42][density];
+  const density = Math.round(bounded(design.dotDensity, MIN_DOT_DENSITY, MAX_DOT_DENSITY, 2));
+  const glyphCells = [18, 26, 34, 42][density];
   const inkTop = Math.max(0, bounds.y - bounds.height / 2 - fontSize * 0.15);
   const inkBottom = Math.min(height, bounds.y + bounds.height / 2 + fontSize * 0.15);
   // A portrait viewport can be mostly empty above/below a fitted sentence.
   // Spend the row budget on its actual text band instead of those blank rows.
   const spacing = Math.max(1, width / 384, Math.max(1, inkBottom - inkTop) / 190,
-    Math.min(Math.min(width, height) * [0, 0.03, 0.022, 0.015][density], fontSize / glyphCells));
+    Math.min(Math.min(width, height) * [0.05, 0.03, 0.022, 0.015][density], fontSize / glyphCells));
   const rasterTop = Math.floor(inkTop / spacing) * spacing;
   const mask = dotMask || (dotMask = document.createElement('canvas'));
   const columns = Math.min(384, Math.max(1, Math.ceil(width / spacing)));
@@ -446,7 +498,7 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
   const sampleX = Math.round(x / spacing) * spacing;
   const shiftX = x - sampleX;
   const font = boardFont(design, fontSize);
-  const key = JSON.stringify([maskWidth, maskHeight, spacing, font, gap, sampleX, y, rasterTop, lines]);
+  const key = JSON.stringify([maskWidth, maskHeight, spacing, font, gap, sampleX, y, rasterTop, textScaleX, lines]);
   if (mask.width !== maskWidth) mask.width = maskWidth;
   if (mask.height !== maskHeight) mask.height = maskHeight;
   const mctx = mask.getContext('2d', { willReadFrequently: true });
@@ -456,11 +508,13 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
     mctx.setTransform(1, 0, 0, 1, 0, 0);
     mctx.clearRect(0, 0, mask.width, mask.height);
     mctx.scale(DOT_SAMPLE_SCALE / spacing, DOT_SAMPLE_SCALE / spacing);
+    mctx.translate(sampleX, y - rasterTop);
+    mctx.scale(textScaleX, 1);
     mctx.font = font;
     mctx.textAlign = 'center';
     mctx.textBaseline = 'middle';
     mctx.fillStyle = '#FFFFFF';
-    lines.forEach((line, index) => mctx.fillText(line, sampleX, y - rasterTop + (index - (lines.length - 1) / 2) * gap));
+    lines.forEach((line, index) => mctx.fillText(line, 0, (index - (lines.length - 1) / 2) * gap));
     const rgba = mctx.getImageData(0, 0, mask.width, mask.height).data;
     const cells = new Uint8ClampedArray(columns * rows);
     for (let row = 0; row < rows; row++) {
@@ -515,15 +569,18 @@ function boardDimensions(canvas: HTMLCanvasElement, options: RenderOptions): { w
 function boardLayout(ctx: Context, design: Design, width: number, height: number) {
   const light = getTemplate(design.templateId).category === 'light';
   const scrolling = light && design.scroll;
+  const landscape = light && width > height;
   const unit = Math.min(width, height);
-  const lines = linesFor(design.text, design.layout);
-  const padding = unit * (light ? 0.09 : 0.12);
+  const lines = getTextLines(design.text, design.layout);
+  const padding = unit * (light ? landscape ? 0.045 : 0.07 : 0.12);
   // Stickers stay in the corner, outside the text's quiet central band.
   const textAreaWidth = width - padding * 2;
-  const textAreaHeight = height * (light ? 0.72 : 0.64);
-  const lineHeight = 1.19;
+  const textAreaHeight = height * (light ? landscape ? 0.82 : 0.76 : 0.64);
+  const lineHeight = light ? landscape ? 1.08 : 1.14 : 1.19;
   const maxFont = textAreaHeight / (lines.length * lineHeight);
   const minFont = Math.min(maxFont, height * (light ? 0.19 : 0.15));
+  const maxSafeFont = height * (design.sticker === 'none' ? 0.91 : 0.8) / (lines.length * lineHeight);
+  const minimumScaleX = landscape && !scrolling ? 0.82 : 1;
   const outlineAllowance = design.templateId === 'L4' ? 0.36 : 0.18;
   let fontSize = maxFont;
   const measure = (size: number) => {
@@ -536,21 +593,23 @@ function boardLayout(ctx: Context, design: Design, width: number, height: number
       let high = maximum;
       for (let i = 0; i < 20; i++) {
         const middle = (low + high) / 2;
-        if (measure(middle) + middle * outlineAllowance <= textAreaWidth) low = middle;
+        if ((measure(middle) + middle * outlineAllowance) * minimumScaleX <= textAreaWidth) low = middle;
         else high = middle;
       }
       return low;
     };
     fontSize = fit(maxFont, light ? 0 : minFont);
-    const scale = bounded(design.fontScale, 70, 130, 100) / 100;
+    const scale = bounded(design.fontScale, MIN_FONT_SCALE, MAX_FONT_SCALE, 100) / 100;
     // Static light boards always fit the complete sentence. The size control
     // can shrink it, or enlarge it only while there is still room.
-    fontSize = light ? Math.min(fontSize * scale, fit(maxFont * 1.3, 0)) : fontSize * scale;
+    fontSize = light ? Math.min(fontSize * scale, fit(maxSafeFont, 0)) : fontSize * scale;
   } else fontSize = Math.max(minFont, maxFont * 0.86);
-  if (scrolling) fontSize *= bounded(design.fontScale, 70, 130, 100) / 100;
-  const textWidth = measure(fontSize);
-  const overflow = !scrolling && textWidth + fontSize * outlineAllowance > textAreaWidth + 1;
-  return { fontSize, overflow, textWidth, light, scrolling, unit, lines, padding, lineHeight };
+  if (scrolling) fontSize = Math.min(maxSafeFont, fontSize * bounded(design.fontScale, MIN_FONT_SCALE, MAX_FONT_SCALE, 100) / 100);
+  const naturalTextWidth = measure(fontSize);
+  const textScaleX = Math.max(minimumScaleX, Math.min(1, textAreaWidth / (naturalTextWidth + fontSize * outlineAllowance)));
+  const textWidth = naturalTextWidth * textScaleX;
+  const overflow = !scrolling && (naturalTextWidth + fontSize * outlineAllowance) * textScaleX > textAreaWidth + 1;
+  return { fontSize, overflow, textWidth, naturalTextWidth, textScaleX, light, scrolling, unit, lines, padding, lineHeight };
 }
 
 /** Measure layout without drawing, reading pixels or resizing the canvas bitmap. */
@@ -571,7 +630,7 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const template = getTemplate(design.templateId);
   const palette = template.palettes.find((item) => item.id === design.paletteId) || template.palettes[0];
   const accent = design.accent || palette.accent;
-  const { fontSize, overflow, textWidth, light, scrolling, unit, lines, padding, lineHeight } = boardLayout(ctx, design, width, height);
+  const { fontSize, overflow, textWidth, naturalTextWidth, textScaleX, light, scrolling, unit, lines, padding, lineHeight } = boardLayout(ctx, design, width, height);
   const hasSticker = design.sticker !== 'none';
   ctx.save();
   ctx.clearRect(0, 0, width, height);
@@ -580,14 +639,21 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const x = width / 2 + offset;
   const y = height * (design.templateId === 'H2' ? 0.52 : 0.51);
   const bounds = { x, y, width: textWidth, height: fontSize * lineHeight * lines.length };
-  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height, bounds);
+  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height, bounds, textScaleX);
   else {
-    const paint = textPaint(ctx, design, bounds);
-    const core = design.templateId === 'L4' ? textPaint(ctx, design, bounds, true) : paint;
     ctx.save();
-    if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
-    if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
-    lines.forEach((line, index) => styledText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core));
+    ctx.translate(x, y); ctx.scale(textScaleX, 1); ctx.translate(-x, -y);
+    if (design.templateId === 'L5') {
+      lines.forEach((line, index) => ghostText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight,
+        fontSize, accent, width, height, textScaleX));
+    } else {
+      const paintBounds = { ...bounds, width: naturalTextWidth };
+      const paint = textPaint(ctx, design, paintBounds);
+      const core = design.templateId === 'L4' ? textPaint(ctx, design, paintBounds, true) : paint;
+      if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
+      if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
+      lines.forEach((line, index) => styledText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core));
+    }
     ctx.restore();
   }
   if (hasSticker) {

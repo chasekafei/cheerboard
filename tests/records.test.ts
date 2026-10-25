@@ -51,18 +51,22 @@ test('existing template IDs remain valid and new light defaults do not migrate o
     assert.equal(migrated.sticker, 'fries');
   }
   assert.equal(validateDesign({ ...legacyDraft, templateId: 'unknown' }), null);
-  assert.deepEqual(TEMPLATES.map(template => template.id), ['L3', 'L2', 'L4', 'L1', 'H1', 'H2', 'H3']);
+  assert.deepEqual(TEMPLATES.map(template => template.id), ['L3', 'L2', 'L4', 'L5', 'L1', 'H1', 'H2', 'H3']);
   assert.equal(createDesign().templateId, 'L3');
-  assert.equal(createDesign().text, '点击屏幕编辑文案和样式');
+  assert.equal(createDesign().text, '点击屏幕修改文案或样式');
   assert.equal(createDesign().layout, 'single');
   assert.equal(getTemplate('unknown' as TemplateId).id, 'L3');
-  for (const templateId of ['L1', 'L2', 'L3', 'L4'] as TemplateId[]) {
+  for (const templateId of ['L1', 'L2', 'L3', 'L4', 'L5'] as TemplateId[]) {
     const design = createDesign(templateId);
     assert.equal(design.background, '#000000');
     assert.equal(design.sticker, 'none');
     assert.equal(design.border, false);
+    assert.equal(design.text, '点击屏幕修改文案或样式');
   }
   assert.equal(createDesign('L1').foreground, '#FFFFFF');
+  assert.equal(createDesign('L5').foreground, '#25F4EE');
+  const oldText = '点击屏幕编辑文案和样式';
+  assert.equal(validateDesign({ ...legacyDraft, text: oldText })!.text, oldText);
 });
 
 test('new persisted controls preserve valid values and bound invalid numeric input', () => {
@@ -90,7 +94,14 @@ test('new persisted controls preserve valid values and bound invalid numeric inp
   const bounded = validateDesign({ ...saved, dotDensity: 1.7, glow: -5, fontScale: 999 })!;
   assert.equal(bounded.dotDensity, 2);
   assert.equal(bounded.glow, 0);
-  assert.equal(bounded.fontScale, 130);
+  assert.equal(bounded.fontScale, 200);
+  for (const dotDensity of [0, 1, 2, 3]) {
+    assert.equal(validateDesign({ ...saved, dotDensity })!.dotDensity, dotDensity);
+  }
+  const newControls = validateDesign({ ...saved, templateId: 'L5', dotDensity: 0, fontScale: 200 })!;
+  assert.equal(newControls.templateId, 'L5');
+  assert.equal(newControls.dotDensity, 0);
+  assert.equal(newControls.fontScale, 200);
   for (const number of [NaN, Infinity, -Infinity, '3', null]) {
     const restoredInvalid = validateDesign({ ...saved, dotDensity: number, glow: number, fontScale: number, speed: number })!;
     assert.equal(restoredInvalid.dotDensity, 2);
@@ -156,4 +167,18 @@ test('reading legacy records does not rewrite them and new control values surviv
   const reopened = await readRecords();
   assert.deepEqual(reopened[0], next[0]);
   assert.equal(reopened[1].text, legacyDraft.text);
+});
+
+
+test('the former ghost default upgrades to two colored layers while custom layer colors and copy survive', () => {
+  const previous = { ...createDesign('L5'), paletteId: 'red-cyan', foreground: '#FFFFFF', accent: '#42D7FF', text: '我们来日方长', layout: 'double' as const, gradient: true };
+  const restored = validateDesign(previous)!;
+  assert.equal(restored.text, previous.text);
+  assert.equal(restored.layout, 'double');
+  assert.equal(restored.foreground, '#25F4EE');
+  assert.equal(restored.accent, '#FE2C55');
+  assert.equal(restored.gradient, false);
+  const custom = validateDesign({ ...previous, paletteId: 'custom', foreground: '#123456', accent: '#ABCDEF' })!;
+  assert.equal(custom.foreground, '#123456');
+  assert.equal(custom.accent, '#ABCDEF');
 });

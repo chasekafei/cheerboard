@@ -1,11 +1,11 @@
 import { SLOGANS } from './slogans.ts';
-import { DEFAULT_DOT_EMOJI } from './design-values.ts';
+import { DEFAULT_DOT_EMOJI, DEFAULT_LIGHT_TEXT } from './design-values.ts';
 import type { BoardFontId } from './fonts.ts';
 export type { BoardFontId } from './fonts.ts';
 export { SLOGANS, SLOGAN_CATEGORIES, findSlogans, getSloganPage, findSloganByText, type Slogan, type SloganCategory, type SloganFilter } from './slogans.ts';
 
 export type Category = 'light' | 'banner';
-export type TemplateId = 'L1' | 'L2' | 'L3' | 'L4' | 'H1' | 'H2' | 'H3';
+export type TemplateId = 'L1' | 'L2' | 'L3' | 'L4' | 'L5' | 'H1' | 'H2' | 'H3';
 export type DotShape = 'circle' | 'square' | 'heart' | 'star' | 'emoji';
 export type Design = {
   id: string;
@@ -71,6 +71,11 @@ export const TEMPLATES: Template[] = [
     { id: 'pink-neon', name: '粉色霓虹', background: '#000000', foreground: '#FF76D5', accent: '#FF76D5' },
     ...LIGHT_PALETTES,
   ] },
+  { id: 'L5', name: '红蓝重影', category: 'light', description: '青左上、红右下，交叠相加成白', palettes: [
+    { id: 'red-cyan', name: '黑底红青', background: '#000000', foreground: '#25F4EE', accent: '#FE2C55' },
+    { id: 'red-cyan-purple', name: '深紫红青', background: '#160D24', foreground: '#25F4EE', accent: '#FE2C55' },
+    { id: 'red-cyan-navy', name: '藏蓝红青', background: '#071323', foreground: '#25F4EE', accent: '#FE2C55' },
+  ] },
   { id: 'L1', name: '纯色灯牌', category: 'light', description: '黑底白字，简单清楚', palettes: LIGHT_PALETTES },
   { id: 'H1', name: '撞色涂鸦', category: 'banner', description: '一点不规矩，一整块热爱', palettes: [
     { id: 'cobalt', name: '蓝黄涂鸦', background: '#3355ED', foreground: '#FFF185', accent: '#FFB451' },
@@ -98,7 +103,7 @@ export function createDesign(templateId: TemplateId = 'L3'): Design {
   const palette = template.palettes[0];
   return {
     id: 'board-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8),
-    text: template.category === 'light' ? '点击屏幕编辑文案和样式' : SLOGANS.find(slogan => slogan.id === 'C003')!.text,
+    text: template.category === 'light' ? DEFAULT_LIGHT_TEXT : SLOGANS.find(slogan => slogan.id === 'C003')!.text,
     templateId: template.id,
     paletteId: palette.id,
     foreground: palette.foreground,

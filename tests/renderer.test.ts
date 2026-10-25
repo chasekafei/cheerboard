@@ -4,7 +4,8 @@ import { createDesign, type Design } from '../src/catalog.ts';
 import { invalidateFontCache, measureBoard, renderBoard, renderExport } from '../src/renderer.ts';
 
 type Call = { name: string; args: unknown[]; state: Record<string, unknown> };
-const allCanvases: Array<{ canvas: HTMLCanvasElement; calls: Call[] }> = [];
+type SizeWrite = { dimension: 'width' | 'height'; value: number };
+const allCanvases: Array<{ canvas: HTMLCanvasElement; calls: Call[]; readState: () => Record<string, unknown>; sizeWrites: SizeWrite[] }> = [];
 let rasterAlpha: ((x: number, y: number) => number) | undefined;
 
 function canvasEnvironment(alpha?: (x: number, y: number) => number) {
@@ -14,7 +15,10 @@ function canvasEnvironment(alpha?: (x: number, y: number) => number) {
   const canvases = allCanvases;
   function makeCanvas() {
     const calls: Call[] = [];
-    let state: Record<string, unknown> = { font: '10px sans-serif', shadowBlur: 0, globalAlpha: 1 };
+    const sizeWrites: SizeWrite[] = [];
+    let canvasWidth = 300;
+    let canvasHeight = 150;
+    let state: Record<string, unknown> = { font: '10px sans-serif', shadowBlur: 0, globalAlpha: 1, globalCompositeOperation: 'source-over' };
     const stack: Record<string, unknown>[] = [];
     const context = new Proxy({}, {
       get(_target, property) {
@@ -48,11 +52,13 @@ function canvasEnvironment(alpha?: (x: number, y: number) => number) {
       set(_target, property, value) { state[String(property)] = value; return true; },
     });
     const canvas = {
-      width: 300,
-      height: 150,
+      get width() { return canvasWidth; },
+      set width(value: number) { canvasWidth = value; sizeWrites.push({ dimension: 'width', value }); },
+      get height() { return canvasHeight; },
+      set height(value: number) { canvasHeight = value; sizeWrites.push({ dimension: 'height', value }); },
       getContext: () => context,
     };
-    const result = { canvas: canvas as unknown as HTMLCanvasElement, calls };
+    const result = { canvas: canvas as unknown as HTMLCanvasElement, calls, readState: () => ({ ...state }), sizeWrites };
     canvases.push(result);
     return result;
   }
@@ -79,7 +85,8 @@ test('layout measurement does not draw or resize, and scaled scrolling metrics m
   assert.ok(calls.every(call => call.name === 'measureText'));
   assert.deepEqual(renderBoard(canvas, design, options), measured);
   const smaller = measureBoard(canvas, { ...design, fontScale: 70 }, options);
-  assert.ok(Math.abs(measured.fontSize / smaller.fontSize - 130 / 70) < 0.000001);
+  assert.ok(measured.fontSize > smaller.fontSize);
+  assert.ok(measured.fontSize * 1.08 <= options.height * 0.91 + 1);
 });
 
 test('solid text stays one color even with the former split red-blue palette', () => {
@@ -219,13 +226,146 @@ test('font changes and asynchronous font invalidation refresh the point raster',
 
 test('static light boards fit the whole long sentence even at a large requested size', () => {
   const { makeCanvas } = canvasEnvironment();
-  for (const id of ['L1', 'L2', 'L3', 'L4'] as const) {
+  for (const id of ['L1', 'L2', 'L3', 'L4', 'L5'] as const) {
     const target = makeCanvas();
-    const design = { ...light(id), text: '重围颖钦'.repeat(80), fontScale: 130 };
+    const design = { ...light(id), text: '重围颖钦'.repeat(80), fontScale: 200 };
     const metrics = renderBoard(target.canvas, design, { width: 1080, height: 1920 });
     assert.equal(metrics.overflow, false);
     assert.ok(metrics.fontSize > 0 && metrics.textWidth < 1080);
   }
+});
+
+test('landscape uses a larger text band and bounded horizontal compression without cropping', () => {
+  const { makeCanvas } = canvasEnvironment();
+  const target = makeCanvas();
+  const design = { ...light('L1'), text: '我们来日方长', layout: 'double' as const };
+  const normal = measureBoard(target.canvas, design, { width: 1280, height: 720 });
+  assert.ok(normal.fontSize > (720 * 0.72 / (2 * 1.19)) * 1.2);
+  const large = measureBoard(target.canvas, { ...design, fontScale: 200 }, { width: 1280, height: 720 });
+  assert.ok(large.fontSize > normal.fontSize);
+  assert.equal(large.overflow, false);
+  const fitted = renderBoard(target.canvas, { ...light('L1'), text: '一二三四五六七八九十', fontScale: 200 }, { width: 1280, height: 720 });
+  const scales = target.calls.filter(call => call.name === 'scale').map(call => Number(call.args[0]));
+  assert.ok(scales.some(scale => scale >= 0.82 && scale < 1));
+  assert.equal(fitted.overflow, false);
+  assert.ok(fitted.textWidth < 1280);
+});
+
+test('extra-large point density is larger than legacy density one and stays inside the raster budget', () => {
+  const { makeCanvas } = canvasEnvironment();
+  const sizes: number[] = [];
+  for (const dotDensity of [0, 1]) {
+    const target = makeCanvas();
+    renderBoard(target.canvas, { ...light('L3'), dotDensity }, { width: 1280, height: 720 });
+    sizes.push(Number(target.calls.find(call => call.name === 'drawImage')!.args[3]));
+  }
+  assert.ok(sizes[0] > sizes[1] * 1.3);
+});
+
+test('ghost text uses only two diagonal additive layers isolated from every background and restores state', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const pairs = [['#25F4EE', '#FE2C55'], ['#38A7D2', '#DD4050']];
+  for (const [index, [foreground, accent]] of pairs.entries()) {
+    const target = makeCanvas();
+    const background = index ? '#F6E9C3' : '#123456';
+    const context = target.canvas.getContext('2d')!;
+    context.globalCompositeOperation = 'multiply';
+    context.shadowBlur = 7;
+    const priorCalls = new Set(canvases.flatMap(item => item.calls));
+    renderBoard(target.canvas, { ...light('L5'), text: '重影' + index, foreground, accent, background, gradient: true }, { width: 1280, height: 720 });
+    assert.equal(target.calls.find(call => call.name === 'fillRect')!.state.fillStyle, background);
+    assert.equal(target.calls.filter(call => call.name === 'fillText').length, 0);
+    assert.equal(target.calls.filter(call => call.name === 'createLinearGradient').length, 0);
+    const stamp = target.calls.find(call => call.name === 'drawImage')!;
+    assert.equal(stamp.state.globalCompositeOperation, 'source-over');
+    const source = canvases.find(item => item.canvas === stamp.args[0])!;
+    const passes = source.calls.filter(call => !priorCalls.has(call) && call.name === 'fillText');
+    assert.equal(passes.length, 2);
+    assert.deepEqual(passes.map(call => call.state.fillStyle), [foreground, accent]);
+    assert.ok(passes.every(call => call.state.globalCompositeOperation === 'lighter'));
+    const dx = Number(passes[1].args[1]) - Number(passes[0].args[1]);
+    const dy = Number(passes[1].args[2]) - Number(passes[0].args[2]);
+    assert.ok(dx > 0 && dy > 0 && Math.abs(dx - dy) < 0.000001);
+    assert.ok(passes.every(call => !Number(call.state.shadowBlur)));
+    assert.equal(source.calls.filter(call => call.name === 'fillRect' || call.name === 'getImageData').length, 0);
+    assert.equal(source.readState().globalCompositeOperation, 'source-over');
+    assert.equal(target.readState().globalCompositeOperation, 'multiply');
+    assert.equal(target.readState().shadowBlur, 7);
+  }
+  const defaults = createDesign('L5');
+  assert.equal(defaults.foreground, '#25F4EE');
+  assert.equal(defaults.accent, '#FE2C55');
+  for (const offset of [1, 3, 5]) {
+    assert.ok(parseInt(defaults.foreground.slice(offset, offset + 2), 16) + parseInt(defaults.accent.slice(offset, offset + 2), 16) >= 255);
+  }
+});
+
+test('ghost isolation includes compressed glyph edges and caps one reusable viewport surface', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const target = makeCanvas();
+  const width = 1280;
+  renderBoard(target.canvas, { ...light('L5'), text: '一二三四五六七八九十', fontScale: 200 }, { width, height: 720 });
+  const compression = Number(target.calls.find(call => call.name === 'scale')!.args[0]);
+  assert.ok(compression < 1);
+  const stamp = target.calls.find(call => call.name === 'drawImage')!;
+  const left = Number(stamp.args[5]);
+  const right = left + Number(stamp.args[7]);
+  assert.ok(left < 0 && right > width);
+  assert.ok((left - width / 2) * compression + width / 2 >= -0.000001);
+  assert.ok((right - width / 2) * compression + width / 2 <= width + 0.000001);
+  const scrolling = { ...light('L5'), text: '长句重影'.repeat(100), scroll: true };
+  renderBoard(target.canvas, scrolling, { width: 6000, height: 6000 });
+  const surfaceCount = canvases.length;
+  const source = target.calls.filter(call => call.name === 'drawImage').at(-1)!.args[0] as HTMLCanvasElement;
+  assert.ok(source.width <= 2048 && source.height <= 2048 && source.width * source.height <= 2_000_000);
+  for (const offset of [10, 20, 30]) renderBoard(target.canvas, scrolling, { width: 6000, height: 6000, offset });
+  assert.equal(canvases.length, surfaceCount);
+  assert.equal(canvases.find(item => item.canvas === source)!.calls.filter(call => call.name === 'getImageData').length, 0);
+});
+
+test('ghost preview and export stamp the same isolated two-layer result', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const design = { ...light('L5'), text: '同一块重影牌' };
+  const preview = makeCanvas();
+  renderBoard(preview.canvas, design, { width: 1920, height: 1080 });
+  const expected = preview.calls.find(call => call.name === 'drawImage')!;
+  const exported = renderExport(design, 'board');
+  const actual = canvases.find(item => item.canvas === exported)!.calls.find(call => call.name === 'drawImage')!;
+  assert.equal(actual.args[0], expected.args[0]);
+  assert.deepEqual(actual.args.slice(1), expected.args.slice(1));
+  assert.equal(actual.state.globalCompositeOperation, 'source-over');
+});
+
+test('unequal ghost lines and scrolling offsets share fixed bitmap capacity without repeated size assignments', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const target = makeCanvas();
+  const design = { ...light('L5'), text: '短句\n这一行比上面那行长很多', layout: 'double' as const, scroll: true };
+  const before = new Map(canvases.map(item => [item.canvas, item.sizeWrites.length]));
+  renderBoard(target.canvas, design, { width: 1280, height: 720 });
+  const stamps = target.calls.filter(call => call.name === 'drawImage');
+  assert.equal(stamps.length, 2);
+  assert.equal(stamps[0].args[0], stamps[1].args[0]);
+  assert.notEqual(stamps[0].args[3], stamps[1].args[3]);
+  const source = canvases.find(item => item.canvas === stamps[0].args[0])!;
+  const assignments = source.sizeWrites.slice(before.get(source.canvas) || 0);
+  assert.ok(assignments.filter(item => item.dimension === 'width').length <= 1);
+  assert.ok(assignments.filter(item => item.dimension === 'height').length <= 1);
+  const count = source.sizeWrites.length;
+  for (const offset of [-200, -40, 0, 40, 200]) {
+    renderBoard(target.canvas, design, { width: 1280, height: 720, offset });
+  }
+  assert.equal(source.sizeWrites.length, count);
+});
+
+test('manual four-line text reaches the renderer without merging lines or changing content', () => {
+  const { makeCanvas } = canvasEnvironment();
+  const target = makeCanvas();
+  const text = '纵有千古\n横有八荒\n前途似海\n来日方长';
+  const design = { ...light('L1'), text, layout: 'double' as const, fontScale: 200 };
+  const result = renderBoard(target.canvas, design, { width: 1280, height: 720 });
+  assert.deepEqual(target.calls.filter(call => call.name === 'fillText').map(call => call.args[0]), text.split('\n'));
+  assert.equal(result.overflow, false);
+  assert.equal(design.text, text);
 });
 
 test('gradient angles reach Canvas paints and point colors reuse a bounded sprite palette', () => {
