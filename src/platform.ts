@@ -290,9 +290,11 @@ export async function shareImage(dataUrl: string, kind: 'comment' | 'note', snap
     return;
   }
   const filePath = await imagePath(dataUrl, false);
+  const version = await clientVersion();
   await invoke('postNote', {
     title: '做一块自己的加油牌',
     content: '用手机手幅做的加油牌。现场使用请遵守当场规定，勿遮挡他人。发布前可检查并手动挂载小工具。',
+    ...(version >= 9430 ? { pageType: 'photo_publish' } : {}),
     mediaInfo: { image_resources: [{ url: filePath }] },
   }, 180_000);
 }

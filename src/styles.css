@@ -977,162 +977,50 @@ input[type=color]::-webkit-color-swatch { border:1px solid #d5deed; border-radiu
 /* The light board is the whole scene. Only the canvas rotates; its tools and
    sheets stay in screen coordinates. Existing banner/export layouts are separate. */
 .light-player {
-  position:fixed;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
-  z-index:20;
-  width:100%;
-  height:100vh;
-  height:var(--app-height,100vh);
-  overflow:hidden;
-  background:#000;
-  color:#fff
+  position:fixed; top:0; right:0; bottom:0; left:0; z-index:20;
+  width:100%; height:100vh; height:var(--app-height,100vh);
+  overflow:hidden; background:#000; color:#fff
 }
-.light-canvas-wrap {
-  position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
-  overflow:hidden
-}
+.light-canvas-wrap { position:absolute; top:0; right:0; bottom:0; left:0; overflow:hidden }
 #light-board {
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:100%;
-  height:100%;
-  margin:0;
-  transform:translate(-50%,-50%);
-  cursor:pointer;
-  touch-action:manipulation;
-  -webkit-touch-callout:none
+  position:absolute; left:50%; top:50%; width:100%; height:100%; margin:0;
+  transform:translate(-50%,-50%); cursor:pointer; touch-action:manipulation; -webkit-touch-callout:none
 }
-#light-board:focus {
-  outline:2px solid rgba(255,255,255,.8);
-  outline-offset:-3px
-}
+#light-board:focus { outline:2px solid rgba(255,255,255,.8); outline-offset:-3px }
 #light-board:focus:not(:focus-visible) { outline:none }
+.light-control-frame { position:absolute; top:50%; left:50%; pointer-events:none }
 .light-top-tools,.light-tools {
-  position:absolute;
-  z-index:2;
-  visibility:hidden;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .15s
+  position:absolute; z-index:2; visibility:hidden; opacity:0; pointer-events:none; transition:opacity .18s
 }
-.light-player.controls-visible .light-top-tools,
-.light-player.controls-visible .light-tools {
-  visibility:visible;
-  opacity:1
-}
+.light-player.controls-visible .light-top-tools,.light-player.controls-visible .light-tools { visibility:visible; opacity:1 }
 .light-top-tools {
-  top:12px;
-  top:calc(12px + var(--layout-inset-top));
-  left:12px;
-  left:calc(12px + var(--layout-inset-left));
-  right:12px;
-  right:calc(12px + var(--layout-inset-right));
-  display:flex;
-  align-items:center;
-  justify-content:space-between
+  top:calc(12px + var(--control-inset-top,0px)); left:calc(14px + var(--control-inset-left,0px));
+  right:calc(14px + var(--control-inset-right,0px)); display:flex; align-items:center; justify-content:space-between
 }
 .light-top-tools button,.light-tools>button {
-  border:1px solid rgba(255,255,255,.24);
-  color:#fff;
-  background:rgba(12,15,23,.76);
-  pointer-events:none
+  display:inline-flex; align-items:center; justify-content:center; min-width:0; min-height:44px;
+  padding:10px 12px; border:1px solid rgba(255,255,255,.2); border-radius:24px;
+  color:#fff; background:rgba(26,30,40,.9); font-size:12px; font-weight:500; line-height:20px;
+  white-space:nowrap; pointer-events:none
 }
-.light-player.controls-visible .light-top-tools button,
-.light-player.controls-visible .light-tools>button { pointer-events:auto }
-.light-top-tools button {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  min-height:44px;
-  padding:9px 12px;
-  border-radius:9px;
-  font-size:12px;
-  font-weight:500;
-  line-height:1.4;
-  white-space:nowrap
-}
-.light-top-tools .icon { width:16px; height:16px }
+.light-top-tools button>.icon,.light-tools>button>.icon { width:16px; height:16px; flex-shrink:0; margin-right:5px }
+.light-player.controls-visible .light-top-tools button,.light-player.controls-visible .light-tools>button { pointer-events:auto }
 .light-tools {
-  right:14px;
-  right:calc(14px + var(--layout-inset-right));
-  bottom:14px;
-  bottom:calc(14px + var(--layout-inset-bottom));
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  grid-gap:8px;
-  gap:8px;
-  width:294px;
-  max-width:calc(100% - 28px);
-  max-width:calc(100% - 28px - var(--layout-inset-left) - var(--layout-inset-right))
+  right:calc(14px + var(--control-inset-right,0px)); bottom:calc(14px + var(--control-inset-bottom,0px));
+  display:flex; max-width:calc(100% - 28px - var(--control-inset-left,0px) - var(--control-inset-right,0px))
 }
-.light-tools>button {
-  display:grid;
-  grid-template-columns:18px minmax(0,1fr);
-  grid-template-rows:auto auto;
-  grid-gap:2px 6px;
-  gap:2px 6px;
-  align-items:center;
-  min-width:0;
-  min-height:54px;
-  padding:10px 8px;
-  border-radius:9px;
-  text-align:left;
-  font-size:12px;
-  line-height:1.35
-}
-.light-tools>button>.icon {
-  grid-column:1;
-  grid-row:1 / span 2;
-  width:18px;
-  height:18px
-}
-.light-tools>button>span { grid-column:2; grid-row:1; white-space:nowrap }
-.light-tools>button>small {
-  grid-column:2;
-  grid-row:2;
-  min-width:0;
-  overflow:hidden;
-  color:rgba(255,255,255,.6);
-  font-size:10px;
-  line-height:1.35;
-  text-overflow:ellipsis;
-  white-space:nowrap
-}
-.light-top-tools button:active,.light-tools>button:active,
-.light-tools>button.selected,.light-tools>button[aria-pressed=true] {
-  border-color:rgba(255,255,255,.55);
-  background:rgba(255,255,255,.17)
-}
+.light-tools>button+button { margin-left:6px }
+.direction-glyph { margin-right:5px; font-size:18px; line-height:16px }
+.compact-controls .light-tools { display:grid; width:328px; grid-gap:6px }
+.compact-controls .light-tools>button { padding:10px 6px; border-radius:12px }
+.compact-controls .light-tools>button+button { margin-left:0 }
+.light-top-tools button:active,.light-tools>button:active,.light-tools>button[aria-pressed=true] { border-color:#b7c9f3; background:#334664 }
 .light-player button:focus { outline:2px solid #dce7ff; outline-offset:3px }
 .light-player button:focus:not(:focus-visible) { outline:none }
 .light-explanation {
-  position:absolute;
-  z-index:1;
-  left:16px;
-  right:16px;
-  bottom:18px;
-  bottom:calc(18px + var(--layout-inset-bottom));
-  color:rgba(255,255,255,.55);
-  text-align:center;
-  font-size:11px;
-  line-height:1.7;
-  text-shadow:0 1px 4px rgba(0,0,0,.7);
-  pointer-events:none
-}
-.light-explanation small,.light-explanation span {
-  display:block;
-  margin-top:3px;
-  color:rgba(255,255,255,.4);
-  font-size:10px
+  position:absolute; z-index:1; left:16px; right:16px; bottom:calc(18px + var(--control-inset-bottom,0px));
+  color:rgba(255,255,255,.55); text-align:center; font-size:11px; line-height:1.7;
+  text-shadow:0 1px 4px rgba(0,0,0,.7); pointer-events:none
 }
 .light-player.controls-visible .light-explanation { visibility:hidden }
 .light-sheet-backdrop {
@@ -1261,13 +1149,50 @@ input[type=color]::-webkit-color-swatch { border:1px solid #d5deed; border-radiu
   .light-sheet-body { padding-left:18px; padding-right:18px; padding-bottom:20px }
 }
 @media(max-width:320px) {
-  .light-top-tools { top:calc(9px + var(--layout-inset-top)); left:calc(10px + var(--layout-inset-left)); right:calc(10px + var(--layout-inset-right)) }
-  .light-top-tools button { min-height:44px; padding:8px 10px }
-  .light-tools { right:calc(10px + var(--layout-inset-right)); bottom:calc(10px + var(--layout-inset-bottom)); grid-gap:6px; gap:6px; max-width:calc(100% - 20px - var(--layout-inset-left) - var(--layout-inset-right)) }
-  .light-tools>button { grid-gap:2px 5px; gap:2px 5px; padding:9px 6px; font-size:11px }
-  .light-tools>button>small { font-size:9px }
-  .light-sheet-header { padding-left:calc(15px + var(--layout-inset-left)); padding-right:calc(15px + var(--layout-inset-right)) }
-  .light-sheet-body { padding-left:calc(15px + var(--layout-inset-left)); padding-right:calc(15px + var(--layout-inset-right)) }
+  .light-sheet-header { padding-left:calc(12px + var(--layout-inset-left)); padding-right:calc(12px + var(--layout-inset-right)) }
+  .light-sheet-body { padding-left:calc(12px + var(--layout-inset-left)); padding-right:calc(12px + var(--layout-inset-right)) }
 }
 
 body.light-page-active { overflow:hidden }
+
+/* Effect choices show the same canvas renderer as the actual board. */
+.light-effect-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-gap:10px; margin:0 0 24px }
+.light-effect-option { position:relative; min-width:0; padding:5px 5px 9px; border:2px solid #e7ebf3; border-radius:12px; background:#f7f9fc; color:var(--ink); text-align:left }
+.light-effect-option canvas { display:block; width:100%; height:70px; border-radius:7px; background:#000; object-fit:contain }
+.light-effect-option>span { display:block; padding:8px 5px 0; font-size:12px; line-height:18px }
+.light-effect-option>.icon { position:absolute; right:9px; bottom:11px; width:16px; height:16px; color:var(--blue) }
+.light-effect-option.selected { border-color:var(--blue); background:#edf3ff }
+.light-effect-option:last-child { grid-column:span 2 }
+.light-effect-option:last-child canvas { height:62px }
+.color-palette-group,.color-gradient-group { min-width:0; margin:0; padding:0; border:0 }
+.color-palette-group:disabled,.color-gradient-group:disabled,.color-disabled { opacity:.38 }
+.color-palette-group:disabled button { cursor:default }
+.color-palette-group+.custom-colors { margin-top:14px }
+.emoji-color-hint { margin:0 0 13px; color:#66748d; font-size:12px; line-height:1.7 }
+
+/* Sharing keeps the image and its two delivery actions in the foreground. */
+.share-modal { width:620px; padding:22px; border-radius:18px }
+.share-modal .modal-header { align-items:center; padding-bottom:16px }
+.share-modal .modal-header h2 { font-size:18px; letter-spacing:0 }
+.share-modal .modal-header p { margin-top:4px; color:#6e7b92 }
+.share-modal .export-layout-image-first { display:block }
+.share-modal .export-preview { min-height:180px; max-height:none; padding:12px; background:#edf0f6; border-radius:12px }
+.share-modal .export-preview img { width:auto; height:auto; max-width:100%; max-height:46vh; max-height:calc(var(--app-height,100vh) * .46); box-shadow:none }
+.share-modal .export-settings { margin-top:13px }
+.share-modal .export-main-actions { grid-template-columns:repeat(2,minmax(0,1fr)); grid-gap:10px; margin-top:18px }
+.share-modal .export-main-actions button { min-height:50px; padding:12px 8px; white-space:nowrap; font-size:14px }
+.share-modal .export-main-actions .secondary-button { border:1px solid #c9d5ee; color:var(--blue); background:#f3f6ff }
+.share-modal .export-more-formats summary { min-height:32px; padding:7px 0; color:#63718b; font-size:12px; cursor:pointer }
+.share-modal .export-more-formats[open] summary { margin-bottom:8px }
+.share-modal .export-options { grid-template-columns:repeat(2,minmax(0,1fr)); grid-gap:7px }
+.share-modal .export-options>button:last-child { grid-column:span 2 }
+.share-modal .export-hint { color:#768198; text-align:center; font-size:11px; line-height:1.6 }
+.share-modal .memory-fields { margin:0 0 12px; grid-template-columns:repeat(2,minmax(0,1fr)); grid-gap:10px }
+.share-modal .memory-fields label { min-width:0; font-size:12px; color:#65738b }
+.share-modal .memory-fields input { width:100%; min-width:0; min-height:42px; font-size:14px }
+@media(max-width:480px) {
+  .export-backdrop { padding:12px; padding-top:calc(12px + var(--layout-inset-top)); padding-bottom:calc(12px + var(--layout-inset-bottom)) }
+  .share-modal { padding:18px }
+  .share-modal .export-preview { padding:8px }
+}
+@media(prefers-reduced-motion:reduce) { .light-top-tools,.light-tools { transition:none } }

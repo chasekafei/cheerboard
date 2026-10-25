@@ -3,6 +3,12 @@ import test from 'node:test';
 import {
   isNative, loadLocal, saveLocal, saveImage, shareImage, getInsets, NativeUnavailableError,
 } from '../src/platform.ts';
+import { localDateInputValue } from '../src/export-view.ts';
+
+test('memory-card dates use the local calendar at both ends of the day', () => {
+  assert.equal(localDateInputValue(new Date(2026, 0, 1, 0, 15)), '2026-01-01');
+  assert.equal(localDateInputValue(new Date(2026, 11, 31, 23, 45)), '2026-12-31');
+});
 
 type Result = Record<string, unknown>;
 type Options = Record<string, unknown> & {
@@ -171,12 +177,30 @@ test('Promise APIs receive local file handles for album, note and comment', asyn
   await shareImage(image, 'comment', { text: '加油' });
   assert.equal(calls.find(([kind]) => kind === 'album')![1].filePath, 'xhsfile://tmp/image.png');
   const note = calls.find(([kind]) => kind === 'note')![1];
+  assert.equal(note.pageType, 'photo_publish');
   assert.deepEqual(note.mediaInfo, { image_resources: [{ url: 'xhsfile://tmp/image.png' }] });
   const comment = calls.find(([kind]) => kind === 'comment')![1];
   const payload = comment.payload as Result;
   assert.deepEqual(payload.media_bean, [{ media_type: 'image', cover_image_url: 'xhsfile://tmp/image.png' }]);
   assert.deepEqual(JSON.parse(String(payload.miniToolSnapshotInfo)), { text: '加油' });
   assert.equal(comment.saveToAlbum, false);
+});
+
+test('photo publishing sets pageType only on supported clients and keeps legacy image publishing available', async () => {
+  for (const version of [9430001, 9429001, null]) {
+    let note: Options | undefined;
+    environment({
+      postNote: options => { note = options; options.success({ errMsg: 'postNote:ok' }); },
+    }, version);
+    await shareImage(image, 'note');
+    assert.ok(note);
+    assert.deepEqual(note.mediaInfo, { image_resources: [{ url: image }] });
+    if (version !== null && Math.floor(version / 1000) >= 9430) {
+      assert.equal(note.pageType, 'photo_publish');
+    } else {
+      assert.equal(Object.prototype.hasOwnProperty.call(note, 'pageType'), false);
+    }
+  }
 });
 
 test('snapshot limits use UTF-8 bytes and prevent invalid native sharing', async () => {

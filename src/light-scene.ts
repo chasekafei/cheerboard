@@ -1,6 +1,13 @@
 import type { Design } from './catalog.ts';
 import { measureBoard, renderBoard } from './renderer.ts';
 
+/** CSS pixels per second, using the unrotated board's displayed CSS height. */
+export function scrollPixelsPerSecond(speed: number, boardHeight: number): number {
+  const level = Number.isFinite(speed) ? Math.max(1, Math.min(5, Math.round(speed))) : 1;
+  const height = Number.isFinite(boardHeight) ? Math.max(0, boardHeight) : 0;
+  return [100, 170, 260, 380, 540][level - 1] * height / 720;
+}
+
 export function lightGeometry(width: number, height: number, orientation: Design['orientation'], dpr = 1) {
   const viewportWidth = Math.max(1, width);
   const viewportHeight = Math.max(1, height);
@@ -11,51 +18,108 @@ export function lightGeometry(width: number, height: number, orientation: Design
   return { cssWidth, cssHeight, rotation: rotate ? 90 : 0, width: Math.max(1, Math.round(cssWidth * ratio)), height: Math.max(1, Math.round(cssHeight * ratio)) };
 }
 
+function visualKey(design: Design): string {
+  return JSON.stringify([design.text, design.templateId, design.paletteId, design.foreground,
+    design.background, design.accent, design.dotShape, design.dotEmoji, design.dotDensity,
+    design.glow, design.fontScale, design.fontId, design.gradient, design.gradientEnd,
+    design.gradientAngle, design.layout, design.sticker, design.border, design.scroll]);
+}
+
 export function mountLightScene(root: HTMLElement, getDesign: () => Design, toggleControls: () => void) {
   const canvas = root.querySelector<HTMLCanvasElement>('#light-board')!;
   let frame = 0;
   let obscured = false;
   let disposed = false;
-  let progress = 0;
-  let previous = 0;
+  let completed = false;
+  // Keep position in CSS pixels so DPR changes never change the apparent speed.
+  let offset = 0;
+  let previous: number | null = null;
   let distance = 0;
   let geometry = lightGeometry(1, 1, 'landscape');
-  let measured = { fontSize: 0, textWidth: 0 };
+  let current: Design | null = null;
+  let lastVisualKey = '';
+  let lastGeometryKey = '';
+  let lastMeasureKey = '';
+  let lastMotionKey = '';
 
-  const paint = (time: number) => {
-    if (disposed) return;
-    const design = getDesign();
-    const scrolling = design.scroll && !obscured && !document.hidden;
-    if (scrolling) {
-      if (previous) progress += Math.min(60, time - previous) / 1000 * [0, 55, 85, 120, 170, 230][design.speed] * geometry.height / 720;
-      if (progress >= distance * 2) {
-        if (design.loop) progress = 0;
-        else { renderBoard(canvas, { ...design, scroll: false }, geometry); previous = 0; return; }
-      }
-      renderBoard(canvas, design, { ...geometry, offset: (distance - progress) * (design.direction === 'left' ? 1 : -1) });
-      previous = time;
-      if (design.loop || progress < distance * 2) frame = requestAnimationFrame(paint);
-    } else renderBoard(canvas, { ...design, scroll: false }, geometry);
+  const canAnimate = () => !disposed && !obscured && !document.hidden && Boolean(current?.scroll) && !completed;
+  const cancel = () => {
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
+    previous = null;
   };
-  const repaint = () => {
+  const draw = () => {
+    if (!current || disposed) return;
+    if (completed) renderBoard(canvas, { ...current, scroll: false }, geometry);
+    else renderBoard(canvas, current, { ...geometry, offset: offset * geometry.width / geometry.cssWidth });
+  };
+  const schedule = () => {
+    if (!frame && canAnimate()) frame = requestAnimationFrame(paint);
+  };
+  const paint = (time: number) => {
+    frame = 0;
+    if (!canAnimate() || !current) { previous = null; return; }
+    if (previous !== null) {
+      const elapsed = Math.max(0, Math.min(100, time - previous)) / 1000;
+      const direction = current.direction === 'left' ? -1 : 1;
+      offset += elapsed * scrollPixelsPerSecond(current.speed, geometry.cssHeight) * direction;
+      const passedEdge = direction < 0 ? offset <= -distance : offset >= distance;
+      if (passedEdge) {
+        if (current.loop) {
+          const overshoot = direction < 0 ? -distance - offset : offset - distance;
+          // Preserve the sub-frame remainder instead of resetting the animation clock.
+          offset = direction < 0 ? distance - overshoot % (distance * 2) : -distance + overshoot % (distance * 2);
+        } else {
+          completed = true;
+          offset = 0;
+        }
+      }
+    }
+    previous = completed ? null : time;
+    draw();
+    schedule();
+  };
+  /** Force a measurement after asynchronously loaded fonts change glyph metrics. */
+  const repaint = (force = false) => {
     if (disposed) return;
-    cancelAnimationFrame(frame);
-    const design = getDesign();
-    geometry = lightGeometry(root.clientWidth, root.clientHeight, design.orientation, window.devicePixelRatio || 1);
-    canvas.style.width = geometry.cssWidth + 'px';
-    canvas.style.height = geometry.cssHeight + 'px';
-    canvas.style.transform = 'translate(-50%, -50%) rotate(' + geometry.rotation + 'deg)';
-    measured = measureBoard(canvas, design, geometry);
-    distance = (geometry.width + measured.textWidth) / 2 + measured.fontSize * 0.25;
-    progress = distance;
-    previous = 0;
-    paint(0);
+    const design = { ...getDesign() };
+    const nextGeometry = lightGeometry(root.clientWidth, root.clientHeight, design.orientation, window.devicePixelRatio || 1);
+    const geometryKey = JSON.stringify(nextGeometry);
+    const nextVisualKey = visualKey(design);
+    const measureKey = JSON.stringify([nextGeometry.width, nextGeometry.height, design.text,
+      design.templateId, design.layout, design.fontScale, design.fontId, design.scroll]);
+    const motionKey = JSON.stringify([design.speed, design.direction, design.loop]);
+    const changed = force || geometryKey !== lastGeometryKey || nextVisualKey !== lastVisualKey || motionKey !== lastMotionKey;
+    if (!changed) { schedule(); return; }
+
+    cancel();
+    const geometryChanged = geometryKey !== lastGeometryKey;
+    const reset = !current || current.scroll !== design.scroll || current.text !== design.text || current.layout !== design.layout;
+    const restart = completed && motionKey !== lastMotionKey;
+    geometry = nextGeometry;
+    if (geometryChanged) {
+      canvas.style.width = geometry.cssWidth + 'px';
+      canvas.style.height = geometry.cssHeight + 'px';
+      canvas.style.transform = 'translate(-50%, -50%) rotate(' + geometry.rotation + 'deg)';
+    }
+    if (force || measureKey !== lastMeasureKey) {
+      const measured = measureBoard(canvas, design, geometry);
+      distance = ((geometry.width + measured.textWidth) / 2 + measured.fontSize * 0.25) * geometry.cssWidth / geometry.width;
+    }
+    if (reset || restart) { offset = 0; completed = false; }
+    else if (distance > 0) offset = Math.max(-distance, Math.min(distance, offset));
+    current = design;
+    lastVisualKey = nextVisualKey;
+    lastGeometryKey = geometryKey;
+    lastMeasureKey = measureKey;
+    lastMotionKey = motionKey;
+    draw();
+    schedule();
   };
   const resize = () => repaint();
   const visibility = () => {
-    cancelAnimationFrame(frame);
-    previous = 0;
-    if (!document.hidden) repaint();
+    if (document.hidden) cancel();
+    else repaint();
   };
   const keyboard = (event: KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleControls(); }
@@ -68,10 +132,18 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
   repaint();
   return {
     repaint,
-    setObscured(value: boolean) { obscured = value; repaint(); },
+    setObscured(value: boolean) {
+      if (disposed || obscured === value) return;
+      obscured = value;
+      // A sheet freezes the current scrolling frame; it never changes the layout
+      // to fit the complete sentence. Edits may still repaint that frozen frame.
+      if (obscured) cancel();
+      else repaint();
+    },
     destroy() {
+      if (disposed) return;
       disposed = true;
-      cancelAnimationFrame(frame);
+      cancel();
       canvas.removeEventListener('click', toggleControls);
       canvas.removeEventListener('keydown', keyboard);
       window.removeEventListener('resize', resize);
