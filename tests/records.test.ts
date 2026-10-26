@@ -32,6 +32,9 @@ test('legacy drafts keep their content and settings while receiving new design v
   assert.equal(migrated.dotShape, 'circle');
   assert.equal(migrated.dotEmoji, '🏓');
   assert.equal(migrated.dotDensity, 2);
+  assert.equal(migrated.dotStyle, 'classic');
+  assert.equal(migrated.decorationId, 'none');
+  assert.equal(migrated.decorationSeed, 1);
   assert.equal(migrated.glow, 65);
   assert.equal(migrated.fontScale, 100);
   assert.equal(migrated.fontId, 'sans');
@@ -53,7 +56,7 @@ test('existing template IDs remain valid and new light defaults do not migrate o
   assert.equal(validateDesign({ ...legacyDraft, templateId: 'unknown' }), null);
   assert.deepEqual(TEMPLATES.map(template => template.id), ['L3', 'L2', 'L4', 'L5', 'L1', 'H1', 'H2', 'H3']);
   assert.equal(createDesign().templateId, 'L3');
-  assert.equal(createDesign().text, '点击屏幕修改文案或样式');
+  assert.equal(createDesign().text, '点击屏幕查看菜单');
   assert.equal(createDesign().layout, 'single');
   assert.equal(getTemplate('unknown' as TemplateId).id, 'L3');
   for (const templateId of ['L1', 'L2', 'L3', 'L4', 'L5'] as TemplateId[]) {
@@ -61,12 +64,21 @@ test('existing template IDs remain valid and new light defaults do not migrate o
     assert.equal(design.background, '#000000');
     assert.equal(design.sticker, 'none');
     assert.equal(design.border, false);
-    assert.equal(design.text, '点击屏幕修改文案或样式');
+    assert.equal(design.text, '点击屏幕查看菜单');
+    assert.equal(design.dotStyle, 'fluorescent');
+    assert.equal(design.dotDensity, 1);
+    assert.equal(design.decorationId, 'hearts');
+    assert.equal(design.decorationSeed, 1);
   }
+  assert.equal(createDesign('L3').foreground, '#FFF12A');
+  assert.equal(createDesign('L3').accent, '#FF3C88');
   assert.equal(createDesign('L1').foreground, '#FFFFFF');
   assert.equal(createDesign('L5').foreground, '#25F4EE');
   const oldText = '点击屏幕编辑文案和样式';
-  assert.equal(validateDesign({ ...legacyDraft, text: oldText })!.text, oldText);
+  assert.equal(validateDesign({ ...legacyDraft, text: oldText })!.text, '点击屏幕查看菜单');
+  assert.equal(validateDesign({ ...legacyDraft, text: '点击屏幕修改文案或样式' })!.text, '点击屏幕查看菜单');
+  assert.equal(validateDesign({ ...legacyDraft, text: '点击屏幕修改文案或样式，加油！' })!.text, '点击屏幕修改文案或样式，加油！');
+  assert.equal(validateDesign({ ...legacyDraft, templateId: 'H1', text: oldText })!.text, oldText);
 });
 
 test('new persisted controls preserve valid values and bound invalid numeric input', () => {
@@ -77,6 +89,9 @@ test('new persisted controls preserve valid values and bound invalid numeric inp
     dotShape: 'emoji',
     dotEmoji: '👩🏽‍🚀',
     dotDensity: 3,
+    dotStyle: 'fine',
+    decorationId: 'orbit',
+    decorationSeed: 0xabcdef12,
     glow: 0,
     fontScale: 130,
     fontId: 'serif',
@@ -86,7 +101,7 @@ test('new persisted controls preserve valid values and bound invalid numeric inp
     orientation: 'portrait',
   };
   const restored = validateDesign(saved)!;
-  for (const key of ['accent', 'dotShape', 'dotEmoji', 'dotDensity', 'glow', 'fontScale', 'gradient', 'gradientEnd', 'gradientAngle', 'orientation'] as const) {
+  for (const key of ['accent', 'dotShape', 'dotEmoji', 'dotDensity', 'dotStyle', 'decorationId', 'decorationSeed', 'glow', 'fontScale', 'gradient', 'gradientEnd', 'gradientAngle', 'orientation'] as const) {
     assert.equal(restored[key], saved[key], key);
   }
   assert.equal(restored.fontId, 'sans');
@@ -124,6 +139,13 @@ test('new persisted controls preserve valid values and bound invalid numeric inp
   assert.equal(invalidEffects.orientation, 'landscape');
   assert.equal(validateDesign({ ...saved, gradientAngle: -1 })!.gradientAngle, 0);
   assert.equal(validateDesign({ ...saved, gradientAngle: 361 })!.gradientAngle, 360);
+  const invalidNew = validateDesign({ ...saved, dotStyle: 'unknown', decorationId: 'unknown', decorationSeed: NaN })!;
+  assert.equal(invalidNew.dotStyle, 'classic');
+  assert.equal(invalidNew.decorationId, 'none');
+  assert.equal(invalidNew.decorationSeed, 1);
+  assert.equal(validateDesign({ ...saved, decorationSeed: -1 })!.decorationSeed, 0);
+  assert.equal(validateDesign({ ...saved, decorationSeed: 0x100000000 })!.decorationSeed, 0xffffffff);
+  assert.equal(validateDesign({ ...saved, decorationSeed: 12.7 })!.decorationSeed, 13);
 });
 
 test('emoji labels retain a complete first cluster without depending on Intl.Segmenter', () => {
@@ -160,7 +182,7 @@ test('reading legacy records does not rewrite them and new control values surviv
   assert.equal(writes, 0);
   assert.equal(stored.get('boards-v1'), original);
 
-  const design = { ...createDesign('L4'), id: 'new-neon', accent: '#AB1234', dotShape: 'heart' as const, dotEmoji: '👩🏽‍🚀', dotDensity: 1, glow: 42, fontScale: 85, fontId: 'sans' as const, gradient: true, gradientEnd: '#Ff7654', gradientAngle: 135, orientation: 'portrait' as const };
+  const design = { ...createDesign('L4'), id: 'new-neon', accent: '#AB1234', dotShape: 'heart' as const, dotEmoji: '👩🏽‍🚀', dotDensity: 1, dotStyle: 'fine' as const, decorationId: 'rally' as const, decorationSeed: 12345, glow: 42, fontScale: 85, fontId: 'sans' as const, gradient: true, gradientEnd: '#Ff7654', gradientAngle: 135, orientation: 'portrait' as const };
   const next = await writeRecord(migrated, design);
   assert.equal(next.length, 5);
   assert.equal(migrated[0].id, 'legacy-0');

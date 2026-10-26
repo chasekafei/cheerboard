@@ -1,7 +1,9 @@
 import { getTemplate, type Design } from './catalog.ts';
 import { normalizeDotEmoji, MIN_DOT_DENSITY, MAX_DOT_DENSITY, MIN_FONT_SCALE, MAX_FONT_SCALE } from './design-values.ts';
-import { getBoardFont, TUBE_FONT } from './fonts.ts';
+import { getEffectFont } from './fonts.ts';
 import { getTextLines } from './text-layout.ts';
+import { drawBoardDecorations } from './decorations.ts';
+import { drawNeonText } from './neon.ts';
 
 export type RenderOptions = { width?: number; height?: number; offset?: number; repeatGap?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
@@ -15,10 +17,21 @@ let ghostLayer: HTMLCanvasElement | null = null;
 let ghostLayerKey = '';
 const MAX_GHOST_EDGE = 2048;
 const MAX_GHOST_PIXELS = 2_000_000;
-const dotSprites = new Map<string, HTMLCanvasElement>();
+type SpriteRect = { x: number; y: number; width: number; height: number };
+type DotSprite = { canvas: HTMLCanvasElement; bleed: number; span: number; halo: SpriteRect; core: SpriteRect | null };
+const dotSprites = new Map<string, DotSprite>();
 const MAX_DOT_SPRITES = 32;
 const DOT_SAMPLE_SCALE = 4;
 const MAX_REPEAT_COPIES = 54;
+const FINE_EM = 64;
+const FINE_SIDE = 96;
+const MAX_FINE_GLYPHS = 128;
+const MAX_FINE_LINES = 16;
+let fineMask: HTMLCanvasElement | null = null;
+type FineGlyph = { points: Float32Array; pitch: number };
+type FineLine = { glyphs: { text: string; center: number; advance: number }[]; width: number };
+const fineGlyphs = new Map<string, FineGlyph>();
+const fineLines = new Map<string, FineLine>();
 type TextBounds = { x: number; y: number; width: number; height: number };
 type Paint = string | CanvasGradient;
 
@@ -43,12 +56,13 @@ export function invalidateFontCache(): void {
   dotMaskKey = '';
   dotMaskPixels = null;
   ghostLayerKey = '';
+  fineGlyphs.clear();
+  fineLines.clear();
 }
 
 function boardFont(design: Design, size: number): string {
-  const font = design.templateId === 'L4' ? TUBE_FONT : getBoardFont(design.fontId);
-  const weight = design.templateId === 'L3' ? 400 : font.weight || 700;
-  return weight + ' ' + size + 'px ' + font.family;
+  const font = getEffectFont(design.templateId);
+  return font.weight + ' ' + size + 'px ' + font.family;
 }
 
 function bounded(value: number, minimum: number, maximum: number, fallback: number): number {
@@ -389,7 +403,7 @@ function ghostText(ctx: Context, design: Design, line: string, x: number, y: num
   }
 }
 
-function styledText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number, accent: string, paint: Paint, core: Paint): void {
+function styledText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number, accent: string, paint: Paint, core: Paint, viewportWidth: number, viewportHeight: number, textScaleX: number): void {
   ctx.font = boardFont(design, fontSize);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -405,44 +419,11 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
     ctx.lineWidth = fontSize * 0.065;
     ctx.strokeText(line, x, y);
   } else if (design.templateId === 'L4') {
-    const strength = bounded(design.glow, 0, 100, 65) / 100;
-    ctx.save();
-    const glowColor = design.gradient ? mixedColor(design.foreground, design.gradientEnd, 0.5) : design.foreground;
-    // A thin font supplies the tube itself; avoid tracing both sides of a heavy
-    // glyph as separate rectangular tubes. Soft light spreads beyond that tube.
-    ctx.fillStyle = paint;
-    ctx.shadowColor = glowColor;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    if (strength > 0) {
-      // Project the same colored light downward onto the board, then soften
-      // the tube's own halo. Only the shadow moves; the glyph never doubles.
-      ctx.globalAlpha = strength * 0.6;
-      ctx.shadowOffsetY = fontSize * (0.1 + strength * 0.1);
-      ctx.shadowBlur = fontSize * (0.12 + strength * 0.18);
-      ctx.fillText(line, x, y);
-      ctx.shadowOffsetY = 0;
-      ctx.globalAlpha = strength * 0.72;
-      ctx.shadowBlur = fontSize * (0.22 + strength * 0.28);
-      ctx.fillText(line, x, y);
-      ctx.globalAlpha = strength * 0.8;
-      ctx.shadowBlur = fontSize * (0.07 + strength * 0.1);
-      ctx.fillText(line, x, y);
-    }
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = paint;
-    ctx.shadowBlur = fontSize * 0.025 * strength;
-    ctx.lineWidth = Math.max(0.6, fontSize * 0.016);
-    ctx.strokeText(line, x, y);
-    ctx.fillText(line, x, y);
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = core;
-    ctx.strokeStyle = core;
-    ctx.lineWidth = Math.max(0.35, fontSize * 0.0025);
-    ctx.globalAlpha = 0.95;
-    ctx.strokeText(line, x, y);
-    ctx.fillText(line, x, y);
-    ctx.restore();
+    drawNeonText(ctx, line, x, y, fontSize, {
+      glow: design.glow, paint, core,
+      glowColor: design.gradient ? mixedColor(design.foreground, design.gradientEnd, 0.5) : design.foreground,
+      viewportWidth, viewportHeight, textScaleX,
+    });
     return;
   } else if (design.templateId === 'H1') {
     ctx.strokeStyle = INK;
@@ -473,53 +454,363 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
   ctx.fillText(line, x, y);
 }
 
-function dotSprite(design: Design, spacing: number, color: string): HTMLCanvasElement {
+function dotSprite(design: Design, spacing: number, color: string): DotSprite {
   const shape = ['square', 'heart', 'star', 'emoji'].includes(design.dotShape) ? design.dotShape : 'circle';
   const emoji = shape === 'emoji' ? normalizeDotEmoji(design.dotEmoji) : '';
-  const side = Math.max(8, Math.min(128, Math.ceil(spacing)));
+  const vivid = shape !== 'emoji' && design.dotStyle === 'fluorescent';
+  const luminous = shape !== 'emoji' && (design.dotStyle === 'fluorescent' || design.dotStyle === 'fine');
+  const base = Math.max(8, Math.min(luminous ? 32 : 128, Math.ceil(spacing)));
+  const margin = luminous ? Math.ceil(base * (vivid ? 0.95 : 0.7)) : 0;
+  const side = base + margin * 2;
   const glow = shape === 'emoji' ? 0 : bounded(design.glow, 0, 100, 65);
-  const key = JSON.stringify([shape, emoji, side, shape === 'emoji' ? '' : color, glow]);
+  const key = JSON.stringify([shape, emoji, base, luminous, shape === 'emoji' ? 'emoji' : design.dotStyle, shape === 'emoji' ? '' : color, glow]);
   const cached = dotSprites.get(key);
   if (cached) return cached;
   const sprite = document.createElement('canvas');
   sprite.width = side;
-  sprite.height = side;
+  sprite.height = side + (luminous ? base : 0);
   const ctx = sprite.getContext('2d');
   if (ctx) {
     const middle = side / 2;
     ctx.fillStyle = color;
     ctx.shadowColor = color;
-    ctx.shadowBlur = side * 0.07 * glow / 100;
+    ctx.shadowBlur = base * (vivid ? 0.75 : luminous ? 0.5 : 0.07) * glow / 100;
     if (shape === 'emoji') {
       ctx.font = Math.round(side * 0.7) + 'px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(emoji, middle, middle, side * 0.8);
-    } else if (shape === 'square') ctx.fillRect(side * 0.18, side * 0.18, side * 0.64, side * 0.64);
-    else if (shape === 'heart') heart(ctx, middle, middle, side * 0.27, color, color);
-    else if (shape === 'star') star(ctx, middle, middle, side * 0.36, color, color);
-    else { ctx.beginPath(); ctx.arc(middle, middle, side * 0.34, 0, Math.PI * 2); ctx.fill(); }
+    } else {
+      const paintShape = (scale: number, fill: string, cx = middle, cy = middle) => {
+        ctx.fillStyle = fill;
+        if (shape === 'square') ctx.fillRect(cx - base * 0.32 * scale, cy - base * 0.32 * scale, base * 0.64 * scale, base * 0.64 * scale);
+        else if (shape === 'heart') heart(ctx, cx, cy, base * 0.27 * scale, fill, fill);
+        else if (shape === 'star') star(ctx, cx, cy, base * 0.36 * scale, fill, fill);
+        else { ctx.beginPath(); ctx.arc(cx, cy, base * (luminous && !vivid ? 0.31 : 0.34) * scale, 0, Math.PI * 2); ctx.fill(); }
+      };
+      if (luminous) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, side, side); ctx.clip(); }
+      paintShape(1, color);
+      if (vivid && glow > 0) {
+        ctx.shadowBlur = base * 0.28 * glow / 100;
+        paintShape(1, color);
+      }
+      if (luminous) {
+        ctx.restore();
+        ctx.shadowBlur = 0;
+        // The lower atlas cell is strictly core-only. It is drawn only after
+        // all LED halos have been composited on the board.
+        paintShape(design.dotStyle === 'fine' ? 0.68 : 0.7, '#FFFFFF', base / 2, side + base / 2);
+      }
+    }
   }
   if (dotSprites.size >= MAX_DOT_SPRITES) {
     const oldest = dotSprites.keys().next().value;
     if (typeof oldest === 'string') dotSprites.delete(oldest);
   }
-  dotSprites.set(key, sprite);
-  return sprite;
+  const result = { canvas: sprite, bleed: margin / base, span: side / base,
+    halo: { x: 0, y: 0, width: side, height: side },
+    core: luminous ? { x: 0, y: side, width: base, height: base } : null };
+  dotSprites.set(key, result);
+  return result;
+}
+
+/** Topology-preserving thinning, followed by arc-length LED sampling.
+ * Input is one alpha value per pixel; output triples are x, y, uniform LED size.
+ * A glyph-sized 96² ceiling bounds both the thinning work and graph storage.
+ */
+export function sampleStrokeCenterline(alpha: ArrayLike<number>, width: number, height: number, pitch: number): Float32Array {
+  if (width < 3 || height < 3 || width > FINE_SIDE || height > FINE_SIDE || alpha.length !== width * height) return new Float32Array();
+  const count = width * height;
+  const ink = new Uint8Array(count);
+  let left = width - 1, right = 1, top = height - 1, bottom = 1;
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      if (alpha[y * width + x] < 96) continue;
+      ink[y * width + x] = 1;
+      left = Math.min(left, x); right = Math.max(right, x); top = Math.min(top, y); bottom = Math.max(bottom, y);
+    }
+  }
+  const remove = new Int32Array(count);
+  const offsets = [-width, -width + 1, 1, width + 1, width, width - 1, -1, -width - 1];
+  // Zhang–Suen deletes only simple boundary pixels. Endpoints and counters
+  // survive; this is not a threshold that erodes away narrow real strokes.
+  for (let iteration = 0; iteration < FINE_SIDE; iteration++) {
+    let changed = false;
+    for (let phase = 0; phase < 2; phase++) {
+      let removals = 0;
+      for (let y = top; y <= bottom; y++) {
+        for (let x = left; x <= right; x++) {
+          const index = y * width + x;
+          if (!ink[index]) continue;
+          const p = offsets.map(offset => ink[index + offset]);
+          const neighbors = p.reduce((sum, value) => sum + value, 0);
+          if (neighbors < 2 || neighbors > 6) continue;
+          let transitions = 0;
+          for (let i = 0; i < 8; i++) if (!p[i] && p[(i + 1) % 8]) transitions++;
+          if (transitions !== 1) continue;
+          if (phase === 0 ? p[0] * p[2] * p[4] || p[2] * p[4] * p[6] : p[0] * p[2] * p[6] || p[0] * p[4] * p[6]) continue;
+          remove[removals++] = index;
+        }
+      }
+      for (let i = 0; i < removals; i++) ink[remove[i]] = 0;
+      changed ||= removals > 0;
+    }
+    if (!changed) break;
+  }
+  const neighbors = (index: number) => {
+    const adjacent: number[] = [];
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        if (!dx && !dy) continue;
+        const next = index + dy * width + dx;
+        if (!ink[next]) continue;
+        // Avoid triangular graph edges at right-angle corners/junctions.
+        if (dx && dy && (ink[index + dx] || ink[index + dy * width])) continue;
+        adjacent.push(next);
+      }
+    }
+    return adjacent;
+  };
+  const graph = new Map<number, number[]>();
+  for (let i = 0; i < count; i++) if (ink[i]) graph.set(i, neighbors(i));
+  const visited = new Set<number>();
+  const edge = (a: number, b: number) => Math.min(a, b) * count + Math.max(a, b);
+  const paths: number[][] = [];
+  const walk = (start: number, next: number) => {
+    const path = [start];
+    let previous = start;
+    let current = next;
+    for (let step = 0; step < count; step++) {
+      visited.add(edge(previous, current)); path.push(current);
+      const choices = graph.get(current)!;
+      if (current === start || choices.length !== 2) break;
+      const following = choices[0] === previous ? choices[1] : choices[0];
+      if (visited.has(edge(current, following))) break;
+      previous = current; current = following;
+    }
+    paths.push(path);
+  };
+  graph.forEach((adjacent, index) => {
+    if (!adjacent.length) paths.push([index]);
+    if (adjacent.length === 2) return;
+    adjacent.forEach(next => { if (!visited.has(edge(index, next))) walk(index, next); });
+  });
+  graph.forEach((adjacent, index) => adjacent.forEach(next => { if (!visited.has(edge(index, next))) walk(index, next); }));
+  const spacing = bounded(pitch, 2, FINE_EM, FINE_EM / 11);
+  const points: number[][] = [];
+  const unique = new Set<string>();
+  const add = (x: number, y: number, node: number) => {
+    const key = Math.round(x * 4) + ':' + Math.round(y * 4);
+    if (!unique.has(key)) { unique.add(key); points.push([x, y, node]); }
+  };
+  for (const path of paths) {
+    const coordinates = path.map(index => [index % width, Math.floor(index / width)]);
+    const lengths = [0];
+    for (let i = 1; i < coordinates.length; i++) lengths.push(lengths[i - 1] + Math.hypot(coordinates[i][0] - coordinates[i - 1][0], coordinates[i][1] - coordinates[i - 1][1]));
+    const total = lengths[lengths.length - 1];
+    const closed = path.length > 2 && path[0] === path[path.length - 1];
+    const steps = Math.max(closed ? 4 : 1, Math.round(total / spacing));
+    let segment = 1;
+    for (let i = 0; i <= (closed ? steps - 1 : steps); i++) {
+      const distance = total * i / steps;
+      while (segment < lengths.length - 1 && lengths[segment] < distance) segment++;
+      const before = Math.max(0, segment - 1);
+      const after = Math.min(segment, coordinates.length - 1);
+      const fraction = (distance - lengths[before]) / (lengths[after] - lengths[before] || 1);
+      add(coordinates[before][0] + (coordinates[after][0] - coordinates[before][0]) * fraction,
+        coordinates[before][1] + (coordinates[after][1] - coordinates[before][1]) * fraction,
+        path[fraction < 0.5 ? before : after]);
+    }
+  }
+  // Several graph branches can end a pixel apart at the same junction.
+  // Merge that local cluster instead of shrinking it into twin pinpricks.
+  // Euclidean proximity alone is insufficient: parallel strokes across a
+  // counter may be close on screen but far apart along the real skeleton.
+  const buckets = new Map<string, number[]>();
+  points.forEach((point, index) => {
+    const key = Math.floor(point[0] / spacing) + ':' + Math.floor(point[1] / spacing);
+    const bucket = buckets.get(key) || []; bucket.push(index); buckets.set(key, bucket);
+  });
+  const parents = points.map((_, index) => index);
+  const root = (index: number): number => {
+    while (parents[index] !== index) { parents[index] = parents[parents[index]]; index = parents[index]; }
+    return index;
+  };
+  const mergeDistance = spacing * 0.62;
+  const graphLimit = spacing * 0.9 + 1;
+  points.forEach((point, index) => {
+    let localDistances: Map<number, number> | null = null;
+    const connectedLocally = (other: number) => {
+      if (!localDistances) {
+        localDistances = new Map([[point[2], 0]]);
+        const queue = [point[2]];
+        for (let at = 0; at < queue.length; at++) {
+          const node = queue[at], distance = localDistances.get(node)!;
+          for (const next of graph.get(node) || []) {
+            const diagonal = Math.abs(node % width - next % width) && Math.abs(Math.floor(node / width) - Math.floor(next / width));
+            const nextDistance = distance + (diagonal ? Math.SQRT2 : 1);
+            if (nextDistance > graphLimit || nextDistance >= (localDistances.get(next) ?? Infinity)) continue;
+            localDistances.set(next, nextDistance); queue.push(next);
+          }
+        }
+      }
+      return localDistances.has(points[other][2]);
+    };
+    const bx = Math.floor(point[0] / spacing), by = Math.floor(point[1] / spacing);
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      (buckets.get((bx + dx) + ':' + (by + dy)) || []).forEach(other => {
+        if (other <= index || Math.hypot(point[0] - points[other][0], point[1] - points[other][1]) >= mergeDistance || !connectedLocally(other)) return;
+        const a = root(index), b = root(other);
+        parents[Math.max(a, b)] = Math.min(a, b);
+      });
+    }
+  });
+  const groups = new Map<number, { x: number; y: number; count: number }>();
+  points.forEach((point, index) => {
+    const key = root(index), group = groups.get(key) || { x: 0, y: 0, count: 0 };
+    group.x += point[0]; group.y += point[1]; group.count++;
+    groups.set(key, group);
+  });
+  const sampled = new Float32Array(groups.size * 3);
+  let position = 0;
+  groups.forEach(group => {
+    sampled[position++] = group.x / group.count;
+    sampled[position++] = group.y / group.count;
+    sampled[position++] = 1;
+  });
+  return sampled;
+}
+
+function fineContext(): Context | null {
+  const mask = fineMask || (fineMask = document.createElement('canvas'));
+  if (mask.width !== FINE_SIDE) mask.width = FINE_SIDE;
+  if (mask.height !== FINE_SIDE) mask.height = FINE_SIDE;
+  return mask.getContext('2d', { willReadFrequently: true });
+}
+
+function fineClusters(text: string): string[] {
+  const result: string[] = [];
+  let join = false;
+  let regional = false;
+  for (const char of Array.from(text)) {
+    const cp = char.codePointAt(0)!;
+    const flag = cp >= 0x1F1E6 && cp <= 0x1F1FF;
+    const extending = cp === 0x200D || cp === 0xFE0F || cp === 0xFE0E || cp === 0x20E3
+      || cp >= 0x300 && cp <= 0x36F || cp >= 0x1F3FB && cp <= 0x1F3FF;
+    if (result.length && (join || extending || flag && regional)) result[result.length - 1] += char;
+    else result.push(char);
+    join = cp === 0x200D;
+    regional = flag && !regional;
+  }
+  return result;
+}
+
+function fineLine(ctx: Context, design: Design, text: string): FineLine {
+  const cached = fineLines.get(text);
+  if (cached) return cached;
+  ctx.font = boardFont(design, FINE_EM);
+  let pen = 0;
+  const glyphs = fineClusters(text).map(text => {
+    const advance = ctx.measureText(text).width;
+    const glyph = { text, center: pen + advance / 2, advance };
+    pen += advance; return glyph;
+  });
+  const width = ctx.measureText(text).width;
+  const kerning = pen ? width / pen : 1;
+  glyphs.forEach(glyph => { glyph.center *= kerning; glyph.advance *= kerning; });
+  const line = { glyphs, width };
+  if (fineLines.size >= MAX_FINE_LINES) fineLines.delete(fineLines.keys().next().value!);
+  fineLines.set(text, line);
+  return line;
+}
+
+function fineGlyph(ctx: Context, design: Design, text: string, density: number): FineGlyph {
+  const key = density + ':' + text;
+  const cached = fineGlyphs.get(key);
+  if (cached) { fineGlyphs.delete(key); fineGlyphs.set(key, cached); return cached; }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, FINE_SIDE, FINE_SIDE);
+  ctx.font = boardFont(design, FINE_EM);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#FFFFFF';
+  ctx.fillText(text, FINE_SIDE / 2, FINE_SIDE / 2);
+  const rgba = ctx.getImageData(0, 0, FINE_SIDE, FINE_SIDE).data;
+  const alpha = new Uint8Array(FINE_SIDE * FINE_SIDE);
+  for (let i = 0; i < alpha.length; i++) alpha[i] = rgba[i * 4 + 3];
+  const pitch = FINE_EM / [8, 11, 15, 20][density];
+  const points = sampleStrokeCenterline(alpha, FINE_SIDE, FINE_SIDE, pitch);
+  for (let i = 0; i < points.length; i += 3) {
+    points[i] = (points[i] - FINE_SIDE / 2) / FINE_EM;
+    points[i + 1] = (points[i + 1] - FINE_SIDE / 2) / FINE_EM;
+  }
+  const glyph = { points, pitch: pitch / FINE_EM };
+  if (fineGlyphs.size >= MAX_FINE_GLYPHS) fineGlyphs.delete(fineGlyphs.keys().next().value!);
+  fineGlyphs.set(key, glyph);
+  return glyph;
+}
+
+function fineText(ctx: Context, design: Design, lines: string[], y: number, fontSize: number, gap: number,
+  width: number, height: number, bounds: TextBounds, textScaleX: number, centers: readonly number[]): void {
+  const mctx = fineContext();
+  if (!mctx) return;
+  const density = Math.round(bounded(design.dotDensity, MIN_DOT_DENSITY, MAX_DOT_DENSITY, 2));
+  const spacing = fontSize / [8, 11, 15, 20][density];
+  const gradient = design.gradient && design.dotShape !== 'emoji';
+  const sprites = gradient
+    ? Array.from({ length: 12 }, (_, i) => dotSprite(design, spacing, mixedColor(design.foreground, design.gradientEnd, i / 11)))
+    : [dotSprite(design, spacing, design.foreground)];
+  const vector = gradientVector(design, bounds);
+  const stamps: number[] = [];
+  lines.forEach((text, lineIndex) => {
+    const line = fineLine(mctx, design, text);
+    const baseline = y + (lineIndex - (lines.length - 1) / 2) * gap;
+    if (baseline + fontSize < 0 || baseline - fontSize > height) return;
+    centers.forEach(center => line.glyphs.forEach(item => {
+      const glyphX = center + (item.center - line.width / 2) * fontSize / FINE_EM * textScaleX;
+      const halfWidth = Math.max(item.advance / FINE_EM, 1) * fontSize * textScaleX;
+      if (glyphX + halfWidth < 0 || glyphX - halfWidth > width || /^\s+$/.test(item.text)) return;
+      const glyph = fineGlyph(mctx, design, item.text, density);
+      for (let i = 0; i < glyph.points.length; i += 3) {
+        const px = glyphX + glyph.points[i] * fontSize * textScaleX;
+        const py = baseline + glyph.points[i + 1] * fontSize;
+        const size = glyph.pitch * fontSize;
+        if (size <= 0 || px + size < 0 || px - size > width || py + size < 0 || py - size > height) continue;
+        const progress = gradient ? bounded(0.5 + ((px - center) * vector.dx + (py - bounds.y) * vector.dy) / vector.span, 0, 1, 0) : 0;
+        stamps.push(px, py, size, Math.round(progress * (sprites.length - 1)));
+      }
+    }));
+  });
+  ctx.save(); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  for (let i = 0; i < stamps.length; i += 4) {
+    const sprite = sprites[stamps[i + 3]], size = stamps[i + 2];
+    const left = stamps[i] - size * (0.5 + sprite.bleed), top = stamps[i + 1] - size * (0.5 + sprite.bleed);
+    if (sprite.core) ctx.drawImage(sprite.canvas, sprite.halo.x, sprite.halo.y, sprite.halo.width, sprite.halo.height,
+      left, top, size * sprite.span, size * sprite.span);
+    else ctx.drawImage(sprite.canvas, left, top, size * sprite.span, size * sprite.span);
+  }
+  const sprite = sprites[0], core = sprite.core;
+  if (core) for (let i = 0; i < stamps.length; i += 4) {
+    const size = stamps[i + 2];
+    ctx.drawImage(sprite.canvas, core.x, core.y, core.width, core.height,
+      stamps[i] - size / 2, stamps[i + 1] - size / 2, size, size);
+  }
+  ctx.restore();
 }
 
 function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number,
   width: number, height: number, bounds: TextBounds, textScaleX: number, centers: readonly number[], repeatPeriod: number): void {
+  if (design.dotStyle === 'fine') { fineText(ctx, design, lines, y, fontSize, gap, width, height, bounds, textScaleX, centers); return; }
   // Keep enough cells across each glyph after auto-fitting, within a fixed
   // viewport budget. Supersampling preserves counters without eroding strokes.
   const density = Math.round(bounded(design.dotDensity, MIN_DOT_DENSITY, MAX_DOT_DENSITY, 2));
-  const glyphCells = [18, 26, 34, 42][density];
+  const vivid = design.dotStyle === 'fluorescent';
+  const glyphCells = (vivid ? [14, 20, 28, 36] : [18, 26, 34, 42])[density];
   const inkTop = Math.max(0, bounds.y - bounds.height / 2 - fontSize * 0.15);
   const inkBottom = Math.min(height, bounds.y + bounds.height / 2 + fontSize * 0.15);
   // A portrait viewport can be mostly empty above/below a fitted sentence.
   // Spend the row budget on its actual text band instead of those blank rows.
+  const cellBudget = (vivid ? [0.075, 0.05, 0.035, 0.026] : [0.05, 0.03, 0.022, 0.015])[density];
   let spacing = Math.max(1, width / 384, Math.max(1, inkBottom - inkTop) / 190,
-    Math.min(Math.min(width, height) * [0.05, 0.03, 0.022, 0.015][density], fontSize / glyphCells));
+    Math.min(Math.min(width, height) * cellBudget, fontSize / glyphCells));
   // A whole period spans an integer number of cells, so wrapping the scene's
   // offset cannot change the phase of the repeated LED grid.
   if (repeatPeriod) spacing = repeatPeriod / Math.max(1, Math.floor(repeatPeriod / spacing));
@@ -577,6 +868,7 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
     : [dotSprite(design, spacing, design.foreground)];
   const vector = gradientVector(design, bounds);
   ctx.save();
+  if (sprites[0].core) { ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; }
   for (let row = 0; row < rows; row++) {
     for (let column = 0; column < columns; column++) {
       if (!pixels[row * columns + column]) continue;
@@ -591,7 +883,24 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
       }
       // Keep sub-cell motion smooth while the much cheaper mask changes only
       // when the sentence crosses a grid boundary.
-      ctx.drawImage(sprite, cellX, cellY, spacing, spacing);
+      if (sprite.core) {
+        ctx.drawImage(sprite.canvas, sprite.halo.x, sprite.halo.y, sprite.halo.width, sprite.halo.height,
+          cellX - spacing * sprite.bleed, cellY - spacing * sprite.bleed, spacing * sprite.span, spacing * sprite.span);
+      } else {
+        ctx.drawImage(sprite.canvas, cellX - spacing * sprite.bleed, cellY - spacing * sprite.bleed,
+          spacing * sprite.span, spacing * sprite.span);
+      }
+    }
+  }
+  const coreSprite = sprites[0];
+  if (coreSprite.core) {
+    const core = coreSprite.core;
+    for (let row = 0; row < rows; row++) {
+      for (let column = 0; column < columns; column++) {
+        if (!pixels[row * columns + column]) continue;
+        ctx.drawImage(coreSprite.canvas, core.x, core.y, core.width, core.height,
+          column * spacing + shiftX, rasterTop + row * spacing, spacing, spacing);
+      }
     }
   }
   ctx.restore();
@@ -608,16 +917,18 @@ function boardLayout(ctx: Context, design: Design, width: number, height: number
   const light = getTemplate(design.templateId).category === 'light';
   const scrolling = light && design.scroll;
   const landscape = light && width > height;
+  const hasDecorations = Boolean(design.decorationId && design.decorationId !== 'none');
   const unit = Math.min(width, height);
   const lines = getTextLines(design.text, design.layout);
-  const padding = unit * (light ? landscape ? 0.045 : 0.07 : 0.12);
+  const padding = light && hasDecorations ? width * (landscape ? 0.12 : 0.14)
+    : unit * (light ? landscape ? 0.045 : 0.07 : 0.12);
   // Stickers stay in the corner, outside the text's quiet central band.
   const textAreaWidth = width - padding * 2;
-  const textAreaHeight = height * (light ? landscape ? 0.82 : 0.76 : 0.64);
+  const textAreaHeight = height * (light ? hasDecorations ? landscape ? 0.62 : 0.66 : landscape ? 0.82 : 0.76 : 0.64);
   const lineHeight = light ? landscape ? 1.08 : 1.14 : 1.19;
   const maxFont = textAreaHeight / (lines.length * lineHeight);
   const minFont = Math.min(maxFont, height * (light ? 0.19 : 0.15));
-  const maxSafeFont = height * (design.sticker === 'none' ? 0.91 : 0.8) / (lines.length * lineHeight);
+  const maxSafeFont = height * (hasDecorations ? 0.84 : design.sticker === 'none' ? 0.91 : 0.8) / (lines.length * lineHeight);
   const minimumScaleX = landscape && !scrolling ? 0.82 : 1;
   const outlineAllowance = design.templateId === 'L4' ? 0.36 : 0.18;
   let fontSize = maxFont;
@@ -647,7 +958,7 @@ function boardLayout(ctx: Context, design: Design, width: number, height: number
   const textScaleX = Math.max(minimumScaleX, Math.min(1, textAreaWidth / (naturalTextWidth + fontSize * outlineAllowance)));
   const textWidth = naturalTextWidth * textScaleX;
   const overflow = !scrolling && (naturalTextWidth + fontSize * outlineAllowance) * textScaleX > textAreaWidth + 1;
-  return { fontSize, overflow, textWidth, naturalTextWidth, textScaleX, light, scrolling, unit, lines, padding, lineHeight };
+  return { fontSize, overflow, textWidth, naturalTextWidth, textScaleX, light, scrolling, unit, lines, padding, lineHeight, hasDecorations };
 }
 
 /** Measure layout without drawing, reading pixels or resizing the canvas bitmap. */
@@ -668,8 +979,8 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const template = getTemplate(design.templateId);
   const palette = template.palettes.find((item) => item.id === design.paletteId) || template.palettes[0];
   const accent = design.accent || palette.accent;
-  const { fontSize, overflow, textWidth, naturalTextWidth, textScaleX, light, scrolling, unit, lines, padding, lineHeight } = boardLayout(ctx, design, width, height);
-  const hasSticker = design.sticker !== 'none';
+  const { fontSize, overflow, textWidth, naturalTextWidth, textScaleX, light, scrolling, unit, lines, padding, lineHeight, hasDecorations } = boardLayout(ctx, design, width, height);
+  const hasSticker = !hasDecorations && design.sticker !== 'none';
   ctx.save();
   ctx.clearRect(0, 0, width, height);
   drawBackground(ctx, design, width, height, accent);
@@ -680,6 +991,10 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const centers = visibleTextCenters(x, textWidth, width, repeatPeriod);
   const y = height * (design.templateId === 'H2' ? 0.52 : 0.51);
   const bounds = { x, y, width: textWidth, height: fontSize * lineHeight * lines.length };
+  if (scrolling && hasDecorations) {
+    ctx.save();
+    ctx.beginPath(); ctx.rect(padding, 0, Math.max(1, width - padding * 2), height); ctx.clip();
+  }
   if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight,
     width, height, bounds, textScaleX, centers, repeatPeriod);
   else {
@@ -695,12 +1010,21 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
         const core = design.templateId === 'L4' ? textPaint(ctx, design, paintBounds, true) : paint;
         if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
         if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
-        lines.forEach((line, index) => styledText(ctx, design, line, copyX, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core));
+        lines.forEach((line, index) => styledText(ctx, design, line, copyX, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core, width, height, textScaleX));
       }
       ctx.restore();
     });
   }
-  if (hasSticker) {
+  if (scrolling && hasDecorations) ctx.restore();
+  if (hasDecorations) {
+    const textHeight = fontSize * (1 + (lines.length - 1) * lineHeight);
+    drawBoardDecorations(ctx, design, { width, height, textBounds: {
+      left: scrolling ? padding : (width - textWidth) / 2,
+      right: scrolling ? width - padding : (width + textWidth) / 2,
+      top: y - textHeight / 2,
+      bottom: y + textHeight / 2,
+    } });
+  } else if (hasSticker) {
     const stickerRadius = unit * (light ? 0.04 : 0.09);
     const stickerX = width - padding * 1.08;
     const stickerY = height * (light ? 0.065 : 0.2);

@@ -35,7 +35,8 @@ test('the five faster speed levels scale with CSS board height', () => {
 
 type Draw = { x: number; font: string; text: string };
 
-function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1) {
+function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1,
+  getViewport?: () => { width: number; height: number; orientation?: Design['orientation'] }) {
   const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
   const originalDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
   const originalRequest = Object.getOwnPropertyDescriptor(globalThis, 'requestAnimationFrame');
@@ -69,9 +70,17 @@ function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1) {
   });
   const canvas = Object.assign(new EventTarget(), { width: 300, height: 150, style: {} as Record<string, string>, getContext: () => context });
   const root = { clientWidth: 1000, clientHeight: 500, querySelector: () => canvas };
-  const document = Object.assign(new EventTarget(), { hidden: false });
+  const document = Object.assign(new EventTarget(), {
+    hidden: false,
+    createElement: (tag: string) => {
+      assert.equal(tag, 'canvas');
+      const offscreen = new Proxy({}, { get: () => () => {}, set: () => true });
+      return { width: 300, height: 150, getContext: () => offscreen };
+    },
+  });
   const window = Object.assign(new EventTarget(), { devicePixelRatio: dpr, visualViewport: new EventTarget() });
-  const design: Design = { ...createDesign('L1'), text: '持续滚动的加油文案'.repeat(3), scroll: true, loop: true, sticker: 'none', border: false, ...changes };
+  const design: Design = { ...createDesign('L1'), text: '持续滚动的加油文案'.repeat(3), scroll: true, loop: true,
+    dotStyle: 'classic', decorationId: 'none', decorationSeed: 1, sticker: 'none', border: false, ...changes };
   Object.defineProperty(globalThis, 'window', { configurable: true, value: window });
   Object.defineProperty(globalThis, 'document', { configurable: true, value: document });
   Object.defineProperty(globalThis, 'requestAnimationFrame', { configurable: true, value: (callback: FrameRequestCallback) => { callbacks.set(++frameId, callback); return frameId; } });
@@ -88,7 +97,7 @@ function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1) {
     }
   };
   t.after(dispose);
-  const scene = mountLightScene(root as unknown as HTMLElement, () => design, () => { stats.toggles++; });
+  const scene = mountLightScene(root as unknown as HTMLElement, () => design, () => { stats.toggles++; }, getViewport);
   mounted = scene;
   const step = (milliseconds = 20) => {
     now += milliseconds;
@@ -164,7 +173,7 @@ test('unchanged UI repaints and metadata updates do not redraw or restart scroll
   close(env.cssX(), 500 - scrollPixelsPerSecond(3, 500) * .4);
 });
 
-test('opening sheets freezes large scrolling text and resumes from the same position', t => {
+test('a fully covering share flow can freeze scrolling and resume from the same position', t => {
   const env = environment(t);
   env.step(0);
   env.advance(300);
@@ -204,6 +213,120 @@ test('DPR changes and explicit font refreshes preserve CSS position', t => {
   env.scene.repaint(true);
   assert.ok(env.stats.measurements > measurements);
   close(env.cssX(), position);
+});
+
+test('dot style, decoration choice and seed repaint without resetting motion', t => {
+  const env = environment(t);
+  env.step(0);
+  env.advance(200);
+  for (const change of [{ dotStyle: 'fluorescent' }, { decorationId: 'hearts' }, { decorationSeed: 987654 }] as const) {
+    const position = env.cssX();
+    const draws = env.draws.length;
+    Object.assign(env.design, change);
+    env.scene.repaint();
+    assert.ok(env.draws.length > draws);
+    close(env.cssX(), position);
+    assert.equal(env.callbacks.size, 1);
+    env.step(0);
+    env.advance(100);
+    close(env.cssX(), position - scrollPixelsPerSecond(3, 500) * .1);
+  }
+});
+
+test('editor preview viewports preserve scrolling layout and phase through DPR changes and restore non-loop completion', t => {
+  for (const loop of [true, false]) {
+    let viewport: { width: number; height: number; orientation: Design['orientation'] } = {
+      width: 1000, height: 500, orientation: 'landscape',
+    };
+    const env = environment(t, { loop, orientation: 'portrait' }, 2, () => viewport);
+    assert.equal(env.canvas.style.width, '1000px');
+    assert.ok(env.canvas.style.transform.includes('rotate(0deg)'));
+    env.step(0);
+    env.advance(300);
+    const fullFont = env.fontSize();
+    const offset = env.cssX() - 500;
+    assert.ok(offset < 0);
+
+    env.scene.setObscured(true);
+    viewport = { width: 240, height: 420, orientation: 'landscape' };
+    env.scene.repaint();
+    assert.deepEqual([env.root.clientWidth, env.root.clientHeight], [1000, 500]);
+    assert.deepEqual([env.canvas.style.width, env.canvas.style.height], ['420px', '240px']);
+    assert.ok(env.canvas.style.transform.includes('rotate(90deg)'));
+    assert.equal(env.design.scroll, true);
+    assert.equal(env.callbacks.size, 0);
+    close(env.fontSize() / 240, fullFont / 500);
+    const previewFont = env.fontSize();
+    const previewOffset = env.cssX() - 210;
+    assert.ok(previewOffset < 0);
+
+    env.window.devicePixelRatio = 1;
+    env.scene.repaint();
+    close(env.fontSize(), previewFont);
+    close(env.cssX() - 210, previewOffset);
+    env.advance(5000);
+    close(env.cssX() - 210, previewOffset);
+
+    viewport = { width: 1000, height: 500, orientation: 'landscape' };
+    env.window.devicePixelRatio = 2;
+    env.scene.setObscured(false);
+    assert.deepEqual([env.canvas.style.width, env.canvas.style.height], ['1000px', '500px']);
+    close(env.fontSize(), fullFont);
+    close(env.cssX() - 500, offset);
+    assert.equal(env.callbacks.size, 1);
+    env.step(0);
+    env.advance(200);
+    close(env.cssX() - 500, offset - scrollPixelsPerSecond(3, 500) * .2);
+
+    if (!loop) {
+      env.advance(60000);
+      assert.equal(env.callbacks.size, 0);
+      assert.ok(env.fontSize() < fullFont);
+      env.scene.setObscured(true);
+      viewport = { width: 240, height: 420, orientation: 'landscape' };
+      env.scene.repaint();
+      viewport = { width: 1000, height: 500, orientation: 'landscape' };
+      env.scene.setObscured(false);
+      assert.equal(env.design.scroll, true);
+      assert.equal(env.callbacks.size, 0);
+      close(env.cssX(), 500);
+    }
+    env.dispose();
+  }
+});
+
+test('late scrolling phases survive repeated temporary preview geometry changes in both directions', t => {
+  for (const loop of [true, false]) for (const direction of ['left', 'right'] as const) {
+    let viewport = { width: 1000, height: 500, orientation: 'landscape' as Design['orientation'] };
+    const env = environment(t, { text: '加油', fontScale: 40, speed: 5, direction, loop }, 1, () => viewport);
+    env.step(0);
+    env.advance(1400);
+    const positions = env.cssPositions();
+    const fullFont = env.fontSize();
+    env.scene.setObscured(true);
+    for (const [width, height, dpr] of [[420, 240, 2], [300, 140, 1], [420, 240, 2]]) {
+      viewport = { width, height, orientation: 'landscape' };
+      env.window.devicePixelRatio = dpr;
+      env.scene.repaint();
+      assert.equal(env.callbacks.size, 0);
+      assert.equal(env.design.scroll, true);
+      close(env.fontSize() / height, fullFont / 500);
+      const frozen = env.cssPositions();
+      env.advance(2000);
+      assert.deepEqual(env.cssPositions(), frozen);
+    }
+    viewport = { width: 1000, height: 500, orientation: 'landscape' };
+    env.window.devicePixelRatio = 1;
+    env.scene.setObscured(false);
+    assert.equal(env.cssPositions().length, positions.length);
+    env.cssPositions().forEach((position, index) => close(position, positions[index]));
+    assert.equal(env.callbacks.size, 1);
+    env.step(0);
+    env.advance(20);
+    const step = scrollPixelsPerSecond(5, 500) * .02 * (direction === 'left' ? -1 : 1);
+    env.cssPositions().forEach((position, index) => close(position, positions[index] + step));
+    env.dispose();
+  }
 });
 
 test('background visibility pauses without catch-up or phase reset', t => {

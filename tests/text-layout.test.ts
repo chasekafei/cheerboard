@@ -27,7 +27,7 @@ test('semantic lines preserve idioms, names, words and unequal clause lengths', 
   assert.deepEqual(getTextLines('SunYingsha', 'double'), ['SunYingsha']);
   assert.deepEqual(getTextLines('BE FIRM AND CONFIDENT', 'double'), ['BE FIRM', 'AND CONFIDENT']);
   assert.deepEqual(getTextLines('那就祝我们都有光明的未来 顶峰相见', 'double'), ['那就祝我们都有光明的未来', '顶峰相见']);
-  assert.deepEqual(getTextLines('点击屏幕修改文案或样式', 'double'), ['点击屏幕', '修改文案或样式']);
+  assert.deepEqual(getTextLines('点击屏幕查看菜单', 'double'), ['点击屏幕', '查看菜单']);
 });
 
 test('explicit newlines retain every line and never merge the remaining manual text', () => {
@@ -36,6 +36,9 @@ test('explicit newlines retain every line and never merge the remaining manual t
   assert.deepEqual(getTextLines('第一行\r\n第二行\r\n第三行', 'double'), ['第一行', '第二行', '第三行']);
   assert.deepEqual(getTextLines('\n来日方长\n', 'double'), ['', '来日方长', '']);
   assert.deepEqual(getTextLines('SUN\nHOPE', 'single'), ['SUN HOPE']);
+  const blessing = SLOGANS.find(slogan => slogan.id === 'C039')!;
+  assert.deepEqual(getTextLines(blessing.text, 'double'), ['祝中国乒乓球队', '越来越好']);
+  assert.equal(blessing.text, '祝中国乒乓球队\n越来越好');
 });
 
 test('custom text protects known whole phrases and joined emoji without splitting English words', () => {

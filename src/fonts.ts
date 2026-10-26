@@ -18,6 +18,16 @@ export function getBoardFont(id: unknown): BoardFont {
   return BOARD_FONTS.find(font => font.id === id) || BOARD_FONTS[0];
 }
 
+const DOT_FONT: BoardFont = { ...BOARD_FONTS[0], weight: 400 };
+
+/** User font IDs remain readable for old records; effects use fixed typography. */
+export function getEffectFont(templateId: string): BoardFont {
+  if (templateId === 'L4') return TUBE_FONT;
+  if (templateId === 'L3') return DOT_FONT;
+  if (templateId === 'H2') return BOARD_FONTS[2];
+  return BOARD_FONTS[0];
+}
+
 let loading: Promise<void> | null = null;
 
 export function loadBoardFonts(): Promise<void> {

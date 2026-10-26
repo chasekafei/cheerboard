@@ -21,11 +21,11 @@ export function lightGeometry(width: number, height: number, orientation: Design
 function visualKey(design: Design): string {
   return JSON.stringify([design.text, design.templateId, design.paletteId, design.foreground,
     design.background, design.accent, design.dotShape, design.dotEmoji, design.dotDensity,
-    design.glow, design.fontScale, design.fontId, design.gradient, design.gradientEnd,
+    design.dotStyle, design.decorationId, design.decorationSeed, design.glow, design.fontScale, design.gradient, design.gradientEnd,
     design.gradientAngle, design.layout, design.sticker, design.border, design.scroll]);
 }
 
-export function mountLightScene(root: HTMLElement, getDesign: () => Design, toggleControls: () => void) {
+export function mountLightScene(root: HTMLElement, getDesign: () => Design, toggleControls: () => void, getViewport?: () => { width: number; height: number; orientation?: Design['orientation'] }) {
   const canvas = root.querySelector<HTMLCanvasElement>('#light-board')!;
   let frame = 0;
   let obscured = false;
@@ -83,19 +83,23 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
   const repaint = (force = false) => {
     if (disposed) return;
     const design = { ...getDesign() };
-    const nextGeometry = lightGeometry(root.clientWidth, root.clientHeight, design.orientation, window.devicePixelRatio || 1);
+    const viewport = getViewport ? getViewport() : { width: root.clientWidth, height: root.clientHeight, orientation: design.orientation };
+    const nextGeometry = lightGeometry(viewport.width, viewport.height, viewport.orientation || design.orientation, window.devicePixelRatio || 1);
     const geometryKey = JSON.stringify(nextGeometry);
     const nextVisualKey = visualKey(design);
     const measureKey = JSON.stringify([nextGeometry.width, nextGeometry.height, design.text,
-      design.templateId, design.layout, design.fontScale, design.fontId, design.scroll]);
+      design.templateId, design.layout, design.fontScale, design.dotStyle, design.decorationId, design.sticker, design.scroll]);
     const motionKey = JSON.stringify([design.speed, design.direction, design.loop]);
     const changed = force || geometryKey !== lastGeometryKey || nextVisualKey !== lastVisualKey || motionKey !== lastMotionKey;
     if (!changed) { schedule(); return; }
 
     cancel();
     const geometryChanged = geometryKey !== lastGeometryKey;
+    const resized = nextGeometry.cssWidth !== geometry.cssWidth || nextGeometry.cssHeight !== geometry.cssHeight;
     const reset = !current || current.scroll !== design.scroll || current.text !== design.text || current.layout !== design.layout;
     const restart = completed && motionKey !== lastMotionKey;
+    const previousCycle = cycle;
+    const previousDistance = distance;
     geometry = nextGeometry;
     if (geometryChanged) {
       canvas.style.width = geometry.cssWidth + 'px';
@@ -108,6 +112,14 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
       repeatGap = measured.fontSize * 0.38;
       // Renderer owns the same minimum period used to bound very small glyphs.
       cycle = resolveRepeatPeriod(measured.textWidth, repeatGap, geometry.width) * geometry.cssWidth / geometry.width;
+    }
+    // Temporary previews change the glyph size and period. Keep the same place
+    // in that period (or one-way journey), so shrinking and restoring is
+    // reversible even when the old CSS offset exceeds the preview's period.
+    // DPR-only changes and edits at the same size retain their CSS position.
+    if (!reset && !restart && resized && current?.scroll) {
+      if (design.loop && current.loop && previousCycle > 0) offset *= cycle / previousCycle;
+      else if (!design.loop && !current.loop && previousDistance > 0) offset *= distance / previousDistance;
     }
     if (reset || restart) { offset = 0; completed = false; }
     else if (design.scroll && design.loop && cycle > 0) offset %= cycle;
@@ -139,8 +151,8 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
     setObscured(value: boolean) {
       if (disposed || obscured === value) return;
       obscured = value;
-      // A sheet freezes the current scrolling frame; it never changes the layout
-      // to fit the complete sentence. Edits may still repaint that frozen frame.
+      // Fully covering flows such as sharing can pause the scene. Editing sheets
+      // leave this false, so the board keeps its geometry and motion underneath.
       if (obscured) cancel();
       else repaint();
     },

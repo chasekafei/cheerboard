@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { BOARD_FONTS, getBoardFont, loadBoardFonts, TUBE_FONT } from '../src/fonts.ts';
+import { BOARD_FONTS, getBoardFont, getEffectFont, loadBoardFonts, TUBE_FONT } from '../src/fonts.ts';
 
 test('unknown saved font choices use the packaged sans fallback', () => {
   assert.equal(getBoardFont('unknown').id, 'sans');
@@ -13,6 +13,15 @@ test('unknown saved font choices use the packaged sans fallback', () => {
   assert.match(TUBE_FONT.family, /Cheerboard Tube/);
   assert.doesNotMatch(getBoardFont('sans').family, /Cheerboard Tube/);
   assert.deepEqual(BOARD_FONTS.map(font => font.id), ['sans', 'serif', 'handwritten']);
+});
+
+test('each effect has fixed typography independent of legacy saved font choices', () => {
+  assert.equal(getEffectFont('L4'), TUBE_FONT);
+  assert.equal(getEffectFont('L3').weight, 400);
+  assert.match(getEffectFont('L3').family, /Cheerboard Sans/);
+  assert.doesNotMatch(getEffectFont('L3').family, /Tube|Handwriting/);
+  assert.equal(getEffectFont('H2'), getBoardFont('handwritten'));
+  for (const id of ['L1', 'L2', 'L5', 'H1', 'H3']) assert.equal(getEffectFont(id), getBoardFont('sans'));
 });
 
 test('font loading is optional, cached, and safely resolves when a font fails', async () => {

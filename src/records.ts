@@ -1,5 +1,6 @@
 import { createDesign, getTemplate, TEMPLATES, type Design } from './catalog.ts';
-import { normalizeDotEmoji, MIN_DOT_DENSITY, MAX_DOT_DENSITY, MIN_FONT_SCALE, MAX_FONT_SCALE } from './design-values.ts';
+import { normalizeDotEmoji, MIN_DOT_DENSITY, MAX_DOT_DENSITY, MIN_FONT_SCALE, MAX_FONT_SCALE, DOT_STYLES, DEFAULT_LIGHT_TEXT } from './design-values.ts';
+import { DECORATION_SETS } from './decorations.ts';
 import { BOARD_FONTS } from './fonts.ts';
 import { loadLocal, saveLocal } from './platform.ts';
 
@@ -25,14 +26,18 @@ export function validateDesign(value: unknown): Design | null {
   return {
     ...base,
     id: typeof d.id === 'string' && /^[\w-]{1,100}$/.test(d.id) ? d.id : base.id,
-    text: d.text,
+    text: getTemplate(base.templateId).category === 'light' && ['点击屏幕修改文案或样式', '点击屏幕编辑文案和样式'].includes(d.text) ? DEFAULT_LIGHT_TEXT : d.text,
     paletteId: typeof d.paletteId === 'string' ? d.paletteId : base.paletteId,
     foreground: legacyGhost ? base.foreground : color(d.foreground, base.foreground),
     background: color(d.background, base.background),
     accent: legacyGhost ? base.accent : color(d.accent, palette?.accent || base.accent),
     dotShape: ['circle', 'square', 'heart', 'star', 'emoji'].indexOf(d.dotShape || '') >= 0 ? d.dotShape! : base.dotShape,
     dotEmoji: normalizeDotEmoji(d.dotEmoji),
-    dotDensity: boundedNumber(d.dotDensity, MIN_DOT_DENSITY, MAX_DOT_DENSITY, base.dotDensity),
+    dotDensity: boundedNumber(d.dotDensity, MIN_DOT_DENSITY, MAX_DOT_DENSITY, 2),
+    // Absence identifies an older board: preserve its established appearance.
+    dotStyle: DOT_STYLES.some(style => style.id === d.dotStyle) ? d.dotStyle! : 'classic',
+    decorationId: DECORATION_SETS.some(set => set.id === d.decorationId) ? d.decorationId! : 'none',
+    decorationSeed: boundedNumber(d.decorationSeed, 0, 0xffffffff, 1),
     glow: boundedNumber(d.glow, 0, 100, base.glow),
     fontScale: boundedNumber(d.fontScale, MIN_FONT_SCALE, MAX_FONT_SCALE, base.fontScale),
     fontId: base.templateId === 'L4' ? 'sans' : BOARD_FONTS.some(font => font.id === d.fontId) ? d.fontId! : base.fontId,

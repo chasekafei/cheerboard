@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createDesign, type Design } from '../src/catalog.ts';
-import { invalidateFontCache, measureBoard, renderBoard, renderExport, resolveRepeatPeriod } from '../src/renderer.ts';
+import { invalidateFontCache, measureBoard, renderBoard, renderExport, resolveRepeatPeriod, sampleStrokeCenterline } from '../src/renderer.ts';
+import { getBoardDecorationLayout } from '../src/decorations.ts';
 
 type Call = { name: string; args: unknown[]; state: Record<string, unknown> };
 type SizeWrite = { dimension: 'width' | 'height'; value: number };
@@ -70,7 +71,11 @@ function canvasEnvironment(alpha?: (x: number, y: number) => number) {
 }
 
 function light(template: Design['templateId']): Design {
-  return { ...createDesign(template), text: '加油', layout: 'single', gradient: false, sticker: 'none', border: false };
+  return { ...createDesign(template), text: '加油', layout: 'single', gradient: false, sticker: 'none', border: false, dotStyle: 'classic', dotDensity: 2, decorationId: 'none' };
+}
+
+function imageDestination(call: Call): number[] {
+  return call.args.slice(call.args.length === 9 ? 5 : 1).map(Number);
 }
 
 test('layout measurement does not draw or resize, and scaled scrolling metrics match rendering', () => {
@@ -112,24 +117,28 @@ test('outline and neon are distinct; zero glow keeps a thin-font tube and bright
     assert.equal(neon.calls.find(call => call.name === 'fillRect')?.state.fillStyle, '#121212');
     const strokes = neon.calls.filter(call => call.name === 'strokeText');
     const fills = neon.calls.filter(call => call.name === 'fillText');
-    assert.equal(strokes.length, 2);
+    assert.equal(strokes.length, glow ? 3 : 2);
     assert.ok(fills.length >= 2);
     const core = fills[fills.length - 1];
     assert.match(String(core.state.font), /^100 /);
-    assert.notEqual(core.state.fillStyle, strokes[0].state.strokeStyle);
+    const tubeStroke = strokes[strokes.length - 2];
+    const coreStroke = strokes[strokes.length - 1];
+    assert.notEqual(core.state.fillStyle, tubeStroke.state.strokeStyle);
     assert.equal(core.state.shadowBlur, 0);
-    assert.equal(strokes[0].state.strokeStyle, '#62F7FF');
-    assert.equal(strokes[1].state.strokeStyle, core.state.fillStyle);
-    assert.ok(Number(strokes[1].state.lineWidth) < Number(strokes[0].state.lineWidth) / 4);
-    assert.equal(strokes[1].state.lineJoin, 'round');
+    assert.equal(tubeStroke.state.strokeStyle, '#62F7FF');
+    assert.equal(coreStroke.state.strokeStyle, core.state.fillStyle);
+    assert.ok(Number(coreStroke.state.lineWidth) < Number(tubeStroke.state.lineWidth) / 4);
+    assert.equal(coreStroke.state.lineJoin, 'round');
     assert.equal(fills.some(call => Number(call.state.shadowBlur) > 0), glow > 0);
-    const projection = fills.find(call => Number(call.state.shadowOffsetY) > 0);
+    const projection = fills.find(call => Number(call.args[2]) > Number(core.args[2]));
     assert.equal(Boolean(projection), glow > 0);
     if (projection) {
       assert.equal(projection.state.shadowColor, '#62F7FF');
       assert.ok(Number(projection.state.shadowBlur) > 0);
       assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 1);
-      assert.deepEqual(projection.args, core.args);
+      assert.equal(projection.args[0], core.args[0]);
+      assert.equal(projection.args[1], core.args[1]);
+      assert.ok(Number(projection.args[2]) - Number(core.args[2]) > 10);
     }
   }
 });
@@ -194,6 +203,244 @@ test('emoji dots cache a complete joined glyph rather than filling text for ever
   assert.equal(pixelReads(), reads);
   assert.ok(target.calls.filter(call => call.name === 'drawImage').length > 10);
   assert.equal(target.calls.filter(call => call.name === 'fillText').length, 0);
+  for (const dotStyle of ['fluorescent', 'fine'] as const) {
+    const next = makeCanvas();
+    const beforeStyle = glyphFills().length;
+    renderBoard(next.canvas, { ...design, dotStyle }, options);
+    assert.ok(next.calls.filter(call => call.name === 'drawImage').every(call => call.args.length === 5));
+    assert.ok(glyphFills().length <= beforeStyle + 1);
+    const cachedCount = glyphFills().length;
+    renderBoard(next.canvas, { ...design, dotStyle }, options);
+    assert.equal(glyphFills().length, cachedCount);
+  }
+});
+
+test('fluorescent LEDs keep their glow outside the cell and a bright core independently of glow strength', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const design = { ...light('L3'), foreground: '#FFF12A', dotShape: 'circle' as const, dotDensity: 1 };
+  const classic = makeCanvas();
+  renderBoard(classic.canvas, { ...design, dotStyle: 'classic', glow: 100 }, { width: 1280, height: 720 });
+  const oldStamp = classic.calls.find(call => call.name === 'drawImage')!;
+  for (const glow of [0, 100]) {
+    const target = makeCanvas();
+    renderBoard(target.canvas, { ...design, dotStyle: 'fluorescent', glow }, { width: 1280, height: 720 });
+    const stamp = target.calls.find(call => call.name === 'drawImage')!;
+    assert.ok(imageDestination(stamp)[2] > imageDestination(oldStamp)[2] * 3);
+    assert.ok(imageDestination(stamp)[0] < imageDestination(oldStamp)[0]);
+    const sprite = canvases.find(item => item.canvas === stamp.args[0])!;
+    assert.ok(sprite.canvas.width <= 128 && sprite.canvas.height <= 128);
+    const fills = sprite.calls.filter(call => call.name === 'fill');
+    assert.ok(fills.some(call => call.state.fillStyle === '#FFFFFF' && call.state.shadowBlur === 0));
+    const arcs = sprite.calls.filter(call => call.name === 'arc');
+    assert.ok(Math.abs(Number(arcs[arcs.length - 1].args[2]) / Number(arcs[0].args[2]) - 0.7) < 0.000001);
+    assert.equal(fills.filter(call => Number(call.state.shadowBlur) > 0).length, glow ? 2 : 0);
+    assert.equal(fills.some(call => Number(call.state.shadowBlur) > 0), glow > 0);
+    const stamps = target.calls.filter(call => call.name === 'drawImage');
+    const firstCore = stamps.findIndex(call => Number(call.args[2]) > 0);
+    assert.ok(firstCore > 0);
+    assert.equal(stamps.length, firstCore * 2);
+    assert.ok(stamps.slice(0, firstCore).every(call => call.args.length === 9 && call.args[2] === 0));
+    assert.ok(stamps.slice(firstCore).every(call => Number(call.args[2]) > 0 && call.state.globalAlpha === 1 && call.state.globalCompositeOperation === 'source-over'));
+    assert.ok(sprite.calls.some(call => call.name === 'rect' && call.args[0] === 0 && call.args[1] === 0 && call.args[2] === sprite.canvas.width));
+  }
+});
+
+test('fine points follow cached glyph centerlines with large two-pass LEDs and stable scrolling', () => {
+  const { makeCanvas, canvases } = canvasEnvironment((x, y) => x >= 44 && x <= 50 && y >= 20 && y <= 76 ? 255 : 0);
+  const fine = makeCanvas();
+  const before = new Set(canvases.flatMap(item => item.calls));
+  const design = { ...light('L3'), text: '重围颖钦', dotStyle: 'fine' as const, fontId: 'serif' as const, scroll: true };
+  renderBoard(fine.canvas, design, { width: 1280, height: 720 });
+  assert.ok(fine.calls.some(call => call.name === 'drawImage'));
+  const pointPasses = fine.calls.filter(call => call.name === 'drawImage');
+  const firstCore = pointPasses.findIndex(call => Number(call.args[2]) > 0);
+  assert.ok(firstCore > 0);
+  assert.equal(pointPasses.length, firstCore * 2);
+  assert.ok(pointPasses.slice(firstCore).every(call => Number(call.args[2]) > 0));
+  const fineSprite = canvases.find(item => item.canvas === pointPasses[0].args[0])!;
+  const fineArcs = fineSprite.calls.filter(call => call.name === 'arc');
+  assert.ok(Math.abs(Number(fineArcs[fineArcs.length - 1].args[2]) / Number(fineArcs[0].args[2]) - 0.68) < 0.000001);
+  const raster = canvases.flatMap(item => item.calls).filter(call => !before.has(call));
+  const glyphs = raster.filter(call => call.name === 'fillText' && '重围颖钦'.includes(String(call.args[0])));
+  assert.ok(glyphs.length >= 2);
+  assert.ok(glyphs.every(call => String(call.args[0]).length === 1));
+  assert.ok(glyphs.every(call => /^400 .*Cheerboard Sans/.test(String(call.state.font))));
+  const reads = raster.filter(call => call.name === 'getImageData');
+  assert.equal(reads.length, glyphs.length);
+  assert.ok(reads.every(call => Number(call.args[2]) === 96 && Number(call.args[3]) === 96));
+  const shifted = makeCanvas();
+  const after = new Set(canvases.flatMap(item => item.calls));
+  renderBoard(shifted.canvas, { ...design, fontId: 'handwritten' }, { width: 1280, height: 720, offset: 3.25 });
+  assert.equal(canvases.flatMap(item => item.calls).filter(call => !after.has(call) && call.name === 'getImageData').length, 0);
+  const shiftedStamps = shifted.calls.filter(call => call.name === 'drawImage');
+  assert.equal(shiftedStamps.length, pointPasses.length);
+  pointPasses.forEach((call, index) => {
+    const original = imageDestination(call), translated = imageDestination(shiftedStamps[index]);
+    assert.ok(Math.abs(translated[0] - original[0] - 3.25) < 0.00001);
+    assert.deepEqual(translated.slice(1), original.slice(1));
+  });
+  for (const dotStyle of ['classic', 'fluorescent'] as const) {
+    const target = makeCanvas();
+    const prior = new Set(canvases.flatMap(item => item.calls));
+    renderBoard(target.canvas, { ...light('L3'), text: '常规点阵', dotStyle, fontId: 'sans' }, { width: 1280, height: 720 });
+    const regular = canvases.flatMap(item => item.calls).find(call => !prior.has(call) && call.name === 'fillText' && call.args[0] === '常规点阵');
+    // Classic/fluorescent share the same glyph mask, so the second profile
+    // may reuse it; any new raster still has to retain the regular font.
+    if (regular) assert.match(String(regular.state.font), /^400 .*Cheerboard Sans/);
+  }
+});
+
+test('stroke centerlines turn a thick stroke into one LED column and keep endpoints', () => {
+  const width = 64, height = 64;
+  const alpha = new Uint8Array(width * height);
+  for (let y = 8; y <= 55; y++) for (let x = 28; x <= 36; x++) alpha[y * width + x] = 255;
+  const points = sampleStrokeCenterline(alpha, width, height, 7);
+  assert.ok(points.length / 3 >= 6 && points.length / 3 <= 9);
+  const xs: number[] = [], ys: number[] = [];
+  for (let i = 0; i < points.length; i += 3) { xs.push(points[i]); ys.push(points[i + 1]); assert.ok(points[i + 2] > 0.8); }
+  assert.ok(Math.max(...xs) - Math.min(...xs) <= 1, 'one thick stroke must not become several parallel LED columns');
+  assert.ok(Math.min(...ys) <= 13 && Math.max(...ys) >= 49, 'the stroke endpoints survive thinning');
+  assert.equal(sampleStrokeCenterline(alpha, 256, 256, 7).length, 0);
+});
+
+test('stroke-center LEDs preserve a closed counter, inner cross and nearby distinct strokes', () => {
+  const width = 80, height = 80;
+  const alpha = new Uint8Array(width * height);
+  const rect = (left: number, top: number, right: number, bottom: number) => {
+    for (let y = top; y <= bottom; y++) for (let x = left; x <= right; x++) alpha[y * width + x] = 255;
+  };
+  // A 围-like enclosure: all four counters must stay open around its cross.
+  rect(8, 8, 12, 70); rect(8, 8, 70, 12); rect(66, 8, 70, 70); rect(8, 66, 70, 70);
+  rect(24, 37, 54, 41); rect(37, 24, 41, 54);
+  const points = sampleStrokeCenterline(alpha, width, height, 6);
+  const xy: number[][] = [];
+  for (let i = 0; i < points.length; i += 3) xy.push([points[i], points[i + 1]]);
+  for (const [cx, cy] of [[25, 25], [53, 25], [25, 53], [53, 53]]) {
+    assert.ok(xy.every(([x, y]) => Math.hypot(x - cx, y - cy) > 7), 'a counter must not gain LEDs inside its gap');
+  }
+  assert.ok(xy.some(([x, y]) => Math.abs(x - 39) < 2 && Math.abs(y - 39) < 2));
+  assert.ok(xy.some(([x, y]) => x < 13 && y > 20 && y < 60));
+  assert.ok(xy.some(([x, y]) => x > 65 && y > 20 && y < 60));
+  assert.deepEqual(sampleStrokeCenterline(alpha, width, height, 6), points, 'arc-length phase must be deterministic');
+});
+
+test('fine junctions merge neighboring branch endpoints into one full-size LED', () => {
+  const width = 64, alpha = new Uint8Array(width * width);
+  const ink = (x: number, y: number) => { alpha[y * width + x] = 255; };
+  // Five arms create several graph nodes only one pixel apart, as in 我.
+  for (let i = 9; i <= 54; i++) { ink(i, 31); ink(31, i); }
+  for (let i = 32; i < 52; i++) ink(i, i);
+  const points = sampleStrokeCenterline(alpha, width, width, 7);
+  const junction: number[][] = [];
+  for (let i = 0; i < points.length; i += 3) {
+    assert.equal(points[i + 2], 1, 'crossing branches must not turn into undersized twin LEDs');
+    if (Math.hypot(points[i] - 31, points[i + 1] - 31) < 4) junction.push([points[i], points[i + 1]]);
+  }
+  assert.equal(junction.length, 1, 'the crossing has one shared LED');
+  for (const [x, y] of [[10, 31], [54, 31], [31, 10], [31, 54], [51, 51]]) {
+    assert.ok(Array.from({ length: points.length / 3 }, (_, i) => Math.hypot(points[i * 3] - x, points[i * 3 + 1] - y)).some(distance => distance < 2), 'a real branch endpoint must survive junction consolidation');
+  }
+  assert.deepEqual(sampleStrokeCenterline(alpha, width, width, 7), points);
+});
+
+test('fine consolidation keeps close parallel strokes on both sides of a narrow counter', () => {
+  const width = 64, alpha = new Uint8Array(width * width);
+  for (let y = 8; y <= 55; y++) { alpha[y * width + 28] = 255; alpha[y * width + 32] = 255; }
+  // These sides are connected at the ends, but not across their middle gap.
+  for (let x = 28; x <= 32; x++) { alpha[8 * width + x] = 255; alpha[55 * width + x] = 255; }
+  const points = sampleStrokeCenterline(alpha, width, width, 8);
+  let left = 0, right = 0;
+  for (let i = 0; i < points.length; i += 3) {
+    assert.equal(points[i + 2], 1);
+    if (points[i + 1] < 18 || points[i + 1] > 45) continue;
+    assert.ok(points[i] < 29 || points[i] > 31, 'do not merge parallel sides into a dot inside the counter');
+    if (points[i] < 29) left++; else right++;
+  }
+  assert.ok(left >= 3 && right >= 3, 'both nearby sides must remain visible');
+});
+
+test('fine scrolling rasterizes only visible glyphs and reuses its fixed small mask across offsets', () => {
+  const { makeCanvas, canvases } = canvasEnvironment((x, y) => x >= 44 && x <= 50 && y >= 20 && y <= 76 ? 255 : 0);
+  const target = makeCanvas();
+  const text = Array.from({ length: 180 }, (_, index) => String.fromCodePoint(0x4E00 + index)).join('');
+  const design = { ...light('L3'), dotStyle: 'fine' as const, text, scroll: true, loop: true };
+  const prior = new Set(canvases.flatMap(item => item.calls));
+  renderBoard(target.canvas, design, { width: 720, height: 405, repeatGap: 30 });
+  const fresh = () => canvases.flatMap(item => item.calls).filter(call => !prior.has(call));
+  const reads = fresh().filter(call => call.name === 'getImageData');
+  assert.ok(reads.length > 0 && reads.length < 12, 'offscreen text must not rasterize all 180 glyphs');
+  const masks = canvases.filter(item => item.calls.some(call => reads.includes(call)));
+  assert.equal(masks.length, 1);
+  assert.equal(masks[0].canvas.width, 96);
+  assert.equal(masks[0].canvas.height, 96);
+  const sizes = masks[0].sizeWrites.length;
+  renderBoard(target.canvas, design, { width: 720, height: 405, repeatGap: 30, offset: 0.25 });
+  assert.equal(fresh().filter(call => call.name === 'getImageData').length, reads.length);
+  assert.equal(masks[0].sizeWrites.length, sizes);
+  invalidateFontCache();
+  renderBoard(target.canvas, design, { width: 720, height: 405, repeatGap: 30, offset: 0.25 });
+  assert.equal(fresh().filter(call => call.name === 'getImageData').length, reads.length * 2);
+  assert.equal(masks[0].sizeWrites.length, sizes, 'font readiness clears vectors, not the bitmap allocation');
+});
+
+test('fine preview and export share centerline positions and all effects ignore saved font choices', () => {
+  const { makeCanvas, canvases } = canvasEnvironment((x, y) => x >= 44 && x <= 50 && y >= 20 && y <= 76 ? 255 : 0);
+  const design = { ...light('L3'), dotStyle: 'fine' as const, fontId: 'serif' as const, gradient: true, gradientEnd: '#FF3399' };
+  const preview = makeCanvas();
+  renderBoard(preview.canvas, design, { width: 1920, height: 1080 });
+  const exported = renderExport(design, 'board');
+  const output = canvases.find(item => item.canvas === exported)!;
+  const stamps = (calls: Call[]) => calls.filter(call => call.name === 'drawImage').map(call => call.args);
+  assert.deepEqual(stamps(output.calls), stamps(preview.calls));
+  const corePasses = preview.calls.filter(call => call.name === 'drawImage' && Number(call.args[2]) > 0);
+  assert.equal(new Set(corePasses.map(call => Number(call.args[7]).toFixed(6))).size, 1, 'every centerline LED has the same diameter');
+  for (const templateId of ['L1', 'L2', 'L3', 'L4', 'L5', 'H1', 'H2', 'H3'] as const) {
+    const base = createDesign(templateId);
+    const target = makeCanvas();
+    const metrics = ['sans', 'serif', 'handwritten'].map(fontId => measureBoard(target.canvas, { ...base, fontId: fontId as Design['fontId'] }, { width: 1280, height: 720 }));
+    assert.deepEqual(metrics[1], metrics[0]);
+    assert.deepEqual(metrics[2], metrics[0]);
+    const fonts = new Set(target.calls.filter(call => call.name === 'measureText').map(call => call.state.font));
+    assert.ok([...fonts].every(font => templateId === 'H2' ? /Handwriting/.test(String(font)) : !/Handwriting|Songti|SimSun/.test(String(font))));
+  }
+});
+
+test('new rich decorations replace the legacy corner icon and export the same seeded edge layout', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const options = { width: 1920, height: 1080 };
+  const design = { ...light('L1'), text: '莎莎加油', decorationId: 'hearts' as const, decorationSeed: 1, sticker: 'fries' as const };
+  const preview = makeCanvas();
+  const metrics = renderBoard(preview.canvas, design, options);
+  const placements = getBoardDecorationLayout(design, { ...options, textBounds: {
+    left: (options.width - metrics.textWidth) / 2, right: (options.width + metrics.textWidth) / 2,
+    top: options.height * 0.51 - metrics.fontSize / 2, bottom: options.height * 0.51 + metrics.fontSize / 2,
+  } });
+  assert.ok(placements.length > 1);
+  assert.equal(preview.calls.filter(call => call.name === 'rotate').length, placements.length * 2);
+  assert.equal(preview.calls.filter(call => call.name === 'stroke').length, 0);
+  assert.ok(preview.calls.filter(call => call.name === 'drawImage').length > 20);
+  const exported = renderExport(design, 'board');
+  const output = canvases.find(item => item.canvas === exported)!;
+  const transforms = (calls: Call[]) => calls.filter(call => call.name === 'rotate' || call.name === 'translate').map(call => [call.name, ...call.args]);
+  assert.deepEqual(transforms(output.calls), transforms(preview.calls));
+  const plain = measureBoard(makeCanvas().canvas, { ...design, decorationId: 'none', sticker: 'none' }, options);
+  assert.ok(metrics.fontSize > plain.fontSize * 0.6);
+});
+
+test('rich decorations remain fixed while repeated text uses one bounded viewport read', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const design = { ...light('L3'), dotStyle: 'fluorescent' as const, decorationId: 'hearts' as const, scroll: true, loop: true, decorationSeed: 5 };
+  const transforms: unknown[][] = [];
+  for (const offset of [-70, 80]) {
+    const target = makeCanvas();
+    const prior = new Set(canvases.flatMap(item => item.calls));
+    renderBoard(target.canvas, design, { width: 1280, height: 720, offset, repeatGap: 50 });
+    assert.ok(target.calls.some(call => call.name === 'clip'));
+    const fresh = canvases.flatMap(item => item.calls).filter(call => !prior.has(call));
+    assert.ok(fresh.filter(call => call.name === 'getImageData').length <= 1);
+    transforms.push(target.calls.filter(call => call.name === 'rotate' || call.name === 'translate').map(call => [call.name, ...call.args]));
+  }
+  assert.deepEqual(transforms[0], transforms[1]);
 });
 
 test('board export uses the same neon renderer and layout as preview', () => {
@@ -221,7 +468,7 @@ test('dot sampling ignores bright cell-edge fringes and preserves opaque adjacen
   assert.ok(target.calls.filter(call => call.name === 'drawImage').length > 10);
 });
 
-test('font changes and asynchronous font invalidation refresh the point raster', () => {
+test('legacy font choices do not change the point raster; font readiness still invalidates it', () => {
   const { makeCanvas, canvases } = canvasEnvironment();
   const target = makeCanvas();
   const pixels = () => canvases.flatMap(item => item.calls).filter(call => call.name === 'getImageData').length;
@@ -229,10 +476,10 @@ test('font changes and asynchronous font invalidation refresh the point raster',
   renderBoard(target.canvas, design, { width: 720, height: 405 });
   const before = pixels();
   renderBoard(target.canvas, { ...design, fontId: 'handwritten' }, { width: 720, height: 405 });
-  assert.equal(pixels(), before + 1);
+  assert.equal(pixels(), before);
   invalidateFontCache();
   renderBoard(target.canvas, { ...design, fontId: 'handwritten' }, { width: 720, height: 405 });
-  assert.equal(pixels(), before + 2);
+  assert.equal(pixels(), before + 1);
 });
 
 test('static light boards fit the whole long sentence even at a large requested size', () => {

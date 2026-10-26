@@ -1,6 +1,10 @@
 import { SLOGANS } from './slogans.ts';
 import { DEFAULT_DOT_EMOJI, DEFAULT_LIGHT_TEXT } from './design-values.ts';
 import type { BoardFontId } from './fonts.ts';
+import type { DotStyle } from './design-values.ts';
+import type { DecorationId } from './decorations.ts';
+export type { DotStyle } from './design-values.ts';
+export type { DecorationId } from './decorations.ts';
 export type { BoardFontId } from './fonts.ts';
 export { SLOGANS, SLOGAN_CATEGORIES, findSlogans, getSloganPage, findSloganByText, type Slogan, type SloganCategory, type SloganFilter } from './slogans.ts';
 
@@ -18,6 +22,9 @@ export type Design = {
   dotShape: DotShape;
   dotEmoji: string;
   dotDensity: number;
+  dotStyle: DotStyle;
+  decorationId: DecorationId;
+  decorationSeed: number;
   glow: number;
   fontScale: number;
   fontId: BoardFontId;
@@ -57,6 +64,7 @@ const LIGHT_PALETTES: Palette[] = [
 
 export const TEMPLATES: Template[] = [
   { id: 'L3', name: '点阵灯牌', category: 'light', description: '一颗颗光点，汇成加油声', palettes: [
+    { id: 'lemon-led', name: '荧光黄粉', background: '#000000', foreground: '#FFF12A', accent: '#FF3C88' },
     { id: 'amber', name: '琥珀光点', background: '#000000', foreground: '#FFD76A', accent: '#FF784F' },
     { id: 'mint', name: '薄荷光点', background: '#000000', foreground: '#9CFFD5', accent: '#89BDFF' },
     ...LIGHT_PALETTES,
@@ -111,7 +119,10 @@ export function createDesign(templateId: TemplateId = 'L3'): Design {
     accent: palette.accent,
     dotShape: 'circle',
     dotEmoji: DEFAULT_DOT_EMOJI,
-    dotDensity: 2,
+    dotDensity: template.category === 'light' ? 1 : 2,
+    dotStyle: template.category === 'light' ? 'fluorescent' : 'classic',
+    decorationId: template.category === 'light' ? 'hearts' : 'none',
+    decorationSeed: 1,
     glow: 65,
     fontScale: 100,
     fontId: 'sans',

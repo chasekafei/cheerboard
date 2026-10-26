@@ -1,9 +1,15 @@
 export const DEFAULT_DOT_EMOJI = '🏓';
-export const DEFAULT_LIGHT_TEXT = '点击屏幕修改文案或样式';
+export const DEFAULT_LIGHT_TEXT = '点击屏幕查看菜单';
 export const MIN_FONT_SCALE = 70;
 export const MAX_FONT_SCALE = 200;
 export const MIN_DOT_DENSITY = 0;
 export const MAX_DOT_DENSITY = 3;
+export const DOT_STYLES = [
+  { id: 'classic', name: '经典点阵' },
+  { id: 'fluorescent', name: '荧光亮点' },
+  { id: 'fine', name: '细线点阵' },
+] as const;
+export type DotStyle = typeof DOT_STYLES[number]['id'];
 const MAX_EMOJI_CODE_POINTS = 32;
 
 function regionalIndicator(code: number): boolean {
