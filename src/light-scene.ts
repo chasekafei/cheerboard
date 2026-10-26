@@ -1,5 +1,5 @@
 import type { Design } from './catalog.ts';
-import { measureBoard, renderBoard } from './renderer.ts';
+import { measureBoard, renderBoard, resolveRepeatPeriod } from './renderer.ts';
 
 /** CSS pixels per second, using the unrotated board's displayed CSS height. */
 export function scrollPixelsPerSecond(speed: number, boardHeight: number): number {
@@ -35,6 +35,8 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
   let offset = 0;
   let previous: number | null = null;
   let distance = 0;
+  let repeatGap = 0;
+  let cycle = 0;
   let geometry = lightGeometry(1, 1, 'landscape');
   let current: Design | null = null;
   let lastVisualKey = '';
@@ -51,7 +53,8 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
   const draw = () => {
     if (!current || disposed) return;
     if (completed) renderBoard(canvas, { ...current, scroll: false }, geometry);
-    else renderBoard(canvas, current, { ...geometry, offset: offset * geometry.width / geometry.cssWidth });
+    else renderBoard(canvas, current, { ...geometry, offset: offset * geometry.width / geometry.cssWidth,
+      ...(current.scroll && current.loop ? { repeatGap } : {}) });
   };
   const schedule = () => {
     if (!frame && canAnimate()) frame = requestAnimationFrame(paint);
@@ -63,16 +66,13 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
       const elapsed = Math.max(0, Math.min(100, time - previous)) / 1000;
       const direction = current.direction === 'left' ? -1 : 1;
       offset += elapsed * scrollPixelsPerSecond(current.speed, geometry.cssHeight) * direction;
-      const passedEdge = direction < 0 ? offset <= -distance : offset >= distance;
-      if (passedEdge) {
-        if (current.loop) {
-          const overshoot = direction < 0 ? -distance - offset : offset - distance;
-          // Preserve the sub-frame remainder instead of resetting the animation clock.
-          offset = direction < 0 ? distance - overshoot % (distance * 2) : -distance + overshoot % (distance * 2);
-        } else {
-          completed = true;
-          offset = 0;
-        }
+      if (current.loop) {
+        // Neighboring copies are one sentence plus a small gap apart, so a
+        // whole-period phase change is visually identical in either direction.
+        if (cycle > 0) offset %= cycle;
+      } else if (direction < 0 ? offset <= -distance : offset >= distance) {
+        completed = true;
+        offset = 0;
       }
     }
     previous = completed ? null : time;
@@ -105,8 +105,12 @@ export function mountLightScene(root: HTMLElement, getDesign: () => Design, togg
     if (force || measureKey !== lastMeasureKey) {
       const measured = measureBoard(canvas, design, geometry);
       distance = ((geometry.width + measured.textWidth) / 2 + measured.fontSize * 0.25) * geometry.cssWidth / geometry.width;
+      repeatGap = measured.fontSize * 0.38;
+      // Renderer owns the same minimum period used to bound very small glyphs.
+      cycle = resolveRepeatPeriod(measured.textWidth, repeatGap, geometry.width) * geometry.cssWidth / geometry.width;
     }
     if (reset || restart) { offset = 0; completed = false; }
+    else if (design.scroll && design.loop && cycle > 0) offset %= cycle;
     else if (distance > 0) offset = Math.max(-distance, Math.min(distance, offset));
     current = design;
     lastVisualKey = nextVisualKey;

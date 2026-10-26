@@ -3,7 +3,7 @@ import { normalizeDotEmoji, MIN_DOT_DENSITY, MAX_DOT_DENSITY, MIN_FONT_SCALE, MA
 import { getBoardFont, TUBE_FONT } from './fonts.ts';
 import { getTextLines } from './text-layout.ts';
 
-type RenderOptions = { width?: number; height?: number; offset?: number };
+export type RenderOptions = { width?: number; height?: number; offset?: number; repeatGap?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
 type Context = CanvasRenderingContext2D;
 const FONT = '"Arial Black", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
@@ -18,8 +18,26 @@ const MAX_GHOST_PIXELS = 2_000_000;
 const dotSprites = new Map<string, HTMLCanvasElement>();
 const MAX_DOT_SPRITES = 32;
 const DOT_SAMPLE_SCALE = 4;
+const MAX_REPEAT_COPIES = 54;
 type TextBounds = { x: number; y: number; width: number; height: number };
 type Paint = string | CanvasGradient;
+
+/** Bitmap-pixel period shared with the scene's offset wrapping. */
+export function resolveRepeatPeriod(textWidth: number, gap: number, viewportWidth: number): number {
+  const limit = Number.MAX_SAFE_INTEGER / 4;
+  const width = bounded(textWidth, 0, limit, 0);
+  const safeGap = bounded(gap, 4, limit, 4);
+  const viewport = bounded(viewportWidth, 1, limit, 1);
+  return Math.max(width + safeGap, viewport / 48);
+}
+
+function visibleTextCenters(x: number, textWidth: number, viewportWidth: number, period: number): number[] {
+  if (!period) return [x];
+  const first = Math.ceil((-textWidth / 2 - x) / period) - 1;
+  const last = Math.floor((viewportWidth + textWidth / 2 - x) / period) + 1;
+  const count = Math.max(0, Math.min(MAX_REPEAT_COPIES, last - first + 1));
+  return Array.from({ length: count }, (_, index) => x + (first + index) * period);
+}
 
 export function invalidateFontCache(): void {
   dotMaskKey = '';
@@ -394,23 +412,35 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
     // glyph as separate rectangular tubes. Soft light spreads beyond that tube.
     ctx.fillStyle = paint;
     ctx.shadowColor = glowColor;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
     if (strength > 0) {
-      ctx.globalAlpha = strength * 0.78;
-      ctx.shadowBlur = fontSize * (0.2 + strength * 0.24);
+      // Project the same colored light downward onto the board, then soften
+      // the tube's own halo. Only the shadow moves; the glyph never doubles.
+      ctx.globalAlpha = strength * 0.6;
+      ctx.shadowOffsetY = fontSize * (0.1 + strength * 0.1);
+      ctx.shadowBlur = fontSize * (0.12 + strength * 0.18);
       ctx.fillText(line, x, y);
+      ctx.shadowOffsetY = 0;
       ctx.globalAlpha = strength * 0.72;
-      ctx.shadowBlur = fontSize * (0.045 + strength * 0.075);
+      ctx.shadowBlur = fontSize * (0.22 + strength * 0.28);
+      ctx.fillText(line, x, y);
+      ctx.globalAlpha = strength * 0.8;
+      ctx.shadowBlur = fontSize * (0.07 + strength * 0.1);
       ctx.fillText(line, x, y);
     }
     ctx.globalAlpha = 1;
     ctx.strokeStyle = paint;
     ctx.shadowBlur = fontSize * 0.025 * strength;
-    ctx.lineWidth = Math.max(0.5, fontSize * 0.012);
+    ctx.lineWidth = Math.max(0.6, fontSize * 0.016);
     ctx.strokeText(line, x, y);
     ctx.fillText(line, x, y);
     ctx.shadowBlur = 0;
     ctx.fillStyle = core;
-    ctx.globalAlpha = 0.92;
+    ctx.strokeStyle = core;
+    ctx.lineWidth = Math.max(0.35, fontSize * 0.0025);
+    ctx.globalAlpha = 0.95;
+    ctx.strokeText(line, x, y);
     ctx.fillText(line, x, y);
     ctx.restore();
     return;
@@ -478,7 +508,8 @@ function dotSprite(design: Design, spacing: number, color: string): HTMLCanvasEl
   return sprite;
 }
 
-function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number, width: number, height: number, bounds: TextBounds, textScaleX: number): void {
+function dotText(ctx: Context, design: Design, lines: string[], x: number, y: number, fontSize: number, gap: number,
+  width: number, height: number, bounds: TextBounds, textScaleX: number, centers: readonly number[], repeatPeriod: number): void {
   // Keep enough cells across each glyph after auto-fitting, within a fixed
   // viewport budget. Supersampling preserves counters without eroding strokes.
   const density = Math.round(bounded(design.dotDensity, MIN_DOT_DENSITY, MAX_DOT_DENSITY, 2));
@@ -487,8 +518,11 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
   const inkBottom = Math.min(height, bounds.y + bounds.height / 2 + fontSize * 0.15);
   // A portrait viewport can be mostly empty above/below a fitted sentence.
   // Spend the row budget on its actual text band instead of those blank rows.
-  const spacing = Math.max(1, width / 384, Math.max(1, inkBottom - inkTop) / 190,
+  let spacing = Math.max(1, width / 384, Math.max(1, inkBottom - inkTop) / 190,
     Math.min(Math.min(width, height) * [0.05, 0.03, 0.022, 0.015][density], fontSize / glyphCells));
+  // A whole period spans an integer number of cells, so wrapping the scene's
+  // offset cannot change the phase of the repeated LED grid.
+  if (repeatPeriod) spacing = repeatPeriod / Math.max(1, Math.floor(repeatPeriod / spacing));
   const rasterTop = Math.floor(inkTop / spacing) * spacing;
   const mask = dotMask || (dotMask = document.createElement('canvas'));
   const columns = Math.min(384, Math.max(1, Math.ceil(width / spacing)));
@@ -498,7 +532,8 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
   const sampleX = Math.round(x / spacing) * spacing;
   const shiftX = x - sampleX;
   const font = boardFont(design, fontSize);
-  const key = JSON.stringify([maskWidth, maskHeight, spacing, font, gap, sampleX, y, rasterTop, textScaleX, lines]);
+  const copyOffsets = centers.map(center => (center - x) / textScaleX);
+  const key = JSON.stringify([maskWidth, maskHeight, spacing, font, gap, sampleX, y, rasterTop, textScaleX, lines, copyOffsets]);
   if (mask.width !== maskWidth) mask.width = maskWidth;
   if (mask.height !== maskHeight) mask.height = maskHeight;
   const mctx = mask.getContext('2d', { willReadFrequently: true });
@@ -514,7 +549,9 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
     mctx.textAlign = 'center';
     mctx.textBaseline = 'middle';
     mctx.fillStyle = '#FFFFFF';
-    lines.forEach((line, index) => mctx.fillText(line, 0, (index - (lines.length - 1) / 2) * gap));
+    copyOffsets.forEach(copyX => {
+      lines.forEach((line, index) => mctx.fillText(line, copyX, (index - (lines.length - 1) / 2) * gap));
+    });
     const rgba = mctx.getImageData(0, 0, mask.width, mask.height).data;
     const cells = new Uint8ClampedArray(columns * rows);
     for (let row = 0; row < rows; row++) {
@@ -547,7 +584,8 @@ function dotText(ctx: Context, design: Design, lines: string[], x: number, y: nu
       const cellY = rasterTop + row * spacing;
       let sprite = sprites[0];
       if (gradient) {
-        const progress = bounded(0.5 + ((cellX + spacing / 2 - bounds.x) * vector.dx
+        const copyX = repeatPeriod ? bounds.x + Math.round((cellX + spacing / 2 - bounds.x) / repeatPeriod) * repeatPeriod : bounds.x;
+        const progress = bounded(0.5 + ((cellX + spacing / 2 - copyX) * vector.dx
           + (cellY + spacing / 2 - bounds.y) * vector.dy) / vector.span, 0, 1, 0);
         sprite = sprites[Math.round(progress * (sprites.length - 1))];
       }
@@ -635,26 +673,32 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   ctx.save();
   ctx.clearRect(0, 0, width, height);
   drawBackground(ctx, design, width, height, accent);
-  const offset = scrolling ? (options.offset || 0) : 0;
-  const x = width / 2 + offset;
+  const offset = scrolling && Number.isFinite(options.offset) ? options.offset! : 0;
+  const repeatPeriod = scrolling && design.loop && Number.isFinite(options.repeatGap)
+    ? resolveRepeatPeriod(textWidth, options.repeatGap!, width) : 0;
+  const x = width / 2 + (repeatPeriod ? offset % repeatPeriod : offset);
+  const centers = visibleTextCenters(x, textWidth, width, repeatPeriod);
   const y = height * (design.templateId === 'H2' ? 0.52 : 0.51);
   const bounds = { x, y, width: textWidth, height: fontSize * lineHeight * lines.length };
-  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight, width, height, bounds, textScaleX);
+  if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight,
+    width, height, bounds, textScaleX, centers, repeatPeriod);
   else {
-    ctx.save();
-    ctx.translate(x, y); ctx.scale(textScaleX, 1); ctx.translate(-x, -y);
-    if (design.templateId === 'L5') {
-      lines.forEach((line, index) => ghostText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight,
-        fontSize, accent, width, height, textScaleX));
-    } else {
-      const paintBounds = { ...bounds, width: naturalTextWidth };
-      const paint = textPaint(ctx, design, paintBounds);
-      const core = design.templateId === 'L4' ? textPaint(ctx, design, paintBounds, true) : paint;
-      if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
-      if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
-      lines.forEach((line, index) => styledText(ctx, design, line, x, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core));
-    }
-    ctx.restore();
+    centers.forEach(copyX => {
+      ctx.save();
+      ctx.translate(copyX, y); ctx.scale(textScaleX, 1); ctx.translate(-copyX, -y);
+      if (design.templateId === 'L5') {
+        lines.forEach((line, index) => ghostText(ctx, design, line, copyX, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight,
+          fontSize, accent, width, height, textScaleX));
+      } else {
+        const paintBounds = { ...bounds, x: copyX, width: naturalTextWidth };
+        const paint = textPaint(ctx, design, paintBounds);
+        const core = design.templateId === 'L4' ? textPaint(ctx, design, paintBounds, true) : paint;
+        if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
+        if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
+        lines.forEach((line, index) => styledText(ctx, design, line, copyX, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core));
+      }
+      ctx.restore();
+    });
   }
   if (hasSticker) {
     const stickerRadius = unit * (light ? 0.04 : 0.09);

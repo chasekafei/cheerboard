@@ -42,6 +42,7 @@ function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1) {
   const originalCancel = Object.getOwnPropertyDescriptor(globalThis, 'cancelAnimationFrame');
   const callbacks = new Map<number, FrameRequestCallback>();
   const draws: Draw[] = [];
+  const frames: Draw[][] = [];
   const stats = { measurements: 0, widthFactor: 0.56, toggles: 0 };
   let frameId = 0;
   let now = 0;
@@ -54,7 +55,12 @@ function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1) {
         stats.measurements++;
         return { width: Array.from(text).length * Number(/([\d.]+)px/.exec(font)?.[1] || 10) * stats.widthFactor };
       };
-      if (name === 'fillText') return (text: string, x: number) => draws.push({ text, x, font });
+      if (name === 'clearRect') return () => frames.push([]);
+      if (name === 'fillText') return (text: string, x: number) => {
+        const draw = { text, x, font };
+        draws.push(draw);
+        frames[frames.length - 1].push(draw);
+      };
       if (name === 'save') return () => stack.push(font);
       if (name === 'restore') return () => { font = stack.pop() || font; };
       return () => {};
@@ -94,9 +100,14 @@ function environment(t: TestContext, changes: Partial<Design> = {}, dpr = 1) {
     for (let remaining = milliseconds; remaining > 0; remaining -= 20) step(Math.min(20, remaining));
   };
   const last = () => draws[draws.length - 1];
-  const cssX = () => last().x * parseFloat(canvas.style.width) / canvas.width;
+  const frame = () => frames[frames.length - 1];
+  const cssPositions = () => frame().map(draw => draw.x * parseFloat(canvas.style.width) / canvas.width);
+  const cssX = () => {
+    const center = parseFloat(canvas.style.width) / 2;
+    return cssPositions().reduce((best, x) => Math.abs(x - center) < Math.abs(best - center) ? x : best);
+  };
   const fontSize = () => Number(/([\d.]+)px/.exec(last().font)![1]) * parseFloat(canvas.style.height) / canvas.height;
-  return { scene, design, root, window, document, canvas, callbacks, draws, stats, step, advance, last, cssX, fontSize, dispose };
+  return { scene, design, root, window, document, canvas, callbacks, draws, stats, step, advance, last, frame, cssPositions, cssX, fontSize, dispose };
 }
 
 function close(actual: number, expected: number) {
@@ -241,14 +252,80 @@ test('non-looping motion in both directions ends on a full static board and stay
   }
 });
 
-test('looping boards wrap at the edges in either direction', t => {
+test('short looping text fills wide boards with only small gaps in either direction and DPR', t => {
   for (const direction of ['left', 'right'] as const) {
-    const env = environment(t, { text: '加油', direction, speed: 5 });
-    env.step(0);
-    const positions = [];
-    for (let i = 0; i < 600; i++) { env.step(); positions.push(env.cssX()); }
-    assert.ok(positions.some((position, index) => index && (direction === 'left' ? position > positions[index - 1] + 100 : position < positions[index - 1] - 100)));
-    assert.equal(env.callbacks.size, 1);
+    for (const dpr of [1, 2]) {
+      const env = environment(t, { text: '钦', direction, speed: 5, fontScale: 20 }, dpr);
+      const font = env.fontSize();
+      const textWidth = font * env.stats.widthFactor;
+      const positions = env.cssPositions().sort((a, b) => a - b);
+      assert.ok(positions.length > 2, 'short text must use as many neighbors as the viewport needs');
+      const gap = positions[1] - positions[0] - textWidth;
+      assert.ok(gap >= font * .3 && gap <= font * .45);
+      env.step(0);
+      for (let i = 0; i < 150; i++) {
+        env.step();
+        const intervals = env.cssPositions().map(x => [x - textWidth / 2, x + textWidth / 2])
+          .filter(([left, right]) => right > 0 && left < 1000).sort((a, b) => a[0] - b[0]);
+        assert.ok(intervals.length > 2);
+        let rightEdge = 0;
+        let blank = 0;
+        for (const [left, right] of intervals) {
+          blank = Math.max(blank, left - rightEdge);
+          rightEdge = Math.max(rightEdge, right);
+        }
+        blank = Math.max(blank, 1000 - rightEdge);
+        assert.ok(blank <= gap + .000001, `viewport blank ${blank} exceeds the small inter-copy gap ${gap}`);
+      }
+      assert.equal(env.callbacks.size, 1);
+      env.dispose();
+    }
+  }
+});
+
+test('repeated text keeps its phase through multiple cycles, reversal, speed changes and DPR', t => {
+  const env = environment(t, { text: '加油', fontScale: 40, speed: 5 });
+  const positions = env.cssPositions().sort((a, b) => a - b);
+  const period = positions[1] - positions[0];
+  let travelled = 0;
+  const phaseMatches = () => {
+    const residual = ((env.cssX() - 500 - travelled) % period + period) % period;
+    close(Math.min(residual, period - residual), 0);
+  };
+  env.step(0);
+  env.advance(2100);
+  travelled -= scrollPixelsPerSecond(5, 500) * 2.1;
+  phaseMatches();
+  const beforeReverse = env.cssPositions();
+  env.design.direction = 'right';
+  env.scene.repaint();
+  assert.deepEqual(env.cssPositions(), beforeReverse);
+  env.step(0);
+  env.advance(700);
+  travelled += scrollPixelsPerSecond(5, 500) * .7;
+  phaseMatches();
+  env.design.speed = 2;
+  const beforeSpeed = env.cssPositions();
+  env.scene.repaint();
+  assert.deepEqual(env.cssPositions(), beforeSpeed);
+  env.step(0);
+  env.advance(600);
+  travelled += scrollPixelsPerSecond(2, 500) * .6;
+  phaseMatches();
+  env.window.devicePixelRatio = 2;
+  env.scene.repaint();
+  phaseMatches();
+});
+
+test('static and non-looping boards keep one copy instead of repeating across the viewport', t => {
+  for (const scroll of [false, true]) {
+    const env = environment(t, { text: '钦', scroll, loop: false, fontScale: 20 });
+    assert.equal(env.frame().length, 1);
+    if (scroll) {
+      env.step(0);
+      env.advance(200);
+      assert.equal(env.frame().length, 1);
+    }
     env.dispose();
   }
 });

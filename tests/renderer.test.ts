@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createDesign, type Design } from '../src/catalog.ts';
-import { invalidateFontCache, measureBoard, renderBoard, renderExport } from '../src/renderer.ts';
+import { invalidateFontCache, measureBoard, renderBoard, renderExport, resolveRepeatPeriod } from '../src/renderer.ts';
 
 type Call = { name: string; args: unknown[]; state: Record<string, unknown> };
 type SizeWrite = { dimension: 'width' | 'height'; value: number };
@@ -112,14 +112,25 @@ test('outline and neon are distinct; zero glow keeps a thin-font tube and bright
     assert.equal(neon.calls.find(call => call.name === 'fillRect')?.state.fillStyle, '#121212');
     const strokes = neon.calls.filter(call => call.name === 'strokeText');
     const fills = neon.calls.filter(call => call.name === 'fillText');
-    assert.equal(strokes.length, 1);
+    assert.equal(strokes.length, 2);
     assert.ok(fills.length >= 2);
     const core = fills[fills.length - 1];
     assert.match(String(core.state.font), /^100 /);
     assert.notEqual(core.state.fillStyle, strokes[0].state.strokeStyle);
     assert.equal(core.state.shadowBlur, 0);
     assert.equal(strokes[0].state.strokeStyle, '#62F7FF');
+    assert.equal(strokes[1].state.strokeStyle, core.state.fillStyle);
+    assert.ok(Number(strokes[1].state.lineWidth) < Number(strokes[0].state.lineWidth) / 4);
+    assert.equal(strokes[1].state.lineJoin, 'round');
     assert.equal(fills.some(call => Number(call.state.shadowBlur) > 0), glow > 0);
+    const projection = fills.find(call => Number(call.state.shadowOffsetY) > 0);
+    assert.equal(Boolean(projection), glow > 0);
+    if (projection) {
+      assert.equal(projection.state.shadowColor, '#62F7FF');
+      assert.ok(Number(projection.state.shadowBlur) > 0);
+      assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 1);
+      assert.deepEqual(projection.args, core.args);
+    }
   }
 });
 
@@ -399,4 +410,102 @@ test('portrait orientation exports a true portrait board and preserves its ratio
     assert.deepEqual([source.width, source.height], [1080, 1920]);
     assert.ok(Math.abs(Number(call.args[3]) / Number(call.args[4]) - 9 / 16) < 0.000001);
   }
+});
+
+test('repeat periods preserve requested gaps and bound extreme tiny-text copy counts', () => {
+  assert.equal(resolveRepeatPeriod(120, 30, 1280), 150);
+  assert.equal(resolveRepeatPeriod(120, -5, 1280), 124);
+  assert.equal(resolveRepeatPeriod(0, 0, 16000), 16000 / 48);
+  for (const value of [NaN, Infinity, -Infinity, Number.MAX_VALUE]) {
+    assert.ok(Number.isFinite(resolveRepeatPeriod(value, value, value)));
+  }
+  const { makeCanvas } = canvasEnvironment();
+  const target = makeCanvas();
+  renderBoard(target.canvas, { ...light('L1'), scroll: true, loop: true }, { width: 16000, height: 1, repeatGap: 0, offset: Number.MAX_VALUE });
+  const copies = target.calls.filter(call => call.name === 'fillText');
+  assert.ok(copies.length > 2 && copies.length <= 54);
+  assert.ok(copies.every(call => Number.isFinite(call.args[1])));
+});
+
+test('looping text fills the viewport with periodic copies for both signs and draws background and sticker once', () => {
+  const { makeCanvas } = canvasEnvironment();
+  const design = { ...light('L1'), text: '莎', scroll: true, loop: true, sticker: 'star' as const };
+  const measured = measureBoard(makeCanvas().canvas, design, { width: 1280, height: 720 });
+  const gap = measured.fontSize * 0.38;
+  const period = resolveRepeatPeriod(measured.textWidth, gap, 1280);
+  let baseline: number[] = [];
+  for (const offset of [-47, 47, 47 + period * 100]) {
+    const target = makeCanvas();
+    renderBoard(target.canvas, design, { width: 1280, height: 720, offset, repeatGap: gap });
+    const positions = target.calls.filter(call => call.name === 'fillText').map(call => Number(call.args[1])).sort((a, b) => a - b);
+    assert.ok(positions.length > 2 && positions.length <= 54);
+    for (let index = 1; index < positions.length; index++) assert.ok(Math.abs(positions[index] - positions[index - 1] - period) < 0.000001);
+    assert.ok(positions[0] - measured.textWidth / 2 < 0);
+    assert.ok(positions[positions.length - 1] + measured.textWidth / 2 > 1280);
+    assert.equal(target.calls.filter(call => call.name === 'fillRect').length, 1);
+    assert.equal(target.calls.filter(call => call.name === 'rotate').length, 1);
+    if (offset === 47) baseline = positions;
+    if (offset > period) {
+      assert.equal(positions.length, baseline.length);
+      positions.forEach((position, index) => assert.ok(Math.abs(position - baseline[index]) < 0.000001));
+    }
+  }
+});
+
+test('repeatGap never repeats static, non-looping, unspecified or exported text', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  for (const controls of [{ scroll: false, loop: true }, { scroll: true, loop: false }]) {
+    const target = makeCanvas();
+    renderBoard(target.canvas, { ...light('L1'), ...controls }, { width: 1280, height: 720, repeatGap: 20 });
+    assert.equal(target.calls.filter(call => call.name === 'fillText').length, 1);
+  }
+  const design = { ...light('L1'), scroll: true, loop: true };
+  const target = makeCanvas();
+  renderBoard(target.canvas, design, { width: 1280, height: 720 });
+  assert.equal(target.calls.filter(call => call.name === 'fillText').length, 1);
+  const exported = renderExport(design, 'board');
+  assert.equal(canvases.find(item => item.canvas === exported)!.calls.filter(call => call.name === 'fillText').length, 1);
+});
+
+test('repeated point text shares one bounded viewport raster and one pixel read per frame', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const target = makeCanvas();
+  const design = { ...light('L3'), text: '莎', scroll: true, loop: true };
+  const metrics = measureBoard(target.canvas, design, { width: 16000, height: 720 });
+  const gap = metrics.fontSize * 0.38;
+  const prior = new Set(canvases.flatMap(item => item.calls));
+  renderBoard(target.canvas, design, { width: 16000, height: 720, repeatGap: gap });
+  const fresh = canvases.flatMap(item => item.calls).filter(call => !prior.has(call));
+  const reads = fresh.filter(call => call.name === 'getImageData');
+  assert.equal(reads.length, 1);
+  assert.ok(Number(reads[0].args[2]) <= 1536 && Number(reads[0].args[3]) <= 768);
+  const rasterCopies = fresh.filter(call => call.name === 'fillText' && call.args[0] === '莎');
+  assert.ok(rasterCopies.length > 2 && rasterCopies.length <= 54);
+  assert.equal(new Set(rasterCopies.map(call => call.state.font)).size, 1);
+  assert.equal(target.calls.filter(call => call.name === 'fillRect').length, 1);
+  const beforeSecond = new Set(canvases.flatMap(item => item.calls));
+  renderBoard(target.canvas, design, { width: 16000, height: 720, repeatGap: gap, offset: 17 });
+  assert.ok(canvases.flatMap(item => item.calls).filter(call => !beforeSecond.has(call) && call.name === 'getImageData').length <= 1);
+});
+
+test('repeated ghost text retains isolated two-color layers without new surfaces or pixel readbacks', () => {
+  const { makeCanvas, canvases } = canvasEnvironment();
+  const target = makeCanvas();
+  const design = { ...light('L5'), text: '莎', scroll: true, loop: true };
+  const prior = new Set(canvases.flatMap(item => item.calls));
+  renderBoard(target.canvas, design, { width: 1600, height: 500, repeatGap: 60 });
+  const stamps = target.calls.filter(call => call.name === 'drawImage');
+  assert.ok(stamps.length > 1);
+  assert.equal(new Set(stamps.map(call => call.args[0])).size, 1);
+  const source = canvases.find(item => item.canvas === stamps[0].args[0])!;
+  const textPasses = source.calls.filter(call => !prior.has(call) && call.name === 'fillText');
+  assert.equal(textPasses.length, stamps.length * 2);
+  assert.ok(textPasses.every(call => call.state.globalCompositeOperation === 'lighter'));
+  assert.equal(target.calls.filter(call => call.name === 'fillRect').length, 1);
+  assert.equal(source.calls.filter(call => call.name === 'getImageData').length, 0);
+  const count = canvases.length;
+  const assignments = source.sizeWrites.length;
+  renderBoard(target.canvas, design, { width: 1600, height: 500, repeatGap: 60, offset: -30 });
+  assert.equal(canvases.length, count);
+  assert.equal(source.sizeWrites.length, assignments);
 });
