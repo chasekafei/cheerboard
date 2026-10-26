@@ -1,3 +1,5 @@
+import { button, escapeHTML, icon, sheet } from './ui/primitives.ts';
+
 export type ExportFormat = 'board' | 'comment' | 'note' | 'a4' | 'memory';
 export type ExportViewOptions = {
   format: ExportFormat;
@@ -10,17 +12,26 @@ export function localDateInputValue(date = new Date()): string {
     + '-' + String(date.getDate()).padStart(2, '0');
 }
 
-function escapeHTML(value: string): string {
-  return value.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]!);
-}
-
 export function renderExportView({ format, formats, memory }: ExportViewOptions): string {
   const selected = formats.find(option => option[0] === format);
   const formatButtons = formats.map(([id = '', label = '', size = '']) =>
-    `<button type="button" data-action="format" data-id="${escapeHTML(id)}" class="${format === id ? 'selected' : ''}" aria-pressed="${format === id}"><span>${escapeHTML(label)}<small>${escapeHTML(size)}</small></span></button>`,
+    button(`<span>${escapeHTML(label)}<small>${escapeHTML(size)}</small></span>`, 'format', `export-format-tab${format === id ? ' selected' : ''}`, `data-id="${escapeHTML(id)}" aria-pressed="${format === id}" aria-controls="export-image"`),
   ).join('');
   const fields = format === 'memory'
     ? `<div class="memory-fields"><label>地点（选填）<input id="memory-place" value="${escapeHTML(memory.place)}" maxlength="30" placeholder="写下观赛地点"></label><label>日期<input id="memory-date" type="date" value="${escapeHTML(memory.date)}"></label></div>` : '';
   const hint = format === 'a4' ? '打印请按图片方向选择 A4 纸张，并使用“适合页面”。' : '发布图文会打开小红书发布页，你可以继续编辑。';
-  return `<div class="light-sheet-backdrop export-backdrop" data-action="close"><section class="light-sheet share-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"><header class="light-sheet-header share-header"><h2 id="export-title">分享我的加油牌</h2><button type="button" data-action="close" class="share-close" aria-label="关闭分享"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header><div class="light-sheet-body share-body"><p class="share-format-label">${escapeHTML(selected?.[1] || '加油牌图片')}</p><div class="export-layout export-layout-image-first"><div class="export-preview"><img id="export-image" alt="加油牌图片预览"></div><div class="export-settings">${fields}<details class="export-more-formats"><summary>更多图片样式与打印</summary><div class="export-options">${formatButtons}</div></details></div></div><p class="export-hint">${hint}</p></div><footer class="export-buttons export-main-actions share-footer"><button type="button" data-action="save-image" class="primary-button wide">保存到相册</button><button type="button" data-action="share-note" class="secondary-button wide">发布图文</button></footer></section></div>`;
+  return sheet({
+    title: '分享我的加油牌',
+    titleId: 'export-title',
+    kind: 'share',
+    className: 'share-modal',
+    bodyClass: 'share-body',
+    headerIcon: 'close',
+    headerLabel: '',
+    headerExtra: 'aria-label="关闭分享"',
+    body: `<div class="export-format-tabs" role="group" aria-label="图片类型">${formatButtons}</div><div class="export-layout export-layout-image-first"><div class="export-preview"><img id="export-image" alt="${escapeHTML(selected?.[1] || '加油牌图片')}预览"></div>${fields ? `<div class="export-settings">${fields}</div>` : ''}</div><p class="export-hint">${hint}</p>`,
+    footerClass: 'export-buttons export-main-actions share-footer',
+    footer: button(icon('download') + '<span>保存到相册</span>', 'save-image', 'primary-button wide')
+      + button(icon('share') + '<span>发布图文</span>', 'share-note', 'secondary-button wide'),
+  });
 }

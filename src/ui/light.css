@@ -1,0 +1,32 @@
+body.light-page-active { background:#000 }
+.light-player { position:fixed; z-index:20; top:0; right:0; bottom:0; left:0; width:100%; height:100vh; height:var(--app-height,100vh); overflow:hidden; border:3px solid #111; border-radius:22px; box-shadow:inset 0 0 0 3px #4a4d50; background:#000; color:#fff }
+.light-canvas-wrap { position:absolute; top:5px; right:5px; bottom:5px; left:5px; overflow:hidden; border:1px solid #060606; border-radius:16px; background:#000 }
+#light-board { position:absolute; left:50%; top:50%; width:100%; height:100%; max-width:none; margin:0; transform:translate(-50%,-50%); cursor:pointer; -webkit-touch-callout:none; touch-action:manipulation }
+#light-board:focus { outline:2px solid #b16cff; outline-offset:-3px }
+#light-board:focus:not(:focus-visible) { outline:none }
+.light-control-frame { position:absolute; left:50%; top:50%; pointer-events:none }
+.light-tools { position:absolute; z-index:4; left:var(--control-inset-left,0px); right:var(--control-inset-right,0px); bottom:var(--control-inset-bottom,0px); display:grid; grid-template-columns:repeat(9,minmax(0,1fr)); grid-gap:6px; min-height:78px; padding:6px; border:2.5px solid #111; border-radius:20px 20px 15px 15px; background:var(--cb-paper); color:var(--cb-ink); opacity:0; visibility:hidden; pointer-events:none; transform:translateY(14px); transition:opacity .18s ease,transform .24s cubic-bezier(.2,.7,.2,1),visibility .18s }
+.controls-visible .light-tools { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) }
+.light-tool { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:0; min-height:62px; padding:4px 2px; border:1.5px solid #b6b8c3; border-radius:15px; background:linear-gradient(180deg,#fffef9,#faf9f2); color:var(--cb-ink); pointer-events:auto }
+.light-tool:disabled { opacity:.48; pointer-events:none }
+.light-tool-text,.light-tool.is-active { border:2px solid #111; background:var(--cb-yellow); box-shadow:inset 0 2px 0 #fff6a0,0 1px 0 #111 }
+.light-tool-speed { border-color:var(--cb-purple); background:#efe2ff }
+.light-tool-icon { display:flex; align-items:center; justify-content:center; height:28px; margin-bottom:3px }
+.light-tool-glyph { width:25px; height:25px }
+.light-tool-home .light-tool-glyph { width:28px; height:28px; padding:3px; border:2px solid #111; border-radius:50% }
+.light-tool-label { display:block; font-size:14px; font-weight:800; line-height:1.2; white-space:nowrap }
+.light-tool-speed .light-tool-label { font-size:12px }
+.light-tool-glyph.is-portrait { transform:rotate(90deg) }
+.light-tool:active { transform:translateY(1px) }
+.light-explanation { position:absolute; z-index:3; left:var(--control-inset-left,0px); right:var(--control-inset-right,0px); bottom:calc(var(--light-toolbar-height,78px) + var(--control-inset-bottom,0px) + 10px); display:flex; align-items:center; justify-content:center; margin:0; color:#dedde1; font-size:14px; font-weight:600; line-height:1.4; opacity:0; visibility:hidden; pointer-events:none }
+.controls-visible .light-explanation { opacity:1; visibility:visible }
+.light-hint-stroke { position:relative; display:block; width:19px; height:4px; margin:0 12px; border-radius:4px; background:var(--cb-yellow); transform:rotate(23deg) }
+.light-hint-stroke:after { content:''; position:absolute; top:-10px; left:2px; width:14px; height:4px; border-radius:4px; background:var(--cb-yellow); transform:rotate(34deg) }
+.light-hint-stroke-right { transform:rotate(157deg) }
+.compact-controls .light-tools { grid-template-columns:repeat(3,minmax(0,1fr)); min-height:168px; grid-gap:5px; padding:6px }
+.compact-controls .light-tool { flex-direction:row; min-height:46px; padding:5px }
+.compact-controls .light-tool-icon { height:25px; margin:0 6px 0 0 }
+.compact-controls .light-tool-label { font-size:13px }
+.compact-controls .light-tool-glyph { width:21px; height:21px }
+.has-overlay .light-tools,.has-overlay .light-explanation { opacity:0; visibility:hidden; pointer-events:none }
+@media(prefers-reduced-motion:reduce) { .light-tools { transition:none; transform:none } }
