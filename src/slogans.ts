@@ -1,4 +1,5 @@
-// 来源：docs/references/xiaohongshu-handbanners-2026-10-25/最终文案/最终文案.json
+// 初始来源：docs/references/xiaohongshu-handbanners-2026-10-25/最终文案/最终文案.json
+// 后续手动修订以此清单的文字、分类与优先级为准。
 // 保留审核后的原文。每个语义组只列一条，已选异写作为可切换的展示版本。
 export const SLOGAN_CATEGORIES = ['孙颖莎', '王楚钦', '莎头', '其他'] as const;
 export type SloganCategory = typeof SLOGAN_CATEGORIES[number];
@@ -19,7 +20,7 @@ export const SLOGANS: readonly Slogan[] = [
   {"id": "C004", "text": "王楚钦", "category": "王楚钦", "priority": 2, "variants": ["Wang.C.Q", "WangChuqin", "WANGCHUQIN", "钦"]},
   {"id": "C005", "text": "全力以赴", "category": "其他", "priority": 2, "variants": []},
   {"id": "C006", "text": "坚定自信", "category": "其他", "priority": 2, "variants": ["BE FIRM AND CONFIDENT", "相信自己"]},
-  {"id": "C007", "text": "我们来日方长", "category": "莎头", "priority": 2, "variants": ["来日方长", "我们 来日方长"]},
+  {"id": "C007", "text": "我们来日方长", "category": "王楚钦", "priority": 2, "variants": ["来日方长", "我们 来日方长"]},
   {"id": "C008", "text": "这么远那么贵\n为了莎头我无所谓", "category": "莎头", "priority": 2, "variants": []},
   {"id": "C009", "text": "明亮的心", "category": "孙颖莎", "priority": 2, "variants": []},
   {"id": "C010", "text": "痛苦之上是曙光", "category": "王楚钦", "priority": 2, "variants": ["Beyond pain lies the dawn.", "ABOVE THE PAIN LIES THE DAWN"]},
@@ -33,7 +34,7 @@ export const SLOGANS: readonly Slogan[] = [
   {"id": "C018", "text": "钦尽全力 莎出重围", "category": "莎头", "priority": 2, "variants": []},
   {"id": "C019", "text": "目标远不止于此", "category": "王楚钦", "priority": 2, "variants": []},
   {"id": "C020", "text": "Sun & Hope!!", "category": "莎头", "priority": 2, "variants": ["Sunhope", "SUNHOPE", "SUN\nHOPE", "SUN AND HOPE"]},
-  {"id": "C021", "text": "顶峰相见", "category": "其他", "priority": 2, "variants": ["少年热血，顶峰相见"]},
+  {"id": "C021", "text": "顶峰相见", "category": "莎头", "priority": 2, "variants": ["少年热血，顶峰相见"]},
   {"id": "C022", "text": "HOPE", "category": "王楚钦", "priority": 2, "variants": []},
   {"id": "C023", "text": "LIONHEART", "category": "王楚钦", "priority": 2, "variants": []},
   {"id": "C024", "text": "One true king", "category": "王楚钦", "priority": 2, "variants": []},
@@ -51,14 +52,14 @@ export const SLOGANS: readonly Slogan[] = [
   {"id": "C036", "text": "楚钦颖莎", "category": "莎头", "priority": 1, "variants": ["莎莎楚钦", "颖莎楚钦", "SHATOU", "SUNYINGSHA&WANGCHUQIN"]},
   {"id": "C037", "text": "看你们打球好幸福", "category": "莎头", "priority": 1, "variants": ["楚钦颖莎\n看你们打球好幸福", "看你们打球 超级幸福啊", "楚钦颖莎 看你们打球好幸福"]},
   {"id": "C038", "text": "莎头加油", "category": "莎头", "priority": 1, "variants": ["FIGH\nTING", "fighting"]},
-  {"id": "C039", "text": "祝\n没有、\n孙颖莎王楚钦的\n中国乒乓球队、\n越来越好", "category": "莎头", "priority": 1, "variants": []},
+  {"id": "C039", "text": "祝中国乒乓球队\n越来越好", "category": "其他", "priority": 2, "variants": []},
   {"id": "C040", "text": "孙颖莎王楚钦\n请健康、\n请专注自身", "category": "莎头", "priority": 1, "variants": []},
   {"id": "C041", "text": "LOVE FOR HOPE", "category": "王楚钦", "priority": 1, "variants": []},
   {"id": "C042", "text": "LOVE FOR SUN", "category": "孙颖莎", "priority": 1, "variants": []},
   {"id": "C043", "text": "莎莎楚钦\n平安健康顺遂", "category": "莎头", "priority": 1, "variants": []},
   {"id": "C044", "text": "成为榜样\n成为力量", "category": "其他", "priority": 1, "variants": []},
   {"id": "C045", "text": "向上生长", "category": "其他", "priority": 1, "variants": []},
-  {"id": "C046", "text": "生生不息", "category": "其他", "priority": 1, "variants": []},
+  {"id": "C046", "text": "来！走！", "category": "其他", "priority": 1, "variants": []},
   {"id": "C047", "text": "SUN\nSHINE", "category": "孙颖莎", "priority": 1, "variants": []},
   {"id": "C048", "text": "追着光生长、成为自己的太阳", "category": "其他", "priority": 1, "variants": ["GROW TOWARD THE LIGHT\nBECOME YOUR OWN SUN"]},
   {"id": "C049", "text": "聚沙成塔、未完待续", "category": "王楚钦", "priority": 1, "variants": []},
@@ -142,9 +143,9 @@ export const SLOGANS: readonly Slogan[] = [
   {"id": "C127", "text": "用一颗心脏去震动另一颗心脏", "category": "莎头", "priority": 1, "variants": []},
   {"id": "C128", "text": "南阳十二颠 留你在身边", "category": "莎头", "priority": 1, "variants": []},
   {"id": "C129", "text": "祖国荣誉 高于一切", "category": "其他", "priority": 1, "variants": []},
-  {"id": "C130", "text": "少年没有乌托邦 心向远方自明朗", "category": "其他", "priority": 1, "variants": ["少年没有乌托邦 心向骄阳自明朗"]},
+  {"id": "C130", "text": "少年没有乌托邦 心向远方自明朗", "category": "王楚钦", "priority": 1, "variants": ["少年没有乌托邦 心向骄阳自明朗"]},
   {"id": "C131", "text": "一切都是最好的", "category": "其他", "priority": 1, "variants": []},
-  {"id": "C132", "text": "赢了 就有答案", "category": "其他", "priority": 1, "variants": []},
+  {"id": "C132", "text": "赢了 就有答案", "category": "王楚钦", "priority": 1, "variants": []},
   {"id": "C133", "text": "聚沙成塔 保持渴望", "category": "王楚钦", "priority": 1, "variants": []},
   {"id": "C134", "text": "The Bright Heart\nThe Lion Heart", "category": "莎头", "priority": 1, "variants": []},
   {"id": "C135", "text": "太阳永不坠落 希望永不破灭", "category": "莎头", "priority": 1, "variants": []},
@@ -158,7 +159,7 @@ export const SLOGANS: readonly Slogan[] = [
   {"id": "C143", "text": "无限渴望", "category": "王楚钦", "priority": 1, "variants": []},
   {"id": "C144", "text": "希望你能学会快乐 未来见", "category": "王楚钦", "priority": 1, "variants": ["希望你学会快乐 未来见", "学会快乐 未来见"]},
   {"id": "C145", "text": "愿我的人生没有极限", "category": "王楚钦", "priority": 1, "variants": ["我的人生没有极限"]},
-  {"id": "C146", "text": "纵有千古\n横有八荒\n前途似海\n来日方长", "category": "其他", "priority": 1, "variants": []},
+  {"id": "C146", "text": "纵有千古\n横有八荒\n前途似海\n来日方长", "category": "王楚钦", "priority": 1, "variants": []},
   {"id": "C147", "text": "TEAM CHINA", "category": "其他", "priority": 1, "variants": []},
   {"id": "C148", "text": "你不要低估一颗 胜利者 的心，他的名字叫王楚钦", "category": "王楚钦", "priority": 1, "variants": []},
   {"id": "C149", "text": "AS I FACING THE SUN", "category": "莎头", "priority": 1, "variants": []},
@@ -184,16 +185,21 @@ function searchKey(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '');
 }
 
-const searchIndex = SLOGANS.map(slogan => ({
+const searchIndex = SLOGANS.map((slogan, index) => ({
   slogan,
+  index,
   keys: [slogan.text, ...slogan.variants].map(searchKey),
 }));
 
 export function findSlogans(category: SloganFilter = '全部', query = ''): Slogan[] {
   const key = searchKey(query);
+  const pinnedId = category === '其他' ? 'C039' : '';
+  // Sort the current records at query time; source position is an explicit
+  // tie-breaker for browsers whose Array.sort is not stable.
   return searchIndex.filter(item =>
     (category === '全部' || item.slogan.category === category) && item.keys.some(text => text.includes(key)),
-  ).map(item => item.slogan);
+  ).sort((a, b) => Number(b.slogan.id === pinnedId) - Number(a.slogan.id === pinnedId)
+    || b.slogan.priority - a.slogan.priority || a.index - b.index).map(item => item.slogan);
 }
 
 export function getSloganPage(category: SloganFilter = '全部', query = '', requestedPage = 0) {
