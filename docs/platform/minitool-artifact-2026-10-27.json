@@ -1,0 +1,69 @@
+{
+  "verifiedDate": "2026-10-27",
+  "skillVersion": "1.8.0",
+  "skillArchiveSha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
+  "zipBytes": 2592032,
+  "zipSha256": "2b32ea40618b6a4ba04e815e42a2755781769678c83cb45b4cb7f9f75b5abab8",
+  "uncompressedBytes": 2719925,
+  "files": [
+    {
+      "path": "artwork/design-banner.webp",
+      "bytes": 36510,
+      "sha256": "ac38a4ac11a1b875bb627d2a108acb0ad5d7f1167682a85b55deeb5cb218a112"
+    },
+    {
+      "path": "artwork/design-brand.webp",
+      "bytes": 33992,
+      "sha256": "e271f2b2b87e4317be672066accf05abd6eefad321028cf833f1a254fd2265d7"
+    },
+    {
+      "path": "artwork/design-hero.webp",
+      "bytes": 78514,
+      "sha256": "f6a01c40d22e84b4b85216e8a00d7f0f05929e15a743cd31fc972dcb43988114"
+    },
+    {
+      "path": "artwork/design-settings.webp",
+      "bytes": 2158,
+      "sha256": "fd4b287fdf986fc6eb8ef9fc8d9c86f4683b61e19fcbbd4c491db11a47213f61"
+    },
+    {
+      "path": "assets/app.css",
+      "bytes": 44186,
+      "sha256": "42358de809b6bb591d2666b68062b62e13672ce57d5e959dbe5a351010296500"
+    },
+    {
+      "path": "assets/app.js",
+      "bytes": 124076,
+      "sha256": "7188489e535ae3615771c9b7fa20c961ca2de4359fca595e8d554a945401fee7"
+    },
+    {
+      "path": "fonts/CheerboardHandwriting.woff2",
+      "bytes": 1084100,
+      "sha256": "e01fcf657f81f81beda366e027877c54cfeaee5f36cdcf5bcda1f40396218e4e"
+    },
+    {
+      "path": "fonts/CheerboardSans.woff2",
+      "bytes": 671696,
+      "sha256": "a998dd36847bb8b94b7470ae7252856ef14ffb56a50b12ef90e5d0a1f9478ab9"
+    },
+    {
+      "path": "fonts/CheerboardTube.woff2",
+      "bytes": 628168,
+      "sha256": "02f20fd3ae4c531e687779631dae924028c43e828af9c83deb79cecf874027f6"
+    },
+    {
+      "path": "fonts/licenses.json",
+      "bytes": 15832,
+      "sha256": "4dac8d6c4efbd8445ea7bddcaa4533fcfe2c78e4328a400b55eb958b5f70b4f9"
+    },
+    {
+      "path": "index.html",
+      "bytes": 693,
+      "sha256": "aecccdbd3848f748d0d1b68b25e27da472c605aac1ad032ca40c12834a8697a9"
+    }
+  ],
+  "auditWarnings": [
+    "ZIP exceeds the official recommended 2 MiB target; remains below the official 10 MiB hard limit and the project 3 MiB budget. Three offline fonts retain common Chinese character coverage."
+  ],
+  "verifiedTests": 98
+}
