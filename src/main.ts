@@ -1,7 +1,7 @@
 import './styles.css';
 import './fonts.css';
 import { createDesign, getTemplate, TEMPLATES, SLOGAN_CATEGORIES, getSloganPage, findSloganByText, type Design, type Category, type TemplateId, type SloganFilter } from './catalog';
-import { measureBoard, renderBoard, renderExport, invalidateFontCache } from './renderer';
+import { measureBoard, renderBoard, renderExport, invalidateFontCache, resolveRepeatPeriod } from './renderer';
 import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isBrowserPreview } from './platform';
 import { readRecords, writeRecord, validateDesign } from './records';
 import { normalizeDotEmoji, DEFAULT_LIGHT_TEXT, MIN_FONT_SCALE, MAX_FONT_SCALE } from './design-values';
@@ -149,7 +149,7 @@ function lightPlayer() {
   return `<main class="light-player ${lightControls ? 'controls-visible' : ''}" id="light-player" style="background:${design.background}"><div class="light-canvas-wrap" id="light-canvas-wrap"><canvas id="light-board" tabindex="0" role="button" aria-label="点击屏幕显示或收起编辑按钮"></canvas></div><div class="light-control-frame"><div class="light-top-tools" aria-hidden="${!lightControls}">${btn(`${icon('back')}首页`, 'home', 'light-back')}${btn(`${icon('bookmark')}保存`, 'archive', 'light-save')}</div><div class="light-tools" aria-hidden="${!lightControls}">${lightToolButtons()}</div><p class="light-explanation">轻点屏幕，编辑文案或样式</p></div></main>`;
 }
 function lightToolButtons() {
-  return `${btn(`${icon('edit')}<span>文字</span>`, 'light-text', '', 'aria-label="修改文字与文案灵感"')}${btn(`${icon('rotate')}<span>${design.orientation === 'landscape' ? '横屏' : '竖屏'}</span>`, 'light-orientation', '', `aria-label="切换到${design.orientation === 'landscape' ? '竖屏' : '横屏'}"`)}${btn(`${icon('motion')}<span>${design.scroll ? '滚动' : '全显'}</span>`, 'light-mode', '', `aria-label="${design.scroll ? '切换为全部展示' : '开启滚动模式'}" aria-pressed="${design.scroll}"`)}${design.scroll ? `${btn(`${icon('speed')}<span>${design.speed} 档</span>`, 'light-speed', '', `aria-label="滚动速度 ${design.speed} 档，点击加快"`)}${btn(`<span class="direction-glyph" aria-hidden="true">${design.direction === 'left' ? '←' : '→'}</span><span>${design.direction === 'left' ? '向左' : '向右'}</span>`, 'light-direction', '', `aria-label="切换为向${design.direction === 'left' ? '右' : '左'}滚动"`)}` : ''}${btn(`${icon('sliders')}<span>样式</span>`, 'light-style')}${btn(`${icon('share')}<span>分享</span>`, 'export-more')}`;
+  return `${btn(`${icon('edit')}<span>文字</span>`, 'light-text', '', 'aria-label="修改文字与文案灵感"')}${btn(`${icon('rotate')}<span>${design.orientation === 'landscape' ? '横屏' : '竖屏'}</span>`, 'light-orientation', '', `aria-label="切换到${design.orientation === 'landscape' ? '竖屏' : '横屏'}"`)}${btn(`${icon('motion')}<span>${design.scroll ? '静止' : '滚动'}</span>`, 'light-mode', '', `aria-label="${design.scroll ? '切换为静止显示' : '开启滚动模式'}"`)}${design.scroll ? `${btn(`${icon('speed')}<span>${design.speed} 档</span>`, 'light-speed', '', `aria-label="滚动速度 ${design.speed} 档，点击加快"`)}${btn(`<span class="direction-glyph" aria-hidden="true">${design.direction === 'left' ? '←' : '→'}</span><span>${design.direction === 'left' ? '向左' : '向右'}</span>`, 'light-direction', '', `aria-label="切换为向${design.direction === 'left' ? '右' : '左'}滚动"`)}` : ''}${btn(`${icon('sliders')}<span>样式</span>`, 'light-style')}${btn(`${icon('share')}<span>分享</span>`, 'export-more')}`;
 }
 function armLightControlsHide() {
   clearTimeout(lightControlsTimer);
@@ -357,8 +357,12 @@ function showBoard() {
       }
       const distance = (dimensions.width + measurement.textWidth) / 2 + measurement.fontSize * 0.25;
       progress += elapsed / 1000 * scrollPixelsPerSecond(design.speed, canvas.clientHeight || dimensions.height) * dimensions.height / (canvas.clientHeight || dimensions.height);
-      if (progress > distance * 2) { if (design.loop) progress = 0; else stopped = true; }
-      renderBoard(canvas, design, { ...dimensions, offset: (distance - progress) * (design.direction === 'left' ? 1 : -1) });
+      const repeatGap = measurement.fontSize * 0.38;
+      if (design.loop) progress %= resolveRepeatPeriod(measurement.textWidth, repeatGap, dimensions.width);
+      else if (progress > distance * 2) stopped = true;
+      renderBoard(canvas, stopped ? { ...design, scroll: false } : design, { ...dimensions,
+        offset: (design.loop ? -progress : distance - progress) * (design.direction === 'left' ? 1 : -1),
+        ...(design.loop ? { repeatGap } : {}) });
       previous = time;
       if (!stopped) frame = requestAnimationFrame(draw);
       else { const stop = overlay.querySelector('[data-action="stop-motion"]'); if (stop) stop.textContent = '重新滚动'; }
@@ -520,6 +524,7 @@ async function start() {
   const refreshHeight = () => {
     const height = window.visualViewport?.height || window.innerHeight;
     document.documentElement.style.setProperty('--app-height', height + 'px');
+    document.documentElement.classList.toggle('short-viewport', height < 420);
     positionLightControls();
   };
   refreshHeight();
