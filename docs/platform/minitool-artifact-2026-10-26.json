@@ -2,19 +2,19 @@
   "verifiedDate": "2026-10-26",
   "skillVersion": "1.8.0",
   "skillArchiveSha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
-  "zipBytes": 2431084,
-  "zipSha256": "2f22d0cec0c52cd6981c6f0ff065162b259b671651ccb772ff85d4368228cf90",
-  "uncompressedBytes": 2544028,
+  "zipBytes": 2431696,
+  "zipSha256": "581cf2b2117bbdf6ad471420c3a9d60bb9e3ebc3d23dd6163475b0002448625d",
+  "uncompressedBytes": 2546603,
   "files": [
     {
       "path": "assets/app.css",
-      "bytes": 43145,
-      "sha256": "11abb236c2be5612625d4ad42d955763ae0d108c6264cfcf0ee9e9c50a10e937"
+      "bytes": 44371,
+      "sha256": "25b6d9803714013efa6df090a29350ce9abc0648ac86f6e09ac9642d7c4568d0"
     },
     {
       "path": "assets/app.js",
-      "bytes": 100394,
-      "sha256": "d9673bed93f0544cf2f0b58ab2f9cc998d517fbfef20151acdb23ca680ac8910"
+      "bytes": 101743,
+      "sha256": "a37f07e45bfdb05bb882c436b54d59f6ee2a17a236976cd5a326f11f9e7f63c1"
     },
     {
       "path": "fonts/CheerboardHandwriting.woff2",
@@ -45,5 +45,5 @@
   "auditWarnings": [
     "ZIP exceeds the official recommended 2 MiB target; remains below the official 10 MiB hard limit and the project 3 MiB budget. Three offline fonts retain common Chinese character coverage."
   ],
-  "verifiedTests": 63
+  "verifiedTests": 70
 }
