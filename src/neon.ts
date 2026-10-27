@@ -36,18 +36,18 @@ function clearFilter(ctx: CanvasRenderingContext2D): boolean {
 let visualBlurSupport: boolean | null = null;
 type BlurSurface = {
   canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
-  blurred: HTMLCanvasElement;
-  blurredContext: CanvasRenderingContext2D;
   width: number;
   height: number;
+  pixels: number;
 };
 const blurSurfaces = new Map<string, BlurSurface>();
-const MAX_BLUR_SURFACES = 24;
+const MAX_BLUR_PIXELS = 2_000_000;
+let blurPixels = 0;
 
 /** Clear reusable fallback layers after packaged fonts become ready. */
 export function clearNeonBlurCache(): void {
   blurSurfaces.clear();
+  blurPixels = 0;
 }
 
 /**
@@ -108,10 +108,15 @@ function softenedFill(ctx: CanvasRenderingContext2D, line: string, x: number, y:
   }
 }
 
+function hexRgb(value: string): [number, number, number] | null {
+  const match = /^#([\da-f]{6})$/i.exec(value);
+  return match ? [0, 2, 4].map(offset => parseInt(match[1].slice(offset, offset + 2), 16)) as [number, number, number] : null;
+}
+
 /**
- * Blur a glyph through a small reusable bitmap. Downsampling before the
- * source-over draw gives iOS a real soft edge even when Canvas `filter` and
- * shadow alpha are unreliable. The caller's transform and clip stay intact.
+ * Blur a glyph through a reusable alpha bitmap. A normalized separable Gaussian
+ * keeps the edge clean on iOS even when Canvas `filter` and shadow alpha are
+ * unreliable. The caller's transform and clip stay intact.
  */
 function blurFill(ctx: CanvasRenderingContext2D, line: string, x: number, y: number,
   fontSize: number, paint: Paint, glowColor: string, radius: number, alpha: number,
@@ -120,16 +125,16 @@ function blurFill(ctx: CanvasRenderingContext2D, line: string, x: number, y: num
   try {
     const metrics = ctx.measureText(line);
     const textWidth = Number.isFinite(metrics.width) ? Math.max(1, metrics.width) : Math.max(1, fontSize * Array.from(line).length);
-    const spread = Math.max(2, radius * 2);
+    const spread = Math.max(2, radius * 3);
     const destinationWidth = Math.ceil(textWidth + spread * 2);
     const destinationHeight = Math.ceil(fontSize * 1.7 + spread * 2);
-    // Draw at a reduced resolution, then blur that small source with a
-    // weighted image pass before scaling it back up. The low-resolution blur
-    // keeps the target sigma proportional to the requested radius without
-    // allocating a full-size per-frame surface.
-    const reduction = Math.max(1, Math.min(24, Math.round(Math.max(1, radius) / 4)));
+    // A small source keeps convolution work bounded while the target sigma
+    // remains proportional to the requested radius.
+    const reduction = Math.max(1, Math.min(16, Math.round(Math.max(1, radius) / 8)));
     const sourceWidth = Math.max(1, Math.ceil(destinationWidth / reduction));
     const sourceHeight = Math.max(1, Math.ceil(destinationHeight / reduction));
+    const sourcePixels = sourceWidth * sourceHeight;
+    if (sourcePixels > 800_000) return false;
     const color = typeof paint === 'string' ? paint : glowColor;
     const key = JSON.stringify([ctx.font, line, color, Math.round(radius * 100) / 100, stroke, Math.round(lineWidth * 100) / 100, sourceWidth, sourceHeight]);
     let surface = blurSurfaces.get(key);
@@ -138,10 +143,6 @@ function blurFill(ctx: CanvasRenderingContext2D, line: string, x: number, y: num
       canvas.width = sourceWidth; canvas.height = sourceHeight;
       const context = canvas.getContext('2d');
       if (!context) return false;
-      const blurred = document.createElement('canvas');
-      blurred.width = sourceWidth; blurred.height = sourceHeight;
-      const blurredContext = blurred.getContext('2d');
-      if (!blurredContext) return false;
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.clearRect(0, 0, sourceWidth, sourceHeight);
       context.save();
@@ -155,20 +156,52 @@ function blurFill(ctx: CanvasRenderingContext2D, line: string, x: number, y: num
       if (stroke) context.strokeText(line, centerX, centerY);
       context.fillText(line, centerX, centerY);
       context.restore();
-      blurredContext.setTransform(1, 0, 0, 1, 0, 0);
-      blurredContext.clearRect(0, 0, sourceWidth, sourceHeight);
-      blurredContext.imageSmoothingEnabled = true;
-      blurredContext.imageSmoothingQuality = 'high';
-      const step = Math.max(0.5, (radius / 2) / reduction);
-      const taps = [1, 4, 6, 4, 1];
-      for (let row = 0; row < 5; row++) for (let column = 0; column < 5; column++) {
-        blurredContext.globalAlpha = taps[row] * taps[column] / 256;
-        blurredContext.drawImage(canvas, (column - 2) * step, (row - 2) * step);
+      const rgba = context.getImageData(0, 0, sourceWidth, sourceHeight).data;
+      const source = new Float32Array(sourcePixels);
+      for (let index = 0; index < sourcePixels; index++) source[index] = rgba[index * 4 + 3] / 255;
+      const sigma = Math.max(0.8, radius / reduction);
+      const kernelRadius = Math.min(32, Math.max(1, Math.ceil(sigma * 3)));
+      const kernel = new Float32Array(kernelRadius * 2 + 1);
+      let kernelTotal = 0;
+      for (let index = -kernelRadius; index <= kernelRadius; index++) {
+        const weight = Math.exp(-0.5 * (index / sigma) ** 2);
+        kernel[index + kernelRadius] = weight; kernelTotal += weight;
       }
-      blurredContext.globalAlpha = 1;
-      surface = { canvas, context, blurred, blurredContext, width: sourceWidth, height: sourceHeight };
-      if (blurSurfaces.size >= MAX_BLUR_SURFACES) blurSurfaces.delete(blurSurfaces.keys().next().value!);
+      for (let index = 0; index < kernel.length; index++) kernel[index] /= kernelTotal;
+      const horizontal = new Float32Array(sourcePixels);
+      for (let row = 0; row < sourceHeight; row++) for (let column = 0; column < sourceWidth; column++) {
+        let value = 0;
+        for (let offset = -kernelRadius; offset <= kernelRadius; offset++) {
+          const sample = Math.max(0, Math.min(sourceWidth - 1, column + offset));
+          value += source[row * sourceWidth + sample] * kernel[offset + kernelRadius];
+        }
+        horizontal[row * sourceWidth + column] = value;
+      }
+      const blurred = document.createElement('canvas');
+      blurred.width = sourceWidth; blurred.height = sourceHeight;
+      const blurredContext = blurred.getContext('2d');
+      if (!blurredContext) return false;
+      const output = blurredContext.createImageData(sourceWidth, sourceHeight);
+      const rgb = hexRgb(color) || [255, 255, 255];
+      for (let column = 0; column < sourceWidth; column++) for (let row = 0; row < sourceHeight; row++) {
+        let value = 0;
+        for (let offset = -kernelRadius; offset <= kernelRadius; offset++) {
+          const sample = Math.max(0, Math.min(sourceHeight - 1, row + offset));
+          value += horizontal[sample * sourceWidth + column] * kernel[offset + kernelRadius];
+        }
+        const index = (row * sourceWidth + column) * 4;
+        output.data[index] = rgb[0]; output.data[index + 1] = rgb[1]; output.data[index + 2] = rgb[2];
+        output.data[index + 3] = Math.max(0, Math.min(255, Math.round(value * 255)));
+      }
+      blurredContext.putImageData(output, 0, 0);
+      surface = { canvas: blurred, width: sourceWidth, height: sourceHeight, pixels: sourcePixels };
+      while (blurSurfaces.size && blurPixels + sourcePixels > MAX_BLUR_PIXELS) {
+        const oldest = blurSurfaces.keys().next().value!;
+        const removed = blurSurfaces.get(oldest);
+        blurSurfaces.delete(oldest); if (removed) blurPixels -= removed.pixels;
+      }
       blurSurfaces.set(key, surface);
+      blurPixels += sourcePixels;
     } else {
       blurSurfaces.delete(key); blurSurfaces.set(key, surface);
     }
@@ -177,7 +210,7 @@ function blurFill(ctx: CanvasRenderingContext2D, line: string, x: number, y: num
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
       ctx.globalAlpha = alpha;
-      ctx.drawImage(surface.blurred, 0, 0, sourceWidth, sourceHeight,
+      ctx.drawImage(surface.canvas, 0, 0, sourceWidth, sourceHeight,
         x - destinationWidth / 2, y - destinationHeight / 2, destinationWidth, destinationHeight);
     } finally { ctx.restore(); }
     return true;
@@ -226,12 +259,13 @@ export function drawNeonText(ctx: CanvasRenderingContext2D, line: string, x: num
     if (strength > 0) {
       const projectionY = y + fontSize * (0.08 + strength * 0.06);
       const projectionBlur = fontSize * (0.03 + strength * 0.04);
+      const projectionRadius = Math.max(1, projectionBlur * 0.58);
       ctx.lineWidth = tubeWidth * 1.35;
       const nativeBlur = hasFilter && acceptsBlur(ctx, projectionBlur);
       if (nativeBlur) {
         // This is the complete colored glyph moved downward, rather than
         // merely a shadow trailing from the sharp upper glyph.
-        ctx.filter = `blur(${projectionBlur * 0.7}px)`;
+        ctx.filter = `blur(${projectionBlur * 0.65}px)`;
         ctx.globalAlpha = alpha * strength * 0.55;
         ctx.strokeText(line, x, projectionY);
         ctx.fillText(line, x, projectionY);
@@ -240,7 +274,7 @@ export function drawNeonText(ctx: CanvasRenderingContext2D, line: string, x: num
         // shadow and turn this into an opaque duplicate. A small direct
         // convolution keeps the displacement and respects alpha reliably.
         if (!blurFill(ctx, line, x, projectionY, fontSize, options.paint, options.glowColor,
-          Math.max(1, projectionBlur * 1.2), alpha * strength * 0.22, true, ctx.lineWidth)) {
+          projectionRadius, alpha * strength * 0.22, true, ctx.lineWidth)) {
           ctx.fillStyle = options.paint;
           softenedFill(ctx, line, x, projectionY, Math.max(0.5, projectionBlur * 0.35), alpha * strength * 0.22);
         }
