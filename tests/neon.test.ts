@@ -39,7 +39,7 @@ const options: NeonTextOptions = {
   viewportWidth: 720, viewportHeight: 405,
 };
 
-test('the bottom projection blurs the complete same Thin glyph before the sharp tube', () => {
+test('the complete displaced projection precedes a soft tube fallback and restores state', () => {
   const env = context();
   drawNeonText(env.ctx, '莎出重围', 360, 200, 100, options);
   const fills = env.calls.filter(call => call.name === 'fillText');
@@ -56,34 +56,31 @@ test('the bottom projection blurs the complete same Thin glyph before the sharp 
   const core = fills[fills.length - 1];
   assert.equal(projection.state.font, core.state.font);
   assert.match(String(core.state.font), /^100 100px .*"Cheerboard Tube"/);
-  assert.equal(core.state.filter, 'none');
+  assert.match(String(core.state.filter), /^blur\(/);
   assert.equal(core.state.shadowBlur, 0);
   assert.deepEqual(core.args, ['莎出重围', 360, 200]);
   assert.equal(core.state.fillStyle, options.core);
-  const strokes = env.calls.filter(call => call.name === 'strokeText');
-  const projectionWidth = Number(strokes[0].state.lineWidth);
-  const tubeWidth = Number(strokes[1].state.lineWidth);
-  assert.ok(projectionWidth >= tubeWidth * 1.3 && projectionWidth <= tubeWidth * 1.4);
-  assert.ok(tubeWidth < 2, 'only the projected copy is thickened');
-  assert.ok(fills.some(call => call.args[2] === 200 && Number(call.state.shadowBlur) > 5 && Number(call.state.shadowBlur) < 15),
+  const blur = (call: Call) => Number(call.state.shadowBlur) || parseFloat(String(call.state.filter).slice(5)) || 0;
+  assert.ok(fills.some(call => call.args[2] === 200 && blur(call) > 3 && blur(call) < 15),
     'a middle halo bridges the sharp tube and softer inner glow');
-  assert.ok(fills.some(call => Number(call.state.shadowBlur) > 60), 'wide visible halo is larger than the old 0.5em maximum');
+  assert.ok(fills.some(call => blur(call) > 20), 'the ambient halo remains wider than the tube');
   assert.deepEqual(env.read(), env.original);
 });
 
-test('zero glow draws only the thin colored tube and core without projection or halo', () => {
+test('zero glow keeps the tube edge soft while disabling projection and ambient halo', () => {
   const env = context();
   drawNeonText(env.ctx, '加油', 360, 200, 100, { ...options, glow: 0 });
   const text = env.calls.filter(call => call.name === 'fillText' || call.name === 'strokeText');
-  assert.equal(text.length, 4);
-  assert.ok(text.every(call => call.args[2] === 200 && call.state.shadowBlur === 0 && call.state.filter === 'none'));
-  assert.ok(Number(text[2].state.lineWidth) < Number(text[0].state.lineWidth) / 4);
+  assert.ok(text.length > 0);
+  assert.ok(text.every(call => call.args[2] === 200 && call.state.shadowBlur === 0));
+  assert.ok(text.every(call => parseFloat(String(call.state.filter).slice(5)) > 0
+    && parseFloat(String(call.state.filter).slice(5)) < 2));
   assert.equal(text[0].state.lineJoin, 'round');
   assert.equal(text[0].state.lineCap, 'round');
   assert.deepEqual(env.read(), env.original);
 });
 
-test('existing gradient paints are retained for both the projection and colored and white cores', () => {
+test('the soft-fill fallback retains supplied gradient paints', () => {
   const paint = { stops: [[0, '#FF76D5'], [1, '#75DFFF']] } as unknown as CanvasGradient;
   const core = { stops: [[0, '#FFF2FB'], [1, '#F1FCFF']] } as unknown as CanvasGradient;
   const env = context();
@@ -97,11 +94,14 @@ test('missing, ignored or throwing Canvas filter setters use the same displaced 
   for (const support of ['absent', 'ignored', 'throwing'] as const) {
     const env = context(support);
     drawNeonText(env.ctx, '加油', 360, 200, 100, options);
-    const projection = env.calls.find(call => call.name === 'fillText' && Number(call.args[2]) > 200)!;
+    const projection = env.calls.find(call => call.name === 'fillText' && Number(call.state.shadowBlur) > 0
+      && Number(call.args[2]) + Number(call.state.shadowOffsetY) > 201)!;
     assert.ok(projection);
     assert.ok(Number(projection.state.shadowBlur) > 0);
     assert.equal(projection.state.shadowColor, options.glowColor);
     assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 0.8);
+    const softSources = env.calls.filter(call => call.name === 'fillText' && Number(call.state.shadowBlur) > 0);
+    assert.ok(softSources.every(call => Number(call.args[2]) < 0), 'only the blurred shadow reaches the viewport');
     assert.deepEqual(env.read(), env.original);
   }
 });
@@ -122,7 +122,7 @@ test('compression keeps a viewport-sized clip and bitmap scaling scales the proj
   assert.equal(parseFloat(String(projections[1].state.filter).slice(5)), parseFloat(String(projections[0].state.filter).slice(5)) * 2);
 });
 
-test('long scrolling text adds no application bitmap or drawing passes and retains the viewport clip', () => {
+test('the native fallback keeps long text drawing passes fixed and retains the viewport clip', () => {
   const short = context();
   const long = context();
   drawNeonText(short.ctx, '加油', 360, 200, 100, options);

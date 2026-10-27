@@ -105,7 +105,7 @@ test('solid text stays one color even with the former split red-blue palette', (
   assert.equal(calls.filter(call => call.name === 'strokeText' || call.name === 'createLinearGradient').length, 0);
 });
 
-test('outline and neon are distinct; zero glow keeps a thin-font tube and bright filled core', () => {
+test('outline and soft neon remain distinct, including with ambient glow disabled', () => {
   const { makeCanvas } = canvasEnvironment();
   const outline = makeCanvas();
   renderBoard(outline.canvas, { ...light('L2'), accent: '#EE3355' }, { width: 720, height: 405 });
@@ -115,30 +115,23 @@ test('outline and neon are distinct; zero glow keeps a thin-font tube and bright
     const neon = makeCanvas();
     renderBoard(neon.canvas, { ...light('L4'), foreground: '#62F7FF', accent: '#FF1199', background: '#121212', glow }, { width: 720, height: 405 });
     assert.equal(neon.calls.find(call => call.name === 'fillRect')?.state.fillStyle, '#121212');
-    const strokes = neon.calls.filter(call => call.name === 'strokeText');
     const fills = neon.calls.filter(call => call.name === 'fillText');
-    assert.equal(strokes.length, glow ? 3 : 2);
     assert.ok(fills.length >= 2);
     const core = fills[fills.length - 1];
     assert.match(String(core.state.font), /^100 /);
-    const tubeStroke = strokes[strokes.length - 2];
-    const coreStroke = strokes[strokes.length - 1];
-    assert.notEqual(core.state.fillStyle, tubeStroke.state.strokeStyle);
-    assert.equal(core.state.shadowBlur, 0);
-    assert.equal(tubeStroke.state.strokeStyle, '#62F7FF');
-    assert.equal(coreStroke.state.strokeStyle, core.state.fillStyle);
-    assert.ok(Number(coreStroke.state.lineWidth) < Number(tubeStroke.state.lineWidth) / 4);
-    assert.equal(coreStroke.state.lineJoin, 'round');
-    assert.equal(fills.some(call => Number(call.state.shadowBlur) > 0), glow > 0);
-    const projection = fills.find(call => Number(call.args[2]) > Number(core.args[2]));
+    assert.notEqual(core.state.fillStyle, '#62F7FF');
+    assert.ok(Number(core.state.shadowBlur) < 2, 'local edge softness is independent of ambient glow');
+    assert.equal(fills.some(call => Number(call.state.shadowBlur) > 10), glow > 0);
+    const visibleY = (call: Call) => Number(call.args[2]) + Number(call.state.shadowOffsetY || 0);
+    const projection = fills.find(call => Number(call.state.shadowBlur) > 2 && visibleY(call) > 405 * 0.51 + 1);
     assert.equal(Boolean(projection), glow > 0);
     if (projection) {
       assert.equal(projection.state.shadowColor, '#62F7FF');
       assert.ok(Number(projection.state.shadowBlur) > 0);
       assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 1);
       assert.equal(projection.args[0], core.args[0]);
-      assert.equal(projection.args[1], core.args[1]);
-      assert.ok(Number(projection.args[2]) - Number(core.args[2]) > 10);
+      assert.equal(projection.args[1], 360);
+      assert.ok(visibleY(projection) - visibleY(core) > 10);
     }
   }
 });

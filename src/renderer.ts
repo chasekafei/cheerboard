@@ -4,6 +4,7 @@ import { getEffectFont } from './fonts.ts';
 import { getTextLines } from './text-layout.ts';
 import { drawBoardDecorations } from './decorations.ts';
 import { drawNeonText } from './neon.ts';
+import { clearNeonTubeCache } from './neon-tube.ts';
 
 export type RenderOptions = { width?: number; height?: number; offset?: number; repeatGap?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
@@ -58,6 +59,7 @@ export function invalidateFontCache(): void {
   ghostLayerKey = '';
   fineGlyphs.clear();
   fineLines.clear();
+  clearNeonTubeCache();
 }
 
 function boardFont(design: Design, size: number): string {
@@ -403,7 +405,7 @@ function ghostText(ctx: Context, design: Design, line: string, x: number, y: num
   }
 }
 
-function styledText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number, accent: string, paint: Paint, core: Paint, viewportWidth: number, viewportHeight: number, textScaleX: number): void {
+function styledText(ctx: Context, design: Design, line: string, x: number, y: number, fontSize: number, accent: string, paint: Paint, core: Paint, viewportWidth: number, viewportHeight: number, textScaleX: number, gradientBounds: TextBounds): void {
   ctx.font = boardFont(design, fontSize);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -422,6 +424,9 @@ function styledText(ctx: Context, design: Design, line: string, x: number, y: nu
     drawNeonText(ctx, line, x, y, fontSize, {
       glow: design.glow, paint, core,
       glowColor: design.gradient ? mixedColor(design.foreground, design.gradientEnd, 0.5) : design.foreground,
+      foreground: design.foreground,
+      gradientEnd: design.gradient ? design.gradientEnd : undefined,
+      gradientAngle: design.gradientAngle, gradientBounds,
       viewportWidth, viewportHeight, textScaleX,
     });
     return;
@@ -1010,7 +1015,7 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
         const core = design.templateId === 'L4' ? textPaint(ctx, design, paintBounds, true) : paint;
         if (design.templateId === 'H1') { ctx.translate(width / 2, height / 2); ctx.rotate(-0.025); ctx.translate(-width / 2, -height / 2); }
         if (design.templateId === 'H3') { ctx.translate(width / 2, height / 2); ctx.transform(1, 0, -0.1, 1, 0, 0); ctx.translate(-width / 2, -height / 2); }
-        lines.forEach((line, index) => styledText(ctx, design, line, copyX, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core, width, height, textScaleX));
+        lines.forEach((line, index) => styledText(ctx, design, line, copyX, y + (index - (lines.length - 1) / 2) * fontSize * lineHeight, fontSize, accent, paint, core, width, height, textScaleX, paintBounds));
       }
       ctx.restore();
     });

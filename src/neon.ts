@@ -1,4 +1,5 @@
 import { TUBE_FONT } from './fonts.ts';
+import { drawSoftNeonTube, type NeonGradientBounds } from './neon-tube.ts';
 
 type Paint = CanvasRenderingContext2D['fillStyle'];
 
@@ -7,6 +8,10 @@ export type NeonTextOptions = {
   paint: Paint;
   core: Paint;
   glowColor: string;
+  foreground?: string;
+  gradientEnd?: string;
+  gradientAngle?: number;
+  gradientBounds?: NeonGradientBounds;
   /** Bitmap dimensions, before the caller's horizontal text compression. */
   viewportWidth: number;
   viewportHeight: number;
@@ -41,10 +46,34 @@ function acceptsBlur(ctx: CanvasRenderingContext2D, blur: number): boolean {
   }
 }
 
+/** Move the sharp source outside the clip and bring only its soft shadow back. */
+function shadowOnly(ctx: CanvasRenderingContext2D, line: string, x: number, y: number,
+  blur: number, fontSize: number, viewportHeight: number, stroke = false): void {
+  const shift = Math.ceil(viewportHeight + fontSize * 3 + blur * 6);
+  ctx.save();
+  try {
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = blur;
+    if (stroke) ctx.strokeText(line, x, y - shift);
+    else ctx.fillText(line, x, y - shift);
+  } finally { ctx.restore(); }
+}
+
+/** Small convolution fallback when neither pixel masks nor native blur work. */
+function softenedFill(ctx: CanvasRenderingContext2D, line: string, x: number, y: number,
+  radius: number, alpha: number): void {
+  const taps = [1, 2, 1];
+  ctx.shadowBlur = 0;
+  for (let row = 0; row < 3; row++) for (let column = 0; column < 3; column++) {
+    ctx.globalAlpha = 1 - Math.exp(-alpha * taps[row] * taps[column] / 8);
+    ctx.fillText(line, x + (column - 1) * radius, y + (row - 1) * radius);
+  }
+}
+
 /**
  * Draw the same Thin glyph as a soft, displaced projection and a bright tube.
- * No application offscreen surface is allocated. The final effect is clipped
- * to the viewport even when a scrolling sentence is much wider than the board.
+ * The body uses small cached glyph distance fields, with a continuous color
+ * and alpha falloff instead of a white filled glyph inside a colored outline.
  * Keep the caller's transform/clip intact so preview and export share this path.
  */
 export function drawNeonText(ctx: CanvasRenderingContext2D, line: string, x: number, y: number,
@@ -89,41 +118,59 @@ export function drawNeonText(ctx: CanvasRenderingContext2D, line: string, x: num
         // merely a shadow trailing from the sharp upper glyph.
         ctx.filter = `blur(${projectionBlur}px)`;
         ctx.globalAlpha = alpha * strength * 0.62;
+        ctx.strokeText(line, x, projectionY);
+        ctx.fillText(line, x, projectionY);
       } else {
-        // Chrome 61 supports Canvas filters; older engines still retain the
-        // complete low-opacity projection with a soft shadow around its shape.
-        ctx.shadowBlur = projectionBlur;
-        ctx.globalAlpha = alpha * strength * 0.21;
+        ctx.globalAlpha = alpha * strength * 0.62;
+        shadowOnly(ctx, line, x, projectionY, projectionBlur * 2, fontSize, height, true);
+        shadowOnly(ctx, line, x, projectionY, projectionBlur * 2, fontSize, height);
       }
-      ctx.strokeText(line, x, projectionY);
-      ctx.fillText(line, x, projectionY);
       if (hasFilter) ctx.filter = 'none';
       ctx.lineWidth = tubeWidth;
 
-      // A wide ambient glow and a denser inner halo make the light visible
-      // beyond the tube, while the final two passes keep the glyph crisp.
-      ctx.globalAlpha = alpha * strength * 0.8;
-      ctx.shadowBlur = fontSize * (0.3 + strength * 0.45);
-      ctx.fillText(line, x, y);
-      ctx.globalAlpha = alpha * strength * 0.9;
-      ctx.shadowBlur = fontSize * (0.1 + strength * 0.2);
-      ctx.fillText(line, x, y);
-      ctx.globalAlpha = alpha * strength * 0.95;
-      ctx.shadowBlur = fontSize * (0.035 + strength * 0.08);
-      ctx.fillText(line, x, y);
+      // Blur the entire light source. A shadow alone would also leave a sharp
+      // solid glyph underneath the softly shaded tube.
+      for (const [blur, opacity] of [
+        [fontSize * (0.3 + strength * 0.45), 0.8],
+        [fontSize * (0.1 + strength * 0.2), 0.9],
+        [fontSize * (0.035 + strength * 0.08), 0.95],
+      ]) {
+        ctx.globalAlpha = alpha * strength * opacity;
+        if (hasFilter && acceptsBlur(ctx, blur / 2)) {
+          ctx.filter = `blur(${blur / 2}px)`;
+          ctx.shadowBlur = 0;
+          ctx.fillText(line, x, y);
+        } else shadowOnly(ctx, line, x, y, blur, fontSize, height);
+        if (hasFilter) ctx.filter = 'none';
+      }
     }
 
     ctx.globalAlpha = alpha;
-    ctx.shadowBlur = fontSize * 0.04 * strength;
-    ctx.strokeText(line, x, y);
-    ctx.fillText(line, x, y);
     ctx.shadowBlur = 0;
-    ctx.fillStyle = options.core;
-    ctx.strokeStyle = options.core;
-    ctx.lineWidth = Math.max(0.35, fontSize * 0.0025);
-    ctx.globalAlpha = alpha * 0.95;
-    ctx.strokeText(line, x, y);
-    ctx.fillText(line, x, y);
+    if (!drawSoftNeonTube(ctx, line, x, y, fontSize, {
+      foreground: options.foreground || (typeof options.paint === 'string' ? options.paint : options.glowColor),
+      gradientEnd: options.gradientEnd, gradientAngle: options.gradientAngle,
+      gradientBounds: options.gradientBounds,
+      viewportWidth: width, viewportHeight: height, textScaleX: scaleX,
+    })) {
+      // Pixel APIs can be unavailable in a restricted webview. Keep the same
+      // fills softly blended; never restore the hard colored outline.
+      const soften = Math.max(0.5, fontSize * 0.004);
+      if (hasFilter && acceptsBlur(ctx, soften)) {
+        ctx.filter = `blur(${soften}px)`;
+        ctx.fillStyle = options.paint;
+        ctx.globalAlpha = alpha * 0.92;
+        ctx.fillText(line, x, y);
+        ctx.fillStyle = options.core;
+        ctx.globalAlpha = alpha * 0.4;
+        ctx.fillText(line, x, y);
+      } else {
+        ctx.fillStyle = options.paint;
+        softenedFill(ctx, line, x, y, soften, alpha);
+        ctx.fillStyle = options.core;
+        softenedFill(ctx, line, x, y, soften * 0.6, alpha * 0.6);
+      }
+    }
   } finally {
     ctx.restore();
   }
