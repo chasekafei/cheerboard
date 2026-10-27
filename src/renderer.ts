@@ -3,7 +3,7 @@ import { normalizeDotEmoji, MIN_DOT_DENSITY, MAX_DOT_DENSITY, MIN_FONT_SCALE, MA
 import { getEffectFont } from './fonts.ts';
 import { getTextLines } from './text-layout.ts';
 import { drawBoardDecorations } from './decorations.ts';
-import { drawNeonText } from './neon.ts';
+import { drawNeonText, clearNeonBlurCache } from './neon.ts';
 import { clearNeonTubeCache } from './neon-tube.ts';
 
 export type RenderOptions = { width?: number; height?: number; offset?: number; repeatGap?: number };
@@ -59,6 +59,7 @@ export function invalidateFontCache(): void {
   ghostLayerKey = '';
   fineGlyphs.clear();
   fineLines.clear();
+  clearNeonBlurCache();
   clearNeonTubeCache();
 }
 

@@ -30,5 +30,5 @@ body.light-page-active { background:#000 }
 .compact-controls .light-tool-glyph { width:21px; height:21px }
 .has-overlay .light-tools,.has-overlay .light-explanation { opacity:0; visibility:hidden; pointer-events:none }
 .cb-sheet-backdrop.light-sheet-backdrop--landscape { align-items:flex-start; justify-content:flex-start }
-.cb-sheet.light-sheet--landscape { position:absolute; top:0; left:0; width:100vh; max-width:none; height:76vw; max-height:none; border-radius:24px 0 0 24px; transform:rotate(90deg) translateY(-76vw); transform-origin:top left }
+.cb-sheet.light-sheet--landscape { position:absolute; top:var(--layout-inset-top,0px); left:0; width:calc(var(--app-height,100vh) - var(--layout-inset-top,0px) - var(--layout-inset-bottom,0px)); max-width:none; height:76vw; max-height:none; border-radius:24px 24px 0 0; transform:rotate(90deg) translateY(-76vw); transform-origin:top left }
 @media(prefers-reduced-motion:reduce) { .light-tools { transition:none; transform:none } }

@@ -87,6 +87,11 @@ function updateSloganList() {
   const list = document.querySelector('#slogans');
   if (list) { list.innerHTML = sloganList(); list.scrollTop = 0; }
 }
+function lightSheetOrientationClass(): string {
+  const viewportLandscape = window.innerWidth >= (window.visualViewport?.height || window.innerHeight);
+  const requestedLandscape = design.orientation === 'landscape';
+  return requestedLandscape !== viewportLandscape ? 'light-sheet-backdrop--landscape light-sheet--landscape' : '';
+}
 function sloganVariants() { return renderSloganVariants(design); }
 function textPanel() { return renderTextPanel(textState()); }
 function colorPanel() { return renderColorPanel(design); }
@@ -160,7 +165,9 @@ function updateLightControls() {
   positionLightControls(); lightScene?.repaint();
 }
 function openLightSheet(kind: 'text' | 'style') {
-  openOverlay(sheet({ title: kind === 'text' ? '文案' : '样式', body: kind === 'text' ? textPanel() : lightStylePanel(), kind, bodyId: 'light-sheet-body', titleId: 'light-sheet-title', headerAction: 'light-sheet-close', closeAction: 'light-sheet-close', backdropClass: design.orientation === 'landscape' ? 'light-sheet-backdrop--landscape' : '', className: design.orientation === 'landscape' ? 'light-sheet--landscape' : '' }), false);
+  const orientationClass = lightSheetOrientationClass();
+  const [backdropClass = '', className = ''] = orientationClass.split(' ');
+  openOverlay(sheet({ title: kind === 'text' ? '文案' : '样式', body: kind === 'text' ? textPanel() : lightStylePanel(), kind, bodyId: 'light-sheet-body', titleId: 'light-sheet-title', headerAction: 'light-sheet-close', closeAction: 'light-sheet-close', backdropClass, className }), false);
   lightSheet = kind;
   updateLightControls(); paintLightEffects();
 }
@@ -330,7 +337,7 @@ function showBoard() {
       }
       const distance = (dimensions.width + measurement.textWidth) / 2 + measurement.fontSize * 0.25;
       progress += elapsed / 1000 * scrollPixelsPerSecond(design.speed, canvas.clientHeight || dimensions.height) * dimensions.height / (canvas.clientHeight || dimensions.height);
-      const repeatGap = measurement.fontSize * 0.38;
+      const repeatGap = measurement.fontSize * 1;
       if (design.loop) progress %= resolveRepeatPeriod(measurement.textWidth, repeatGap, dimensions.width);
       else if (progress > distance * 2) stopped = true;
       renderBoard(canvas, stopped ? { ...design, scroll: false } : design, { ...dimensions,

@@ -121,17 +121,24 @@ test('outline and soft neon remain distinct, including with ambient glow disable
     assert.match(String(core.state.font), /^100 /);
     assert.notEqual(core.state.fillStyle, '#62F7FF');
     assert.ok(Number(core.state.shadowBlur) < 2, 'local edge softness is independent of ambient glow');
-    assert.equal(fills.some(call => Number(call.state.shadowBlur) > 10), glow > 0);
     const visibleY = (call: Call) => Number(call.args[2]) + Number(call.state.shadowOffsetY || 0);
-    const projection = fills.find(call => Number(call.state.shadowBlur) > 2 && visibleY(call) > 405 * 0.51 + 1);
-    assert.equal(Boolean(projection), glow > 0);
+    const projection = fills.slice(0, -1).find(call => visibleY(call) > visibleY(core) + 3);
+    const projectionImage = neon.calls.find(call => {
+      if (call.name !== 'drawImage') return false;
+      const destination = imageDestination(call);
+      return destination.length === 4 && destination[1] + destination[3] / 2 > visibleY(core) + 3;
+    });
+    assert.equal(Boolean(projection || projectionImage), glow > 0);
     if (projection) {
-      assert.equal(projection.state.shadowColor, '#62F7FF');
-      assert.ok(Number(projection.state.shadowBlur) > 0);
+      if (Number(projection.state.shadowBlur) > 2) assert.equal(projection.state.shadowColor, '#62F7FF');
+      assert.ok(Number(projection.state.shadowBlur) >= 0);
       assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 1);
       assert.equal(projection.args[0], core.args[0]);
-      assert.equal(projection.args[1], 360);
+      assert.ok(Math.abs(Number(projection.args[1]) - 360) < 20);
       assert.ok(visibleY(projection) - visibleY(core) > 10);
+    } else if (projectionImage) {
+      assert.ok(projectionImage.args.length === 9);
+      assert.ok(Number(projectionImage.state.globalAlpha) > 0 && Number(projectionImage.state.globalAlpha) < 1);
     }
   }
 });

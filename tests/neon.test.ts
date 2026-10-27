@@ -90,18 +90,17 @@ test('the soft-fill fallback retains supplied gradient paints', () => {
   assert.equal(fills[fills.length - 1].state.fillStyle, core);
 });
 
-test('missing, ignored or throwing Canvas filter setters use the same displaced glyph with a shadow fallback', () => {
+test('missing, ignored or throwing Canvas filter setters use a dim direct convolution fallback', () => {
   for (const support of ['absent', 'ignored', 'throwing'] as const) {
     const env = context(support);
     drawNeonText(env.ctx, '加油', 360, 200, 100, options);
-    const projection = env.calls.find(call => call.name === 'fillText' && Number(call.state.shadowBlur) > 0
-      && Number(call.args[2]) + Number(call.state.shadowOffsetY) > 201)!;
+    const projection = env.calls.find(call => call.name === 'fillText'
+      && Number(call.args[2]) > 200 && Number(call.args[2]) < 220)!;
     assert.ok(projection);
-    assert.ok(Number(projection.state.shadowBlur) > 0);
-    assert.equal(projection.state.shadowColor, options.glowColor);
-    assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 0.8);
-    const softSources = env.calls.filter(call => call.name === 'fillText' && Number(call.state.shadowBlur) > 0);
-    assert.ok(softSources.every(call => Number(call.args[2]) < 0), 'only the blurred shadow reaches the viewport');
+    assert.equal(projection.state.shadowBlur, 0);
+    assert.ok(Number(projection.state.globalAlpha) > 0 && Number(projection.state.globalAlpha) < 0.2);
+    assert.ok(env.calls.filter(call => call.name === 'fillText' && Number(call.args[2]) === 200).length > 3,
+      'ambient fallback spreads through direct low-alpha taps');
     assert.deepEqual(env.read(), env.original);
   }
 });
