@@ -77,7 +77,7 @@ function templateCard(id: TemplateId, compact = false) {
   return `<button class="template-card ${compact ? 'compact' : ''} ${page === 'editor' && design.templateId === id ? 'selected' : ''}" data-action="template" data-id="${id}" aria-label="使用${t.name}" aria-pressed="${page === 'editor' && design.templateId === id}"><div class="template-art"><canvas data-template="${id}" aria-label="${t.name}效果预览"></canvas>${page === 'editor' && design.templateId === id ? `<span class="template-check">${icon('check')}</span>` : ''}</div><span class="template-info"><strong>${t.name}</strong>${!compact ? `<small>${t.description}</small>` : ''}</span></button>`;
 }
 function home() {
-  return renderHome({ category: homeCategory, records, draft: draftAvailable ? design : null, recordsReady });
+  return renderHome({ category: homeCategory, records, draft: draftAvailable ? design : null, recordsReady, recordsError });
 }
 function textState() { return { design, category: sloganCategory, search, page: sloganPage }; }
 function sloganList() {
@@ -160,7 +160,7 @@ function updateLightControls() {
   positionLightControls(); lightScene?.repaint();
 }
 function openLightSheet(kind: 'text' | 'style') {
-  openOverlay(sheet({ title: kind === 'text' ? '文案' : '样式', body: kind === 'text' ? textPanel() : lightStylePanel(), kind, bodyId: 'light-sheet-body', titleId: 'light-sheet-title', headerAction: 'light-sheet-close', closeAction: 'light-sheet-close' }), false);
+  openOverlay(sheet({ title: kind === 'text' ? '文案' : '样式', body: kind === 'text' ? textPanel() : lightStylePanel(), kind, bodyId: 'light-sheet-body', titleId: 'light-sheet-title', headerAction: 'light-sheet-close', closeAction: 'light-sheet-close', backdropClass: design.orientation === 'landscape' ? 'light-sheet-backdrop--landscape' : '', className: design.orientation === 'landscape' ? 'light-sheet--landscape' : '' }), false);
   lightSheet = kind;
   updateLightControls(); paintLightEffects();
 }
@@ -513,8 +513,14 @@ document.addEventListener('keydown', event => {
 });
 async function loadRecords() {
   recordsError = false;
-  try { records = await readRecords(); recordsReady = true; }
+  let timer = 0;
+  try {
+    const timeout = new Promise<never>((_, reject) => { timer = window.setTimeout(() => reject(new Error('读取存档超时')), 4_000); });
+    records = await Promise.race([readRecords(), timeout]);
+    recordsReady = true;
+  }
   catch { recordsReady = false; recordsError = true; toast('原存档未能读取，已暂停修改存档；仍可制作和存图。'); }
+  finally { if (timer) window.clearTimeout(timer); }
   if (page === 'light') updateLightControls(); else render();
 }
 async function start() {

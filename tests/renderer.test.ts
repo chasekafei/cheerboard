@@ -71,7 +71,7 @@ function canvasEnvironment(alpha?: (x: number, y: number) => number) {
 }
 
 function light(template: Design['templateId']): Design {
-  return { ...createDesign(template), text: '加油', layout: 'single', gradient: false, sticker: 'none', border: false, dotStyle: 'classic', dotDensity: 2, decorationId: 'none' };
+  return { ...createDesign(template), text: '加油', layout: 'single', gradient: false, sticker: 'none', border: false, dotStyle: 'classic', dotDensity: 2, decorationId: 'none', scroll: false };
 }
 
 function imageDestination(call: Call): number[] {
@@ -428,7 +428,7 @@ test('rich decorations remain fixed while repeated text uses one bounded viewpor
     const target = makeCanvas();
     const prior = new Set(canvases.flatMap(item => item.calls));
     renderBoard(target.canvas, design, { width: 1280, height: 720, offset, repeatGap: 50 });
-    assert.ok(target.calls.some(call => call.name === 'clip'));
+    assert.equal(target.calls.some(call => call.name === 'clip'), false);
     const fresh = canvases.flatMap(item => item.calls).filter(call => !prior.has(call));
     assert.ok(fresh.filter(call => call.name === 'getImageData').length <= 1);
     transforms.push(target.calls.filter(call => call.name === 'rotate' || call.name === 'translate').map(call => [call.name, ...call.args]));

@@ -93,6 +93,9 @@ input[type=range]::-moz-range-thumb { width:21px; height:21px; border:2px solid 
 .cb-advanced { margin-top:14px; border-top:1px solid #e1dfd6; padding-top:6px }
 .cb-advanced>summary { padding:9px 0; font-size:14px; font-weight:700; cursor:pointer }
 .cb-advanced[open]>summary { margin-bottom:10px }
+.cb-style-font-scale { margin-top:10px }
+.cb-style-more { margin-top:14px; border-top:1px solid #e1dfd6; padding-top:12px }
+.cb-style-more>.cb-detail-row:last-child { margin-bottom:0 }
 .cb-detail-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; font-size:14px; font-weight:700 }
 .cb-detail-row>span { margin-right:16px; white-space:nowrap }
 .dot-shapes,.emoji-presets { display:flex; flex-wrap:wrap }

@@ -117,11 +117,11 @@ export function drawNeonText(ctx: CanvasRenderingContext2D, line: string, x: num
         // This is the complete colored glyph moved downward, rather than
         // merely a shadow trailing from the sharp upper glyph.
         ctx.filter = `blur(${projectionBlur}px)`;
-        ctx.globalAlpha = alpha * strength * 0.62;
+        ctx.globalAlpha = alpha * strength * 0.38;
         ctx.strokeText(line, x, projectionY);
         ctx.fillText(line, x, projectionY);
       } else {
-        ctx.globalAlpha = alpha * strength * 0.62;
+        ctx.globalAlpha = alpha * strength * 0.14;
         shadowOnly(ctx, line, x, projectionY, projectionBlur * 2, fontSize, height, true);
         shadowOnly(ctx, line, x, projectionY, projectionBlur * 2, fontSize, height);
       }

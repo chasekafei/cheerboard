@@ -996,10 +996,6 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
   const centers = visibleTextCenters(x, textWidth, width, repeatPeriod);
   const y = height * (design.templateId === 'H2' ? 0.52 : 0.51);
   const bounds = { x, y, width: textWidth, height: fontSize * lineHeight * lines.length };
-  if (scrolling && hasDecorations) {
-    ctx.save();
-    ctx.beginPath(); ctx.rect(padding, 0, Math.max(1, width - padding * 2), height); ctx.clip();
-  }
   if (design.templateId === 'L3') dotText(ctx, design, lines, x, y, fontSize, fontSize * lineHeight,
     width, height, bounds, textScaleX, centers, repeatPeriod);
   else {
@@ -1020,7 +1016,6 @@ export function renderBoard(canvas: HTMLCanvasElement, design: Design, options: 
       ctx.restore();
     });
   }
-  if (scrolling && hasDecorations) ctx.restore();
   if (hasDecorations) {
     const textHeight = fontSize * (1 + (lines.length - 1) * lineHeight);
     drawBoardDecorations(ctx, design, { width, height, textBounds: {

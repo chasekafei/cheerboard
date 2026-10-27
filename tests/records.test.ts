@@ -65,8 +65,9 @@ test('existing template IDs remain valid and new light defaults do not migrate o
     assert.equal(design.sticker, 'none');
     assert.equal(design.border, false);
     assert.equal(design.text, '点击屏幕查看菜单');
-    assert.equal(design.dotStyle, 'fluorescent');
+    assert.equal(design.dotStyle, 'fine');
     assert.equal(design.dotDensity, 1);
+    assert.equal(design.scroll, true);
     assert.equal(design.decorationId, 'hearts');
     assert.equal(design.decorationSeed, 1);
   }

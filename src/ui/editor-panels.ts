@@ -27,16 +27,8 @@ export function rangeField(id: string, label: string, value: number, min: number
   return `<div class="range-field"><label for="${id}">${label}</label><div class="cb-slider-row"><input style="--range-progress:${Math.max(0, Math.min(100, (value - min) / (max - min) * 100))}%" id="${id}" type="range" min="${min}" max="${max}" step="1" value="${value}"><output id="${id}-value" for="${id}" data-suffix="${suffix}">${value}${suffix}</output></div>${ends ? `<div class="range-ends"><span>${ends[0]}</span><span>${ends[1]}</span></div>` : ''}</div>`;
 }
 
-const TEXT_COLORS = ['#FFF12A', '#FF3C88', '#BE7AFF', '#FFFFFF', '#20E9FF'];
-const BACKGROUND_COLORS = ['#000000', '#202C58', '#780B12', '#FFFFFF'];
-function quickColors(design: Design, channel: 'foreground' | 'background' | 'accent', label: string): string {
-  const colors = channel === 'background' ? BACKGROUND_COLORS : TEXT_COLORS;
-  const disabled = channel !== 'background' && design.templateId === 'L3' && design.dotShape === 'emoji';
-  return `<fieldset class="cb-color-field" ${disabled ? 'disabled' : ''}><legend>${label}</legend><div class="cb-color-dots">${colors.map(color => button(`<i style="background:${color}"></i>`, 'quick-color', design[channel].toUpperCase() === color ? 'selected' : '', `data-id="${color}" data-channel="${channel}" aria-label="${label}${color}" aria-pressed="${design[channel].toUpperCase() === color}" ${disabled ? 'disabled' : ''}`)).join('')}</div></fieldset>`;
-}
-
 function dotProfileControls(design: Design): string {
-  return `<div class="cb-detail-row"><span>点阵质感</span><div class="segmented">${[['classic', '经典'], ['fluorescent', '荧光'], ['fine', '纤细']].map(([id, name]) => button(name, 'dot-style', design.dotStyle === id ? 'selected' : '', `data-id="${id}" aria-pressed="${design.dotStyle === id}"`)).join('')}</div></div>`;
+  return `<div class="cb-detail-row"><span>点阵质感</span><div class="segmented">${[['fine', '纤细'], ['fluorescent', '荧光'], ['classic', '经典']].map(([id, name]) => button(name, 'dot-style', design.dotStyle === id ? 'selected' : '', `data-id="${id}" aria-pressed="${design.dotStyle === id}"`)).join('')}</div></div>`;
 }
 
 export function dotControls(design: Design): string {
@@ -59,5 +51,5 @@ export function renderGraphicPanel(design: Design): string {
 
 export function renderLightStylePanel(design: Design): string {
   const names: Record<string, string> = { L3: '点阵', L2: '描边', L4: '霓虹', L1: '纯色', L5: '重影' };
-  return `<div class="light-effect-grid" role="group" aria-label="灯牌效果">${(['L3', 'L2', 'L4', 'L1', 'L5'] as TemplateId[]).map(id => button(`<span class="cb-effect-preview"><canvas data-light-effect="${id}" aria-hidden="true"></canvas></span><span>${names[id]}</span>`, 'template', `light-effect-option ${design.templateId === id ? 'selected' : ''}`, `data-id="${id}" aria-pressed="${design.templateId === id}"`)).join('')}</div><div class="cb-style-primary">${quickColors(design, 'foreground', design.templateId === 'L5' ? '左上颜色' : '文字颜色')}${quickColors(design, design.templateId === 'L5' ? 'accent' : 'background', design.templateId === 'L5' ? '右下颜色' : '背景颜色')}${rangeField('font-scale', '字号', design.fontScale, MIN_FONT_SCALE, MAX_FONT_SCALE, undefined, '')}</div>${design.templateId === 'L3' ? `<div class="cb-dot-profile">${dotProfileControls(design)}</div>` : ''}${renderDecorations(design)}<details class="cb-advanced"><summary>更多样式设置</summary>${design.templateId === 'L3' ? dotControls(design) : ''}${design.templateId === 'L4' ? rangeField('glow', '光晕强度', design.glow, 0, 100, ['清晰', '柔和']) : ''}${renderColorPanel(design)}<label class="toggle-row"><span>装饰边框</span><input id="border" type="checkbox" ${design.border ? 'checked' : ''}><span class="toggle"></span></label></details>`;
+  return `<div class="light-effect-grid" role="group" aria-label="灯牌效果">${(['L3', 'L2', 'L4', 'L1', 'L5'] as TemplateId[]).map(id => button(`<span class="cb-effect-preview"><canvas data-light-effect="${id}" aria-hidden="true"></canvas></span><span>${names[id]}</span>`, 'template', `light-effect-option ${design.templateId === id ? 'selected' : ''}`, `data-id="${id}" aria-pressed="${design.templateId === id}"`)).join('')}</div><div class="range-field cb-style-font-scale">${rangeField('font-scale', '字号', design.fontScale, MIN_FONT_SCALE, MAX_FONT_SCALE, undefined, '')}</div>${design.templateId === 'L3' ? `<div class="cb-dot-profile">${dotProfileControls(design)}</div>` : ''}${renderDecorations(design)}<div class="cb-style-more">${design.templateId === 'L3' ? dotControls(design) : ''}${design.templateId === 'L4' ? rangeField('glow', '光晕强度', design.glow, 0, 100, ['清晰', '柔和']) : ''}${renderColorPanel(design)}<label class="toggle-row"><span>装饰边框</span><input id="border" type="checkbox" ${design.border ? 'checked' : ''}><span class="toggle"></span></label></div>`;
 }

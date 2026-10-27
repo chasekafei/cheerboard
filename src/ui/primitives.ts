@@ -59,6 +59,7 @@ export type SheetOptions = {
   bodyClass?: string;
   bodyId?: string;
   footerClass?: string;
+  backdropClass?: string;
   titleId?: string;
   closeAction?: string;
 };
@@ -75,5 +76,5 @@ export function sheet(options: SheetOptions): string {
   const accessibleLabel = /\baria-label\s*=/.test(extra) ? '' : `aria-label="${escapeHTML(label || '关闭' + options.title)}"`;
   const headerButton = button(content, action, actionClass, [accessibleLabel, extra].filter(Boolean).join(' '));
   const footer = options.footer ? `<footer class="cb-sheet-footer${options.footerClass ? ' ' + escapeHTML(options.footerClass) : ''}">${options.footer}</footer>` : '';
-  return `<div class="cb-sheet-backdrop cb-sheet-backdrop--${kind}" data-action="${escapeHTML(closeAction)}"><section class="cb-sheet cb-sheet--${kind}${options.className ? ' ' + escapeHTML(options.className) : ''}" role="dialog" aria-modal="true" aria-labelledby="${escapeHTML(titleId)}"><header class="cb-sheet-header"><h2 class="cb-sheet-title" id="${escapeHTML(titleId)}">${escapeHTML(options.title)}</h2>${headerButton}</header><div class="cb-sheet-body${options.bodyClass ? ' ' + escapeHTML(options.bodyClass) : ''}"${options.bodyId ? ` id="${escapeHTML(options.bodyId)}"` : ''}>${options.body}</div>${footer}</section></div>`;
+  return `<div class="cb-sheet-backdrop cb-sheet-backdrop--${kind}${options.backdropClass ? ' ' + escapeHTML(options.backdropClass) : ''}" data-action="${escapeHTML(closeAction)}"><section class="cb-sheet cb-sheet--${kind}${options.className ? ' ' + escapeHTML(options.className) : ''}" role="dialog" aria-modal="true" aria-labelledby="${escapeHTML(titleId)}"><header class="cb-sheet-header"><h2 class="cb-sheet-title" id="${escapeHTML(titleId)}">${escapeHTML(options.title)}</h2>${headerButton}</header><div class="cb-sheet-body${options.bodyClass ? ' ' + escapeHTML(options.bodyClass) : ''}"${options.bodyId ? ` id="${escapeHTML(options.bodyId)}"` : ''}>${options.body}</div>${footer}</section></div>`;
 }
