@@ -18,6 +18,9 @@
 .editor-title .back-link { display:inline-flex; align-items:center; min-height:40px; padding:8px 0; border:0; background:none; box-shadow:none; font-size:13px; white-space:nowrap }
 .editor-title .back-link .cb-icon { width:16px; height:16px; margin-right:5px }
 .editor-title .save-record { min-height:42px; font-size:12px; white-space:nowrap }
+.editor-title--solo { grid-template-columns:1fr; justify-items:center; padding-bottom:16px }
+.cb-banner-dev-notice { display:flex; align-items:center; justify-content:center; gap:8px; width:fit-content; max-width:100%; min-height:36px; margin:0 auto 10px; padding:7px 14px; border:1.5px solid #c8b4e8; border-radius:18px; background:#f2e9ff; color:#5b4385; font-size:13px; font-weight:700; line-height:1.35; text-align:center }
+.cb-banner-dev-notice .cb-icon { width:17px; height:17px; color:#9a6dd0 }
 .workspace {
   display:grid;
   grid-template-columns:minmax(0,1fr) 360px;
@@ -143,6 +146,8 @@
   .editor-title h1 { font-size:18px }
   .editor-title .back-link { font-size:11px }
   .editor-title .save-record { padding-left:8px; padding-right:8px; font-size:11px }
+  .editor-title--solo { padding-bottom:12px }
+  .cb-banner-dev-notice { min-height:34px; margin-bottom:8px; padding:6px 11px; font-size:12px }
   .workspace { display:block }
   .preview-column { position:static }
   .preview-stage { padding:10px; border-radius:16px }
@@ -161,6 +166,7 @@
   .editor-page,.saved-page { padding-left:16px; padding-right:16px }
   .editor-title h1 { font-size:16px }
   .editor-title .save-record { padding-left:6px; padding-right:6px; font-size:10px }
+  .cb-banner-dev-notice { max-width:calc(100% - 8px); font-size:11px }
   .editor-actions { padding-left:16px; padding-right:16px }
   .editor-actions>button { padding-left:9px; padding-right:9px; font-size:12px }
   .panel-body { padding:16px }
