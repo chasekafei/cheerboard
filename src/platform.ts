@@ -10,7 +10,8 @@ type NativeOptions = Record<string, unknown> & {
 };
 type NativeMethod = (options?: NativeOptions) => unknown;
 type MethodName = 'getLaunchOptions' | 'getWindowInfo' | 'getStorage' | 'setStorage'
-  | 'writeTempFile' | 'saveImageToPhotosAlbum' | 'postNote' | 'interactionOpenApi';
+  | 'writeTempFile' | 'saveImageToPhotosAlbum' | 'postNote' | 'interactionOpenApi'
+  | 'followAuthor' | 'getFollowStatus';
 type MiniTool = Partial<Record<MethodName, NativeMethod>>;
 interface XhsSdk {
   miniTool?: MiniTool;
@@ -53,6 +54,19 @@ function asRecord(value: unknown): NativeResult {
   return value !== null && typeof value === 'object' ? value as NativeResult : {};
 }
 
+function parseStoredData(value: unknown): unknown {
+  if (value === null || typeof value === 'undefined') return null;
+  if (typeof value !== 'string') return value;
+  let source = value.replace(/^\uFEFF/, '').trim();
+  if (!source) return null;
+  for (let depth = 0; depth < 3; depth++) {
+    const parsed = JSON.parse(source) as unknown;
+    if (typeof parsed !== 'string') return parsed;
+    source = parsed.replace(/^\uFEFF/, '').trim();
+  }
+  return JSON.parse(source) as unknown;
+}
+
 function platformError(error: unknown): Error {
   if (error instanceof Error) return error;
   const details = asRecord(error);
@@ -69,6 +83,15 @@ function platformError(error: unknown): Error {
 function hasMethod(name: MethodName): boolean {
   const bridge = sdk()?.miniTool;
   return Boolean(bridge && typeof bridge[name] === 'function');
+}
+
+async function waitForMethod(name: MethodName, timeout = 2_000): Promise<boolean> {
+  if (hasMethod(name) || browserPreview || typeof document === 'undefined') return hasMethod(name);
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline && !hasMethod(name)) {
+    await new Promise<void>(resolve => window.setTimeout(resolve, 50));
+  }
+  return hasMethod(name);
 }
 
 /** Callback options are intentional: documented SDK then returns undefined. */
@@ -157,8 +180,11 @@ export async function saveLocal(key: string, value: unknown): Promise<void> {
 }
 
 async function writeLocal(key: string, data: string): Promise<void> {
-  if (await clientVersion() >= 9460 && hasMethod('setStorage')) {
-    await invoke('setStorage', { key, data }, 8_000);
+  // The container only exposes this method on clients that support the
+  // Storage API. Prefer capability detection so a slow or missing launch
+  // options probe cannot make a working native store look unavailable.
+  if (await waitForMethod('setStorage')) {
+    await invoke('setStorage', { key, data, encrypt: false }, 8_000);
     return;
   }
   try {
@@ -173,9 +199,9 @@ export async function loadLocal(key: string): Promise<unknown> {
   const pendingWrite = storageWrites.get(key);
   if (pendingWrite) await pendingWrite;
   let data: unknown;
-  if (await clientVersion() >= 9460 && hasMethod('getStorage')) {
+  if (await waitForMethod('getStorage')) {
     try {
-      data = (await invoke('getStorage', { key }, 8_000)).data;
+      data = (await invoke('getStorage', { key, encrypt: false }, 8_000)).data;
     } catch (error) {
       const message = error instanceof NativeCallError ? error.nativeMessage : error instanceof Error ? error.message : '';
       // Some client builds report a missing key via fail. Only explicit absence
@@ -195,11 +221,11 @@ export async function loadLocal(key: string): Promise<unknown> {
       }
       if (previous !== null) {
         try {
-          JSON.parse(previous);
+          parseStoredData(previous);
         } catch {
           throw new Error('本地设计数据无法读取，请重新制作。');
         }
-        await invoke('setStorage', { key, data: previous }, 8_000);
+        await invoke('setStorage', { key, data: previous, encrypt: false }, 8_000);
         data = previous;
       }
     }
@@ -210,10 +236,8 @@ export async function loadLocal(key: string): Promise<unknown> {
       throw new Error('暂时无法读取本地设计；仍可制作新牌并保存图片。');
     }
   }
-  if (data === null || typeof data === 'undefined') return null;
-  if (typeof data !== 'string') throw new Error('本地设计数据无效，请重新制作。');
   try {
-    return JSON.parse(data) as unknown;
+    return parseStoredData(data);
   } catch {
     throw new Error('本地设计数据无法读取，请重新制作。');
   }
@@ -274,7 +298,7 @@ export async function shareImage(dataUrl: string, kind: 'comment' | 'note', snap
   if (kind === 'comment') {
     const payload: NativeResult = {
       action: 'post_comment',
-      content: '做好我的加油牌了！',
+      content: '我用手机手幅做了一块自己的加油牌，灯牌和手幅都能选文案、换样式。现场展示请以当场规定为准。',
     };
     if (typeof snapshot !== 'undefined') {
       const serialized = JSON.stringify(snapshot);
@@ -292,11 +316,27 @@ export async function shareImage(dataUrl: string, kind: 'comment' | 'note', snap
   const filePath = await imagePath(dataUrl, false);
   const version = await clientVersion();
   await invoke('postNote', {
-    title: '做一块自己的加油牌',
-    content: '用手机手幅做的加油牌。现场使用请遵守当场规定，勿遮挡他人。发布前可检查并手动挂载小工具。',
+    title: '做一块自己的灯牌或手幅',
+    content: '用手机手幅从文案库选一句，做一块自己的灯牌或手幅；点阵、描边、霓虹、纯色和红蓝重影都能换，配色、装饰、横竖屏与滚动也可以调整。可以保存到相册、晒到评论或发布成笔记。现场展示请以当场规定为准，回合中收起，勿遮挡他人。发布前请检查图片、正文和是否挂载小工具。',
     ...(version >= 9430 ? { pageType: 'photo_publish' } : {}),
     mediaInfo: { image_resources: [{ url: filePath }] },
   }, 180_000);
+}
+
+function followStatus(result: NativeResult): number {
+  const value = Number(result.follow_status);
+  return value === 0 || value === 1 || value === 2 ? value : -1;
+}
+
+/** The API can only target the author of the current mini-tool. */
+export async function getFollowStatus(): Promise<number> {
+  if (!(await waitForMethod('getFollowStatus'))) return -1;
+  try { return followStatus(await invoke('getFollowStatus', {}, 8_000)); } catch { return -1; }
+}
+
+export async function followAuthor(): Promise<number> {
+  if (!(await waitForMethod('followAuthor'))) throw new NativeUnavailableError('当前客户端暂不支持关注作者，请更新小红书后重试。');
+  return followStatus(await invoke('followAuthor', {}, 30_000));
 }
 
 function finite(value: unknown): number {

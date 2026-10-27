@@ -19,9 +19,17 @@ export function renderExportView({ format, formats, memory }: ExportViewOptions)
   ).join('');
   const fields = format === 'memory'
     ? `<div class="memory-fields"><label>地点（选填）<input id="memory-place" value="${escapeHTML(memory.place)}" maxlength="30" placeholder="写下观赛地点"></label><label>日期<input id="memory-date" type="date" value="${escapeHTML(memory.date)}"></label></div>` : '';
-  const hint = format === 'a4' ? '打印请按图片方向选择 A4 纸张，并使用“适合页面”。' : '发布图文会打开小红书发布页，你可以继续编辑。';
+  const hint = format === 'a4'
+    ? '适合打印的 A4 版本。请按图片方向选择纸张，并勾选“适合页面”。'
+    : format === 'comment'
+      ? '图片会带入评论编辑器；发布前可以补充文字，是否发布由你确认。'
+      : format === 'memory'
+        ? '填好地点和日期，留下一张观赛记录，也可以保存或发布。'
+        : format === 'board'
+          ? '导出当前方向的完整牌面，适合保存、发笔记或现场展示。'
+          : '把这张灯牌或手幅带入小红书发布页，可继续补充正文、话题并检查是否挂载小工具。';
   return sheet({
-    title: '分享我的加油牌',
+    title: '分享这块牌',
     titleId: 'export-title',
     kind: 'share',
     className: 'share-modal',

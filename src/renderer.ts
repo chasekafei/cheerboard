@@ -1079,7 +1079,12 @@ export function renderExport(design: Design, format: 'board' | 'comment' | 'note
   ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(64, 186); ctx.lineTo(1016, 186); ctx.stroke();
   cardText(ctx, '手机手幅', 64, 95, 34, '#294635', 900);
-  cardText(ctx, format === 'memory' ? '把这一刻，好好收藏' : '把喜欢，写成一块牌', 64, 146, 24, '#798174');
+  const cardSubtitle = format === 'memory'
+    ? '把这一刻，好好收藏'
+    : format === 'comment'
+      ? '把喜欢晒到评论里'
+      : '灯牌与手幅，随手做、随手晒';
+  cardText(ctx, cardSubtitle, 64, 146, 24, '#798174');
   const board = document.createElement('canvas');
   renderCompleteBoard(board, portrait ? 1080 : 1920, portrait ? 1920 : 1080);
   const ratio = board.width / board.height;
@@ -1107,8 +1112,11 @@ export function renderExport(design: Design, format: 'board' | 'comment' | 'note
     if (meta && meta.place.trim()) fittedCardText(ctx, meta.place.trim(), 74, textTop + 72, 29, width - 148, '#596A58');
     if (meta && meta.date.trim()) fittedCardText(ctx, meta.date.trim(), 74, textTop + 124, 26, width - 148, '#7C8575');
   } else {
-    cardText(ctx, '今天，也想认真加油。', 72, textTop, 38, '#294635', 900);
-    cardText(ctx, '选一句话，做一块自己的加油牌', 74, textTop + 62, 27, '#7B8275');
+    const cardHeading = format === 'comment'
+      ? '为喜欢留一句话'
+      : '今天，也想认真加油。';
+    cardText(ctx, cardHeading, 72, textTop, 38, '#294635', 900);
+    cardText(ctx, '选文案、换样式，做出自己的加油牌', 74, textTop + 62, 27, '#7B8275');
   }
   ctx.strokeStyle = '#D9DCD0';
   ctx.beginPath(); ctx.moveTo(64, height - 117); ctx.lineTo(width - 64, height - 117); ctx.stroke();

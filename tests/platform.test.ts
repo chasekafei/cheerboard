@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   isNative, loadLocal, saveLocal, saveImage, shareImage, getInsets, NativeUnavailableError,
+  getFollowStatus, followAuthor,
 } from '../src/platform.ts';
 import { localDateInputValue } from '../src/export-view.ts';
 
@@ -83,25 +84,32 @@ test('explicit missing-key errors are empty data; unknown and permission errors 
   await assert.rejects(loadLocal('test-corrupt-data'), /无法读取/);
 });
 
-test('concurrent reads share one version probe and later operations reuse it', async () => {
+test('storage reads tolerate BOM, double-encoded JSON and object bridge values', async () => {
+  const bridge: Bridge = { getStorage: options => options.success({ data: '\uFEFF' + JSON.stringify(JSON.stringify({ text: '历史牌' })) }) };
+  environment(bridge);
+  assert.deepEqual(await loadLocal('test-legacy-encoded'), { text: '历史牌' });
+  bridge.getStorage = options => options.success({ data: { text: '桥接对象' } });
+  assert.deepEqual(await loadLocal('test-object-value'), { text: '桥接对象' });
+  bridge.getStorage = options => options.success({ data: '' });
+  assert.equal(await loadLocal('test-empty-value'), null);
+});
+
+test('native storage capability avoids a launch-options probe', async () => {
   let launchCount = 0;
-  let release: ((result: Result) => void) | null = null;
   environment({
-    getLaunchOptions: options => { launchCount += 1; release = options.success; },
+    getLaunchOptions: options => { launchCount += 1; options.success({ miniToolEnv: { buildVersion: 9490001 } }); },
     getStorage: options => options.success({ data: null }),
     setStorage: options => options.success({ errMsg: 'setStorage:ok' }),
   }, null);
   const reads = Promise.all(['one', 'two', 'three'].map(key => loadLocal('test-version-' + key)));
   await tick();
-  assert.equal(launchCount, 1);
-  assert.ok(release);
-  (release as (result: Result) => void)({ miniToolEnv: { buildVersion: 9490001 } });
+  assert.equal(launchCount, 0);
   assert.deepEqual(await reads, [null, null, null]);
   await saveLocal('test-version-four', { text: '可以' });
-  assert.equal(launchCount, 1);
+  assert.equal(launchCount, 0);
 });
 
-test('failed version probes have a cooldown and do not repeatedly block storage', async () => {
+test('missing native storage falls back without probing an unused version API', async () => {
   let launchCount = 0;
   const { browserStore } = environment({
     getLaunchOptions: options => { launchCount += 1; options.fail({ errMsg: 'getLaunchOptions:fail unknown' }); },
@@ -109,7 +117,7 @@ test('failed version probes have a cooldown and do not repeatedly block storage'
   browserStore.set('test-failed-probe', 'true');
   assert.equal(await loadLocal('test-failed-probe'), true);
   assert.equal(await loadLocal('test-failed-probe'), true);
-  assert.equal(launchCount, 1);
+  assert.equal(launchCount, 0);
 });
 
 test('same-key writes cannot finish in reverse order and reads await queued writes', async () => {
@@ -178,9 +186,13 @@ test('Promise APIs receive local file handles for album, note and comment', asyn
   assert.equal(calls.find(([kind]) => kind === 'album')![1].filePath, 'xhsfile://tmp/image.png');
   const note = calls.find(([kind]) => kind === 'note')![1];
   assert.equal(note.pageType, 'photo_publish');
+  assert.equal(note.title, '做一块自己的灯牌或手幅');
+  assert.match(String(note.content), /文案库/);
+  assert.match(String(note.content), /配色、装饰、横竖屏与滚动/);
   assert.deepEqual(note.mediaInfo, { image_resources: [{ url: 'xhsfile://tmp/image.png' }] });
   const comment = calls.find(([kind]) => kind === 'comment')![1];
   const payload = comment.payload as Result;
+  assert.match(String(payload.content), /灯牌和手幅都能选文案、换样式/);
   assert.deepEqual(payload.media_bean, [{ media_type: 'image', cover_image_url: 'xhsfile://tmp/image.png' }]);
   assert.deepEqual(JSON.parse(String(payload.miniToolSnapshotInfo)), { text: '加油' });
   assert.equal(comment.saveToAlbum, false);
@@ -201,6 +213,17 @@ test('photo publishing sets pageType only on supported clients and keeps legacy 
       assert.equal(Object.prototype.hasOwnProperty.call(note, 'pageType'), false);
     }
   }
+});
+
+test('follow author uses the current mini-tool author status API', async () => {
+  const calls: string[] = [];
+  environment({
+    getFollowStatus: options => { calls.push('status'); options.success({ follow_status: 0 }); },
+    followAuthor: options => { calls.push('follow'); options.success({ follow_status: 1 }); },
+  });
+  assert.equal(await getFollowStatus(), 0);
+  assert.equal(await followAuthor(), 1);
+  assert.deepEqual(calls, ['status', 'follow']);
 });
 
 test('snapshot limits use UTF-8 bytes and prevent invalid native sharing', async () => {

@@ -2,7 +2,7 @@ import './styles.css';
 import './fonts.css';
 import { createDesign, getTemplate, TEMPLATES, findSloganByText, type Design, type Category, type TemplateId, type SloganFilter } from './catalog';
 import { measureBoard, renderBoard, renderExport, invalidateFontCache, resolveRepeatPeriod } from './renderer';
-import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isBrowserPreview } from './platform';
+import { loadLocal, saveLocal, saveImage, shareImage, getInsets, isBrowserPreview, getFollowStatus, followAuthor } from './platform';
 import { readRecords, writeRecord, validateDesign } from './records';
 import { normalizeDotEmoji, MIN_FONT_SCALE, MAX_FONT_SCALE } from './design-values';
 import { loadBoardFonts } from './fonts';
@@ -25,6 +25,8 @@ let design = createDesign();
 let records: Design[] = [];
 let recordsReady = false;
 let recordsError = false;
+let followStatus: -1 | 0 | 1 | 2 = -1;
+let followBusy = false;
 let editRevision = 0;
 let draftAvailable = false;
 let draftReady = false;
@@ -77,7 +79,14 @@ function templateCard(id: TemplateId, compact = false) {
   return `<button class="template-card ${compact ? 'compact' : ''} ${page === 'editor' && design.templateId === id ? 'selected' : ''}" data-action="template" data-id="${id}" aria-label="使用${t.name}" aria-pressed="${page === 'editor' && design.templateId === id}"><div class="template-art"><canvas data-template="${id}" aria-label="${t.name}效果预览"></canvas>${page === 'editor' && design.templateId === id ? `<span class="template-check">${icon('check')}</span>` : ''}</div><span class="template-info"><strong>${t.name}</strong>${!compact ? `<small>${t.description}</small>` : ''}</span></button>`;
 }
 function home() {
-  return renderHome({ category: homeCategory, records, draft: draftAvailable ? design : null, recordsReady, recordsError });
+  return renderHome({ category: homeCategory, records, draft: draftAvailable ? design : null, recordsReady, recordsError, followStatus });
+}
+async function refreshFollowStatus() {
+  const status = await getFollowStatus();
+  if (status === 0 || status === 1 || status === 2) {
+    followStatus = status;
+    if (page === 'home') render();
+  }
 }
 function textState() { return { design, category: sloganCategory, search, page: sloganPage }; }
 function sloganList() {
@@ -401,6 +410,17 @@ async function action(button: HTMLElement) {
     case 'home': closeOverlay(); page = 'home'; render(); window.scrollTo(0, 0); break;
     case 'saved': closeOverlay(); page = 'saved'; render(); window.scrollTo(0, 0); break;
     case 'home-category': homeCategory = id as Category; render(); break;
+    case 'follow-author': {
+      if (followBusy || followStatus === 1 || followStatus === 2) break;
+      followBusy = true;
+      try {
+        const status = await followAuthor();
+        if (status === 1 || status === 2) { followStatus = status; toast('感谢关注，之后也可以继续用这块牌。'); }
+        else toast('暂时没有完成关注，之后仍可以再试。');
+      } catch (error) { fail(error); }
+      finally { followBusy = false; if (page === 'home') render(); }
+      break;
+    }
     case 'home-start': if (homeCategory === 'light') enterLight(); else chooseTemplate('H1'); break;
     case 'light-start': enterLight(); break;
     case 'record-menu': {
@@ -522,11 +542,18 @@ async function loadRecords() {
   recordsError = false;
   let timer = 0;
   try {
-    const timeout = new Promise<never>((_, reject) => { timer = window.setTimeout(() => reject(new Error('读取存档超时')), 4_000); });
+    // Native Storage may need a launch-options handshake on first open. Keep
+    // this outer guard longer than the bridge's own request timeout so a slow
+    // production client does not permanently disable the 收藏入口.
+    const timeout = new Promise<never>((_, reject) => { timer = window.setTimeout(() => reject(new Error('读取存档超时')), 15_000); });
     records = await Promise.race([readRecords(), timeout]);
     recordsReady = true;
   }
-  catch { recordsReady = false; recordsError = true; toast('原存档未能读取，已暂停修改存档；仍可制作和存图。'); }
+  catch (error) {
+    recordsReady = false; recordsError = true;
+    const detail = error instanceof Error ? error.message : '';
+    toast(detail ? `原存档读取失败：${detail}` : '原存档未能读取，已暂停修改存档；仍可制作和存图。');
+  }
   finally { if (timer) window.clearTimeout(timer); }
   if (page === 'light') updateLightControls(); else render();
 }
@@ -545,6 +572,7 @@ async function start() {
   if (document.fonts && typeof document.fonts.addEventListener === 'function') document.fonts.addEventListener('loadingdone', fontsChanged);
   const initialRevision = editRevision;
   void loadRecords();
+  void refreshFollowStatus();
   void loadLocal('draft-v1').then(value => {
     draftReady = true;
     const draft = validateDesign(value);

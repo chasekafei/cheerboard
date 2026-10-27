@@ -1,9 +1,12 @@
 .cb-home { width:100%; max-width:560px; margin:0 auto; padding:23px 22px 25px; padding-top:calc(23px + var(--layout-inset-top)); padding-bottom:calc(25px + var(--layout-inset-bottom)); background:radial-gradient(ellipse at 30% 0,rgba(255,236,148,.07),transparent 60%),var(--cb-paper) }
 .cb-home-header { position:relative; padding-top:35px; margin:0 0 26px }
+.cb-home-header-actions { position:absolute; top:0; right:-2px; display:flex; align-items:center; gap:7px }
 .cb-brand { position:relative; margin:0; padding-bottom:0; line-height:1 }
 .cb-logo { display:block; width:calc(100% + 6px); max-width:none; height:auto; margin-left:-3px }
-.cb-home-settings { position:absolute; top:0; right:-2px; display:flex; align-items:center; justify-content:center; width:44px; height:44px; padding:9px; border-radius:50% }
+.cb-home-settings { display:flex; align-items:center; justify-content:center; width:44px; height:44px; padding:9px; border-radius:50% }
 .cb-home-reminder .cb-icon { width:26px; height:26px }
+.cb-follow-author { min-height:36px; padding:7px 11px; border:1.5px solid var(--cb-ink); border-radius:18px; background:var(--cb-yellow); font-size:12px; font-weight:800; white-space:nowrap }
+.cb-follow-author--done { background:#eeeaf2; color:var(--cb-muted); }
 .cb-home-categories { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); height:70px; margin:0 0 13px; border:2.5px solid var(--cb-ink); border-radius:24px; background:#efe5f3 }
 .cb-home-category { position:relative; display:flex; align-items:center; justify-content:center; min-width:0; border-radius:22px; font-size:26px; font-weight:900 }
 .cb-home-category .cb-icon { width:39px; height:39px; margin-right:16px }
@@ -47,7 +50,7 @@
 @media(max-width:450px), (min-width:451px) and (min-height:600px) {
   .cb-home { padding-left:calc(18px + var(--layout-inset-left)); padding-right:calc(18px + var(--layout-inset-right)); padding-top:calc(10px + var(--layout-inset-top)); padding-bottom:calc(12px + var(--layout-inset-bottom)) }
   .cb-home-header { padding-top:12px; margin-bottom:14px }
-  .cb-home-settings { top:0 }
+  .cb-home-header-actions { top:0 }
   .cb-home-categories { height:54px; margin-bottom:6px; border-radius:21px }
   .cb-home-category { min-height:46px; font-size:23px; border-radius:20px }
   .cb-home-category .cb-icon { width:30px; height:30px; margin-right:12px }
