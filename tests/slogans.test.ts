@@ -40,6 +40,22 @@ test('the edited national team blessing leads Other without rewriting its text o
   assert.ok(!findSlogans('莎头').includes(first));
 });
 
+test('common player and national team cheers are available as high-priority slogans', () => {
+  const cheers = [
+    ['孙颖莎！加油！', '孙颖莎'],
+    ['王楚钦！加油！', '王楚钦'],
+    ['中国队！加油！', '其他'],
+  ] as const;
+  for (const [text, category] of cheers) {
+    const slogan = SLOGANS.find(item => item.text === text);
+    assert.ok(slogan);
+    assert.equal(slogan.category, category);
+    assert.equal(slogan.priority, 2);
+    if (category !== '其他') assert.equal(findSlogans(category)[0], slogan);
+    else assert.ok(findSlogans(category).includes(slogan));
+  }
+});
+
 test('manual text and category corrections remain authoritative', () => {
   for (const id of ['C007', 'C130', 'C132', 'C146']) {
     assert.equal(SLOGANS.find(item => item.id === id)?.category, '王楚钦');

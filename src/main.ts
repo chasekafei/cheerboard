@@ -14,6 +14,7 @@ import { renderLightPlayer, renderLightToolButtons } from './ui/light-controls';
 import { renderTextPanel, renderSloganList, renderSloganVariants, renderLightStylePanel, renderGraphicPanel, renderColorPanel, rangeField } from './ui/editor-panels';
 import { drawBoardDecorations, DECORATION_SETS } from './decorations';
 import { renderHeroPreview } from './ui/preview';
+import { preloadShareAssets } from './share-assets';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 const overlay = document.querySelector<HTMLDivElement>('#overlay')!;
@@ -53,7 +54,7 @@ let lightControls = false;
 let lightSheet: 'text' | 'style' | null = null;
 let lightScene: ReturnType<typeof mountLightScene> | null = null;
 let lightControlsTimer = 0;
-const memory = { place: '', date: localDateInputValue() };
+const memory = { place: '', date: localDateInputValue(), name: '' };
 let memoryDateEdited = false;
 function toast(message: string) {
   toastEl.textContent = message;
@@ -369,11 +370,12 @@ function showBoard() {
 }
 function exportOptions() {
   const portrait = getTemplate(design.templateId).category === 'light' && design.orientation === 'portrait';
-  return [ ['note', '笔记分享卡', '1080 × 1440'], ['comment', '评论晒图卡', '1080 × 1080'], ['memory', '观赛打卡', '地点与日期'], ['board', portrait ? '竖版图片' : '横版图片', portrait ? '1080 × 1920' : '1920 × 1080'], ['a4', 'A4 打印图', portrait ? '2480 × 3508' : '3508 × 2480'] ];
+  return [ ['note', '笔记分享卡', '1080 × 1440'], ['comment', '评论晒图卡', '随牌面比例'], ['memory', '观赛打卡', '横向票根 · 日期 · 地点'], ['board', portrait ? '竖版图片' : '横版图片', portrait ? '1080 × 1920' : '1920 × 1080'], ['a4', 'A4 打印图', portrait ? '2480 × 3508' : '3508 × 2480'] ];
 }
-function exportsDialog() {
+async function exportsDialog() {
   if (!design.text.trim()) { toast('先写一句话，再保存图片。'); return; }
   if (!memoryDateEdited) memory.date = localDateInputValue();
+  await preloadShareAssets();
   openOverlay(renderExportView({ format: exportFormat, formats: exportOptions(), memory }));
   updateExport();
 }
@@ -515,6 +517,7 @@ document.addEventListener('input', event => {
     case 'speed': { design.speed = Number(target.value); const output = target.nextElementSibling; if (output) output.textContent = target.value + ' / 5'; dirty(); break; }
     case 'memory-place': memory.place = target.value; updateExport(); break;
     case 'memory-date': memoryDateEdited = true; memory.date = target.value; updateExport(); break;
+    case 'memory-name': memory.name = target.value; updateExport(); break;
   }
 });
 document.addEventListener('change', event => {
@@ -567,6 +570,7 @@ async function start() {
   };
   refreshHeight();
   render();
+  void preloadShareAssets();
   const fontsChanged = () => { invalidateFontCache(); paint(); lightScene?.repaint(true); paintLightEffects(); };
   void loadBoardFonts().then(fontsChanged);
   if (document.fonts && typeof document.fonts.addEventListener === 'function') document.fonts.addEventListener('loadingdone', fontsChanged);

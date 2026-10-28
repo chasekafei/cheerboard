@@ -14,6 +14,10 @@ export type Slogan = {
 
 // 2 为优先收录，1 为可用；同级保留最终清单顺序。
 export const SLOGANS: readonly Slogan[] = [
+  // 最常见的现场加油牌文案优先展示；保留带感叹号的口号作为最终显示文案。
+  {"id": "C166", "text": "孙颖莎！加油！", "category": "孙颖莎", "priority": 2, "variants": ["孙颖莎加油", "莎莎加油"]},
+  {"id": "C167", "text": "王楚钦！加油！", "category": "王楚钦", "priority": 2, "variants": ["王楚钦加油", "楚钦加油"]},
+  {"id": "C168", "text": "中国队！加油！", "category": "其他", "priority": 2, "variants": ["中国队加油", "中国乒乓球队！加油！", "中国乒乓球队加油"]},
   {"id": "C001", "text": "钦尽全力", "category": "王楚钦", "priority": 2, "variants": []},
   {"id": "C002", "text": "莎出重围", "category": "孙颖莎", "priority": 2, "variants": []},
   {"id": "C003", "text": "孙颖莎", "category": "孙颖莎", "priority": 2, "variants": ["Sun.Y.S.", "SunYingsha", "SUNYINGSHA", "CHINA SUN Y.S.", "Sun YingSha", "Sun Y.S.", "莎"]},

@@ -5,6 +5,7 @@ import { getTextLines } from './text-layout.ts';
 import { drawBoardDecorations } from './decorations.ts';
 import { drawNeonText, clearNeonBlurCache } from './neon.ts';
 import { clearNeonTubeCache } from './neon-tube.ts';
+import { shareAsset } from './share-assets.ts';
 
 export type RenderOptions = { width?: number; height?: number; offset?: number; repeatGap?: number };
 type RenderResult = { fontSize: number; overflow: boolean; textWidth: number };
@@ -1051,7 +1052,16 @@ function fittedCardText(ctx: Context, text: string, x: number, y: number, maxSiz
   cardText(ctx, text, x, y, size, color);
 }
 
-export function renderExport(design: Design, format: 'board' | 'comment' | 'note' | 'a4' | 'memory', meta?: { place: string; date: string }): HTMLCanvasElement {
+function centeredCardText(ctx: Context, text: string, x: number, y: number, size: number, color: string, weight = 600): void {
+  ctx.font = weight + ' ' + size + 'px ' + FONT;
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+  ctx.textAlign = 'left';
+}
+
+export function renderExport(design: Design, format: 'board' | 'comment' | 'note' | 'a4' | 'memory', meta?: { place: string; date: string; name: string }): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
   const portrait = getTemplate(design.templateId).category === 'light' && design.orientation === 'portrait';
   const renderCompleteBoard = (target: HTMLCanvasElement, width: number, height: number) => {
@@ -1059,68 +1069,164 @@ export function renderExport(design: Design, format: 'board' | 'comment' | 'note
     if (result.overflow) throw new Error('文字太长，图片放不下。请先改为双行或精简文字，再保存图片。');
   };
   if (format === 'board' || format === 'a4') {
-    // A4 uses its own wider/taller layout calculation; it is never a stretched screenshot.
     const long = format === 'a4' ? 3508 : 1920;
     const short = format === 'a4' ? 2480 : 1080;
     renderCompleteBoard(canvas, portrait ? short : long, portrait ? long : short);
     return canvas;
   }
-  canvas.width = 1080;
-  canvas.height = format === 'comment' ? 1080 : 1440;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return canvas;
-  const width = canvas.width;
-  const height = canvas.height;
-  ctx.fillStyle = '#F7F5ED';
-  ctx.fillRect(0, 0, width, height);
-  // Original graphic accents are shared with the app; no event/location is invented.
-  star(ctx, 957, 124, 36, '#E9F6B4', '#293F2F', 0.19);
-  ctx.strokeStyle = '#D9DCD0';
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(64, 186); ctx.lineTo(1016, 186); ctx.stroke();
-  cardText(ctx, '手机手幅', 64, 95, 34, '#294635', 900);
-  const cardSubtitle = format === 'memory'
-    ? '把这一刻，好好收藏'
-    : format === 'comment'
-      ? '把喜欢晒到评论里'
-      : '灯牌与手幅，随手做、随手晒';
-  cardText(ctx, cardSubtitle, 64, 146, 24, '#798174');
+
   const board = document.createElement('canvas');
   renderCompleteBoard(board, portrait ? 1080 : 1920, portrait ? 1920 : 1080);
-  const ratio = board.width / board.height;
-  const maxHeight = height * (format === 'comment' || format === 'memory' ? 0.5 : 0.56);
-  const bw = portrait ? Math.min(width - 128, maxHeight * ratio) : width - 128;
-  const bh = bw / ratio;
-  const bx = (width - bw) / 2;
-  const by = portrait ? (format === 'comment' ? 230 : 240) : format === 'comment' ? 246 : 280;
-  ctx.save();
-  ctx.translate(bx + bw / 2, by + bh / 2);
-  ctx.rotate(-0.025);
-  ctx.shadowColor = 'rgba(38,57,41,.12)';
-  ctx.shadowBlur = 30;
-  ctx.shadowOffsetY = 16;
-  roundedRect(ctx, -bw / 2 - 10, -bh / 2 - 10, bw + 20, bh + 20, 22);
-  ctx.fillStyle = '#FFFFFF'; ctx.fill();
-  ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
-  roundedRect(ctx, -bw / 2, -bh / 2, bw, bh, 14); ctx.clip();
-  ctx.drawImage(board, -bw / 2, -bh / 2, bw, bh);
-  ctx.restore();
-  const textTop = by + bh + (portrait ? 72 : format === 'comment' ? 84 : 104);
-  if (format === 'memory') {
-    cardText(ctx, '我的观赛记忆', 72, textTop, 38, '#294635', 900);
-    // Meta is filled in by the user; empty fields remain blank instead of posing as a real trip.
-    if (meta && meta.place.trim()) fittedCardText(ctx, meta.place.trim(), 74, textTop + 72, 29, width - 148, '#596A58');
-    if (meta && meta.date.trim()) fittedCardText(ctx, meta.date.trim(), 74, textTop + 124, 26, width - 148, '#7C8575');
-  } else {
-    const cardHeading = format === 'comment'
-      ? '为喜欢留一句话'
-      : '今天，也想认真加油。';
-    cardText(ctx, cardHeading, 72, textTop, 38, '#294635', 900);
-    cardText(ctx, '选文案、换样式，做出自己的加油牌', 74, textTop + 62, 27, '#7B8275');
+  const boardRatio = board.width / board.height;
+  const template = shareAsset(format as 'note' | 'comment' | 'memory');
+  if (template && template.naturalWidth > 0 && template.naturalHeight > 0) {
+    canvas.width = template.naturalWidth; canvas.height = template.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return canvas;
+    const width = canvas.width, height = canvas.height;
+    if (format === 'note') {
+      // The approved note artwork uses transparent sticker cutouts. Share
+      // images must stay opaque when saved from the mini-app.
+      ctx.fillStyle = '#FAF7EE';
+      ctx.fillRect(0, 0, width, height);
+    }
+    ctx.drawImage(template, 0, 0, width, height);
+    const drawBoard = (x: number, y: number, slotWidth: number, slotHeight: number, radius = 0) => {
+      // The generated cards reserve a fixed screen slot. Fill that slot exactly so
+      // the board does not float in the middle of the frame or spill outside it.
+      ctx.save();
+      if (radius > 0) roundedRect(ctx, x, y, slotWidth, slotHeight, radius);
+      else ctx.rect(x, y, slotWidth, slotHeight);
+      ctx.clip();
+      ctx.drawImage(board, x, y, slotWidth, slotHeight);
+      ctx.restore();
+    };
+    if (format === 'note') {
+      drawBoard(80, 478, 928, 374, 24);
+    } else if (format === 'comment') {
+      drawBoard(48, 168, 1440, 668, 28);
+    } else {
+      const now = new Date();
+      const today = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + String(now.getDate()).padStart(2, '0');
+      const date = (meta?.date?.trim() || today).replace(/-/g, '.');
+      const place = meta?.place?.trim() || '地点';
+      const name = meta?.name?.trim() || '观众姓名';
+      // The clean ticket asset already contains the paper, labels and empty
+      // value boxes. Draw the variable content directly into those boxes; do
+      // not paint opaque rectangles over the paper texture.
+      centeredCardText(ctx, '这个赛场见', 835, 174, 54, '#173E32', 900);
+      const rows: Array<[string, string]> = [['日期', date], ['地点', place], ['观众姓名', name]];
+      rows.forEach(([label, value], index) => {
+        const y = 315 + index * 130;
+        cardText(ctx, label, 388, y, index === 2 ? 27 : 30, '#FFFDF5', 900);
+        fittedCardText(ctx, value, 650, y, index === 0 ? 38 : 32, 535, '#173E32');
+      });
+      cardText(ctx, '举个牌', 1352, 850, 18, '#B84A36', 900);
+    }
+    return canvas;
   }
-  ctx.strokeStyle = '#D9DCD0';
-  ctx.beginPath(); ctx.moveTo(64, height - 117); ctx.lineTo(width - 64, height - 117); ctx.stroke();
-  cardText(ctx, '手机手幅  /  为热爱留一块位置', 64, height - 72, 22, '#71806C');
-  cardText(ctx, format === 'memory' ? '我的记录' : '我的加油牌', width - 222, height - 72, 22, '#71806C');
+  const comment = format === 'comment';
+  const memory = format === 'memory';
+  canvas.width = comment ? 1080 : memory ? 1920 : 1080;
+  canvas.height = comment ? (portrait ? 1440 : 608) : memory ? 1080 : 1440;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return canvas;
+  const width = canvas.width, height = canvas.height;
+  const paper = '#F7F4EA', ink = '#25352A', muted = '#7B8275';
+
+  const drawLogo = (x: number, y: number, size = 16) => cardText(ctx, '举个牌', x, y, size, ink, 900);
+  const drawBall = (x: number, y: number, radius: number, color: string) => {
+    ctx.save(); ctx.fillStyle = color; ctx.strokeStyle = ink; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x - radius * .2, y - radius * .35, radius * .65, .2, 1.8); ctx.stroke(); ctx.restore();
+  };
+  const drawPaddle = (x: number, y: number, scale: number, color: string) => {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-.35); ctx.fillStyle = color; ctx.strokeStyle = ink; ctx.lineWidth = 3;
+    roundedRect(ctx, -44 * scale, -62 * scale, 88 * scale, 124 * scale, 28 * scale); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#B98955'; ctx.fillRect(-10 * scale, 52 * scale, 20 * scale, 58 * scale); ctx.strokeRect(-10 * scale, 52 * scale, 20 * scale, 58 * scale); ctx.restore();
+  };
+  const drawBoard = (x: number, y: number, bw: number, bh: number, framed: boolean) => {
+    ctx.save();
+    if (framed) {
+      ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = ink; ctx.lineWidth = 3;
+      roundedRect(ctx, x - 10, y - 10, bw + 20, bh + 20, 20); ctx.fill(); ctx.stroke();
+    }
+    roundedRect(ctx, x, y, bw, bh, 12); ctx.clip(); ctx.drawImage(board, x, y, bw, bh); ctx.restore();
+  };
+
+  if (comment) {
+    ctx.fillStyle = '#F7F4EA'; ctx.fillRect(0, 0, width, height);
+    const pad = 24, maxW = width - pad * 2, maxH = height - pad * 2;
+    const bw = Math.min(maxW, maxH * boardRatio), bh = bw / boardRatio;
+    const bx = (width - bw) / 2, by = (height - bh) / 2;
+    drawBoard(bx, by, bw, bh, false);
+    ctx.strokeStyle = '#1D211D'; ctx.lineWidth = 3;
+    roundedRect(ctx, bx, by, bw, bh, 16); ctx.stroke();
+    ctx.fillStyle = 'rgba(247,244,234,.94)'; ctx.fillRect(width - 156, height - 48, 124, 30);
+    cardText(ctx, '举个牌', width - 140, height - 33, 16, ink, 900);
+    return canvas;
+  }
+
+  if (memory) {
+    ctx.fillStyle = '#F7F3E9'; ctx.fillRect(0, 0, width, height);
+    const ticketX = 42, ticketY = 42, ticketW = width - 84, ticketH = height - 84;
+    ctx.fillStyle = '#FFFDF5'; ctx.strokeStyle = ink; ctx.lineWidth = 3;
+    roundedRect(ctx, ticketX, ticketY, ticketW, ticketH, 18); ctx.fill(); ctx.stroke();
+    ctx.save(); ctx.fillStyle = '#F7F3E9';
+    for (let y = ticketY + 42; y < ticketY + ticketH - 20; y += 58) {
+      ctx.beginPath(); ctx.arc(ticketX, y, 11, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(ticketX + ticketW, y, 11, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+    const split = ticketX + ticketW * .72;
+    ctx.strokeStyle = '#1E4A3A'; ctx.lineWidth = 3; ctx.setLineDash([9, 12]);
+    ctx.beginPath(); ctx.moveTo(split, ticketY + 18); ctx.lineTo(split, ticketY + ticketH - 18); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#1E4A3A'; ctx.fillRect(ticketX, ticketY, 18, ticketH);
+    cardText(ctx, 'MATCH LOG', ticketX + 48, ticketY + 56, 25, ink, 900);
+    cardText(ctx, 'TABLE TENNIS / RECORD', ticketX + 48, ticketY + 88, 15, muted, 700);
+    cardText(ctx, '这个赛场见', ticketX + 52, ticketY + 162, 58, ink, 900);
+    ctx.strokeStyle = '#C66A50'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(ticketX + 54, ticketY + 200); ctx.lineTo(ticketX + 430, ticketY + 200); ctx.stroke();
+    const fieldX = ticketX + 58, fieldW = split - fieldX - 55;
+    const now = new Date();
+    const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+    const rawDate = meta?.date?.trim() || today;
+    const date = rawDate.replace(/-/g, '.');
+    const place = meta?.place?.trim() || '地点';
+    const name = meta?.name?.trim() || '观众姓名';
+    const rows: Array<[string, string]> = [['日期', date], ['地点', place], ['观众姓名', name]];
+    rows.forEach(([label, value], index) => {
+      const y = ticketY + 300 + index * 130;
+      ctx.fillStyle = '#1E4A3A'; ctx.fillRect(fieldX, y - 30, 135, 60);
+      cardText(ctx, label, fieldX + 18, y, 23, '#FFFDF5', 900);
+      ctx.strokeStyle = '#B6A67D'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(fieldX + 150, y + 27); ctx.lineTo(fieldX + fieldW, y + 27); ctx.stroke();
+      fittedCardText(ctx, value, fieldX + 155, y, 30, fieldW - 165, ink);
+    });
+    const imageX = split + 56, imageY = ticketY + 112, imageW = ticketX + ticketW - imageX - 56, imageH = 380;
+    ctx.fillStyle = '#F2EEE1'; ctx.strokeStyle = '#AFA487'; ctx.lineWidth = 2;
+    ctx.fillRect(imageX, imageY, imageW, imageH); ctx.strokeRect(imageX, imageY, imageW, imageH);
+    drawPaddle(imageX + imageW * .42, imageY + imageH * .54, .78, '#D8543B');
+    drawBall(imageX + imageW * .72, imageY + imageH * .38, 18, '#F4CA44');
+    ctx.strokeStyle = '#C66A50'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(imageX + imageW * .5, imageY + imageH * .5, 88, 0, Math.PI * 2); ctx.stroke();
+    cardText(ctx, 'OPTIONAL PHOTO', imageX + 18, imageY + imageH - 18, 14, muted, 700);
+    ctx.strokeStyle = '#C66A50'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(imageX + imageW / 2, ticketY + 650, 78, 0, Math.PI * 2); ctx.stroke();
+    cardText(ctx, '观赛记录', imageX + imageW / 2 - 54, ticketY + 657, 20, '#C66A50', 900);
+    cardText(ctx, 'No. 000123', split + 56, ticketY + ticketH - 62, 20, muted, 700);
+    return canvas;
+  }
+
+  ctx.fillStyle = paper; ctx.fillRect(0, 0, width, height);
+  drawBall(74, 82, 18, '#F5D84A'); drawBall(width - 76, 128, 13, '#FF8F9E');
+  cardText(ctx, '今天也要为喜欢的人加油', 70, 92, 25, ink, 700);
+  const maxW = width - 112, maxH = height - 270;
+  const scale = Math.min(maxW / board.width, maxH / board.height);
+  const bw = board.width * scale, bh = board.height * scale;
+  drawBoard((width - bw) / 2, 164, bw, bh, true);
+  cardText(ctx, '这一牌，送给你', 70, 164 + bh + 62, 28, ink, 900);
+  cardText(ctx, '把想说的那句，举给你看', 72, 164 + bh + 104, 19, muted, 600);
+  ctx.strokeStyle = '#D9DCD0'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(72, height - 104); ctx.lineTo(width - 72, height - 104); ctx.stroke();
+  drawLogo(width - 170, height - 62, 17); drawBall(width - 74, height - 58, 15, '#F5D84A');
   return canvas;
 }

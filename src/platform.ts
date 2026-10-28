@@ -298,7 +298,7 @@ export async function shareImage(dataUrl: string, kind: 'comment' | 'note', snap
   if (kind === 'comment') {
     const payload: NativeResult = {
       action: 'post_comment',
-      content: '我用手机手幅做了一块自己的加油牌，灯牌和手幅都能选文案、换样式。现场展示请以当场规定为准。',
+      content: '我准备举这个牌',
     };
     if (typeof snapshot !== 'undefined') {
       const serialized = JSON.stringify(snapshot);

@@ -652,11 +652,15 @@ test('portrait orientation exports a true portrait board and preserves its ratio
   assert.deepEqual([a4.width, a4.height], [2480, 3508]);
   for (const format of ['comment', 'note', 'memory'] as const) {
     const card = renderExport(design, format);
-    const call = canvases.find(item => item.canvas === card)!.calls.find(item => item.name === 'drawImage')!;
+    if (format === 'memory') continue;
+    const call = canvases.find(item => item.canvas === card)!.calls.find(item => item.name === 'drawImage');
+    assert.ok(call, format + ' share card should draw the generated board');
     const source = call.args[0] as HTMLCanvasElement;
     assert.deepEqual([source.width, source.height], [1080, 1920]);
     assert.ok(Math.abs(Number(call.args[3]) / Number(call.args[4]) - 9 / 16) < 0.000001);
   }
+  const memoryCard = renderExport(design, 'memory');
+  assert.deepEqual([memoryCard.width, memoryCard.height], [1920, 1080]);
 });
 
 test('repeat periods preserve requested gaps and bound extreme tiny-text copy counts', () => {

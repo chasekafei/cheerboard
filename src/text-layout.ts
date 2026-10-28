@@ -5,6 +5,7 @@ import { DEFAULT_LIGHT_TEXT } from './design-values.ts';
 // phrase/name together, or defers to the source's explicit newlines. These rules
 // are display metadata: the reviewed slogan text is never rewritten.
 export const SLOGAN_BREAK_PREFIXES: Readonly<Record<string, string | null>> = {
+  C166: null, C167: null, C168: null,
   C001: null, C002: null, C003: null, C004: null, C005: null, C006: null,
   C007: '我们', C008: null, C009: null, C010: '痛苦之上', C011: '今天的太阳',
   C012: null, C013: null, C014: '当身体达到了极限', C015: '谁敢横刀立马',
@@ -48,6 +49,8 @@ export const SLOGAN_BREAK_PREFIXES: Readonly<Record<string, string | null>> = {
 };
 
 export const VARIANT_BREAK_PREFIXES: Readonly<Record<string, string | null>> = {
+  '孙颖莎加油': null, 莎莎加油: null, '王楚钦加油': null, 楚钦加油: null,
+  中国队加油: null, '中国乒乓球队！加油！': null, 中国乒乓球队加油: null,
   'Sun.Y.S.': null, SunYingsha: null, SUNYINGSHA: null, 'CHINA SUN Y.S.': 'CHINA',
   'Sun YingSha': null, 'Sun Y.S.': null, 莎: null,
   'Wang.C.Q': null, WangChuqin: null, WANGCHUQIN: null, 钦: null,

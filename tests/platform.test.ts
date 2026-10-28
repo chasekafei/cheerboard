@@ -192,7 +192,7 @@ test('Promise APIs receive local file handles for album, note and comment', asyn
   assert.deepEqual(note.mediaInfo, { image_resources: [{ url: 'xhsfile://tmp/image.png' }] });
   const comment = calls.find(([kind]) => kind === 'comment')![1];
   const payload = comment.payload as Result;
-  assert.match(String(payload.content), /灯牌和手幅都能选文案、换样式/);
+  assert.equal(payload.content, '我准备举这个牌');
   assert.deepEqual(payload.media_bean, [{ media_type: 'image', cover_image_url: 'xhsfile://tmp/image.png' }]);
   assert.deepEqual(JSON.parse(String(payload.miniToolSnapshotInfo)), { text: '加油' });
   assert.equal(comment.saveToAlbum, false);
